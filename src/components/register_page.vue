@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { register } from "../api/login_api.js";
 export default {
   data() {
     return {
@@ -41,6 +42,7 @@ export default {
       confirmPassword: "",
     };
   },
+
   methods: {
     checkConfirmPassword() {
       if (this.password !== this.confirmPassword) {
@@ -50,11 +52,12 @@ export default {
       }
     },
 
-    handleRegister() {
-      // Xử lý logic đăng ký ở đây
-      console.log("Username:", this.username);
-      console.log("Password:", this.password);
-      // Ví dụ: Gửi yêu cầu đăng ký đến API
+    async handleRegister() {
+      try {
+        await register(this.username, this.password);
+      } catch (e) {
+        this.$toast.error(e.toString());
+      }
     },
   },
 };

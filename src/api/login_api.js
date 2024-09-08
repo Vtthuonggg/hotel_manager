@@ -4,8 +4,8 @@ import { BASE_URL } from "./BASE_URL";
 export const login = async (username, password) => {
   try {
     const response = await axios.post(`${BASE_URL}staff/login`, {
-      username,
-      password,
+      email: username,
+      password: password,
     });
     return response.data;
   } catch (error) {
@@ -17,8 +17,8 @@ export const login = async (username, password) => {
 export const register = async (username, password) => {
   try {
     const response = await axios.post(`${BASE_URL}account/register`, {
-      username,
-      password,
+      email: username,
+      password: password,
     });
     return response.data;
   } catch (error) {
