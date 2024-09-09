@@ -18,7 +18,7 @@
       </form>
     </div>
     <div class="register-link">
-      <router-link to="/register">Đăng ký tàiiiii khoản</router-link>
+      <router-link to="/register">Đăng ký tài khoản</router-link>
     </div>
   </div>
 </template>
@@ -39,7 +39,7 @@ export default {
 
       // try {
       //   await login(this.username, this.password);
-      //   this.$toast.success("Đăng nhập thành công");
+      this.$toast.success("Đăng nhập thành công");
       // } catch (error) {
       //   this.$toast.error(error.toString());
       // }

@@ -3,12 +3,13 @@ import Router from "vue-router";
 import LoginPage from "../components/login_page.vue";
 import RegisterPage from "../components/register_page.vue";
 import DashboardPage from "../components/dashboard_page.vue";
-import Navbar from "../components/navbar_page.vue";
+// import Navbar from "../components/navbar_page.vue";
 import Room from "../components/room/list_room_page.vue";
+import Report from "../components/report/report_page.vue";
 Vue.use(Router);
 
 const routes = [
-  { path: "/", redirect: "/navbar" },
+  { path: "/", redirect: "/login" },
   {
     path: "/login",
     name: "Login",
@@ -21,18 +22,23 @@ const routes = [
   },
   {
     path: "/dashboard",
-    name: "Dashboard",
     component: DashboardPage,
-  },
-  {
-    path: "/navbar",
-    name: "Navbar",
-    component: Navbar,
-  },
-  {
-    path: "/listroom",
-    name: "Room",
-    component: Room,
+    children: [
+      {
+        path: "",
+        redirect: "listroom",
+      },
+      {
+        path: "listroom",
+        name: "ListRoom",
+        component: Room,
+      },
+      {
+        path: "report",
+        name: "Reports",
+        component: Report,
+      },
+    ],
   },
 ];
 
