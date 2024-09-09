@@ -4,7 +4,7 @@ import LoginPage from "../components/login_page.vue";
 import RegisterPage from "../components/register_page.vue";
 import DashboardPage from "../components/dashboard_page.vue";
 import Navbar from "../components/navbar_page.vue";
-
+import Room from "../components/room/list_room_page.vue";
 Vue.use(Router);
 
 const routes = [
@@ -28,6 +28,11 @@ const routes = [
     path: "/navbar",
     name: "Navbar",
     component: Navbar,
+  },
+  {
+    path: "/listroom",
+    name: "Room",
+    component: Room,
   },
 ];
 

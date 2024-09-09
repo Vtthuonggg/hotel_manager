@@ -5,7 +5,7 @@
         <img src="../assets/logo.png" alt="Vue logo" class="logo" />
       </li>
       <li class="navbar-item">
-        <router-link to="/rooms">Phòng</router-link>
+        <router-link to="/listroom">Phòng</router-link>
       </li>
       <li class="navbar-item">
         <router-link to="/reports">Báo cáo</router-link>

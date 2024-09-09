@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { login } from "../api/login_api.js";
+// import { login } from "../api/login_api.js";
 export default {
   data() {
     return {
@@ -37,12 +37,12 @@ export default {
       console.log("Username:", this.username);
       console.log("Password:", this.password);
 
-      try {
-        await login(this.username, this.password);
-        this.$toast.success("Đăng nhập thành công");
-      } catch (error) {
-        this.$toast.error(error.toString());
-      }
+      // try {
+      //   await login(this.username, this.password);
+      //   this.$toast.success("Đăng nhập thành công");
+      // } catch (error) {
+      //   this.$toast.error(error.toString());
+      // }
       this.$router.push("/dashboard");
     },
   },
