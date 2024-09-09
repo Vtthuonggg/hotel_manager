@@ -8,7 +8,7 @@ import Room from "../components/room/list_room_page.vue";
 Vue.use(Router);
 
 const routes = [
-  { path: "/", redirect: "/login" },
+  { path: "/", redirect: "/navbar" },
   {
     path: "/login",
     name: "Login",

@@ -18,7 +18,7 @@
       </form>
     </div>
     <div class="register-link">
-      <router-link to="/register">Đăng ký tài khoản</router-link>
+      <router-link to="/register">Đăng ký tàiiiii khoản</router-link>
     </div>
   </div>
 </template>
