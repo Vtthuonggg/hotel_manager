@@ -10,6 +10,9 @@
       <li class="navbar-item">
         <router-link to="/reports">Báo cáo</router-link>
       </li>
+      <li class="navbar-item1">
+        <router-link to="/settings"><i class="fas fa-cog"></i>Cài đặt</router-link>
+      </li>
     </ul>
   </nav>
 </template>
@@ -49,8 +52,31 @@ export default {
   border-radius: 5px;
   transition: box-shadow 0.3s ease;
 }
+.navbar-item1 a {
+  color: #333;
+  text-decoration: none;
+  padding: 10px;
+  display: block;
+  border-radius: 5px;
+  transition: box-shadow 0.3s ease;
+}
+.navbar-item1 {
+  margin-left: auto;
+  padding-right: 20px;
+}
 
+.settings-link {
+  color: #333;
+  text-decoration: none;
+  padding: 10px;
+  display: block;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
 .navbar-item a:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.navbar-item1 a:hover {
   background-color: rgba(0, 0, 0, 0.1);
 }
 .logo {
