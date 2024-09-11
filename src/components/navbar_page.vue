@@ -39,10 +39,8 @@
               <i class="fa-solid fa-hotel"></i>Cài đặt thông tin</router-link
             >
           </li>
-          <li>
-            <router-link to="/settings/room-pricing"
-              ><i class="fa-solid fa-coins"></i>Cài đặt giá phòng</router-link
-            >
+          <li @click="showPriceModal">
+            <a href="#"> <i class="fa-solid fa-coins"></i>Cài đặt giá phòng</a>
           </li>
           <li class="logout-item">
             <router-link to="/login"
@@ -53,6 +51,29 @@
         </ul>
       </li>
     </ul>
+    <div v-if="isPriceModalVisible" class="modal">
+      <div class="modal-content">
+        <span class="close" @click="hidePriceModal">&times;</span>
+        <h2 class="title">Cài đặt giá phòng</h2>
+        <div class="price-setting">
+          <label for="single-room">Phòng đơn:</label>
+          <input type="text" id="single-room" v-model="singleRoomPrice" />
+        </div>
+        <div class="price-setting">
+          <label for="double-room">Phòng đôi:</label>
+          <input type="text" id="double-room" v-model="doubleRoomPrice" />
+        </div>
+        <div class="price-setting">
+          <label for="triple-room">Phòng ba:</label>
+          <input type="text" id="triple-room" v-model="tripleRoomPrice" />
+        </div>
+        <div class="price-setting">
+          <label for="quad-room">Phòng bốn:</label>
+          <input type="text" id="quad-room" v-model="quadRoomPrice" />
+        </div>
+        <button class="save-button" @click="savePrices">Lưu</button>
+      </div>
+    </div>
   </nav>
 </template>
 
@@ -62,6 +83,11 @@ export default {
   data() {
     return {
       dropdownVisible: false,
+      isPriceModalVisible: false,
+      singleRoomPrice: "",
+      doubleRoomPrice: "",
+      tripleRoomPrice: "",
+      quadRoomPrice: "",
     };
   },
   methods: {
@@ -71,11 +97,38 @@ export default {
     hideDropdown() {
       this.dropdownVisible = false;
     },
+    showPriceModal() {
+      this.isPriceModalVisible = true;
+    },
+    hidePriceModal() {
+      this.isPriceModalVisible = false;
+    },
+    savePrices() {
+      this.$toast.success("Lưu giá phòng thành công");
+      this.hidePriceModal();
+    },
   },
 };
 </script>
 
 <style scoped>
+.title {
+  margin-bottom: 20px;
+}
+.save-button {
+  background-color: #007bff; /* Màu nền */
+  color: white; /* Màu chữ */
+  border: none; /* Bỏ viền */
+  padding: 10px 20px; /* Khoảng cách bên trong */
+  font-size: 16px; /* Kích thước chữ */
+  border-radius: 5px; /* Bo góc */
+  cursor: pointer; /* Con trỏ chuột */
+  transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu nền */
+}
+
+.save-button:hover {
+  background-color: #0056b3; /* Màu nền khi hover */
+}
 .navbar {
   background-color: white;
   padding: 10px 0;
@@ -195,5 +248,56 @@ i {
 
 .dropdown:hover .dropdown-menu {
   display: block;
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.modal-content {
+  background-color: #fefefe;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+.price-setting {
+  display: flex;
+  margin-bottom: 15px;
+}
+.price-setting label {
+  margin-top: 10px;
+  display: inline-block;
+  width: 100px;
+  margin-right: 10px;
+}
+.price-setting input {
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  padding: 5px;
+  flex: 1;
 }
 </style>
