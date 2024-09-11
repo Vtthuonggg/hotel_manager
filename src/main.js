@@ -5,6 +5,7 @@ import router from "./router";
 import Toast from "vue-toastification";
 import "vuetify/dist/vuetify.min.css";
 import "vue-toastification/dist/index.css";
+import "@mdi/font/css/materialdesignicons.css";
 Vue.use(Vuetify);
 Vue.config.productionTip = false;
 Vue.use(Toast, {
@@ -14,6 +15,10 @@ Vue.use(Toast, {
 
 new Vue({
   router,
-  vuetify: new Vuetify(),
+  vuetify: new Vuetify({
+    icons: {
+      iconfont: "mdi",
+    },
+  }),
   render: (h) => h(App),
 }).$mount("#app");
