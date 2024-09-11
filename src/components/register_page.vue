@@ -65,22 +65,22 @@ export default {
 
 <style scoped>
 .logo {
-  width: 200px;
+  width: 10%;
   height: auto;
-  margin-top: 100px;
+  margin-top: 5%;
 }
 
 .name-group {
   margin-top: 10px;
 }
 .register-container {
-  max-width: 400px;
+  max-width: 20%;
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin-top: 150px;
+  margin-top: 10%;
 }
 .login-link {
   max-width: 400px;
