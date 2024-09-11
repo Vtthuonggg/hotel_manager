@@ -20,6 +20,7 @@ const routes = [
     name: "Register",
     component: RegisterPage,
   },
+
   {
     path: "/dashboard",
     component: DashboardPage,
