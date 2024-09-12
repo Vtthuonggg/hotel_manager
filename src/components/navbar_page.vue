@@ -10,7 +10,7 @@
           active-class="active-link"
           exact-active-class="exact-active-link"
         >
-          ><i class="fas fa-door-open"></i
+          <i class="fas fa-door-open"></i
           ><span class="bold-text"></span>Phòng</router-link
         >
       </li>
@@ -262,12 +262,16 @@ i {
 }
 .active-link {
   background-color: rgba(0, 0, 0, 0.1);
-  color: white;
+  color: rgb(0, 157, 255) !important;
 }
 
 .exact-active-link {
   background-color: rgba(0, 0, 0, 0.1);
-  color: white;
+  color: rgb(0, 157, 255)!important;
+}
+.active-link i,
+.exact-active-link i {
+  color: rgb(0, 157, 255);
 }
 .logout-item a {
   color: red !important;

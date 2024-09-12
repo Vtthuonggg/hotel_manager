@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Danh sách phòng</h1>
+    <h2 class="title">Danh sách phòng</h2>
     <v-divider></v-divider>
     <v-row>
       <v-card>
@@ -45,5 +45,5 @@ export default {
 </script>
 
 <style scoped>
-/* Thêm CSS tùy chỉnh ở đây nếu cần */
+.title{text-align: left;}
 </style>
