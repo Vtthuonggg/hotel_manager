@@ -1,7 +1,7 @@
 <template>
   <div>
     <img alt="Vue logo" src="../assets/logo.png" class="logo" />
-    <h3 class="name-group">Công ty cổ phần The Seven</h3>
+    <h3 class="name-group">Quản lý khách sạn</h3>
 
     <div class="login-container">
       <h2>Đăng nhập</h2>
@@ -60,26 +60,35 @@ export default {
   margin-top: 10px;
 }
 .login-container {
-  max-width: 20%;
+
+  max-width: 25%;
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin-top: 5%;
+  border-radius: 12px;
+
 }
 
 .form-group {
   text-align: left;
   margin-bottom: 15px;
 }
-
+input:focus {
+  border-color: #0056B3;
+  outline: none;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+}
 label {
+  
   display: block;
   margin-bottom: 5px;
 }
 
 input {
+  border-radius: 12px;
   width: 100%;
   padding: 8px;
   box-sizing: border-box;
@@ -94,15 +103,21 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  border-radius: 12px;
+
 }
 
 button:hover {
   background-color: #0056b3;
 }
 .register-link {
-  max-width: 20%;
+  max-width: 25%;
   margin: 0 auto;
   text-align: right;
   margin-top: 10px;
 }
+.register-link a{
+  color: blue;
+}
+
 </style>
