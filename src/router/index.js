@@ -6,6 +6,7 @@ import DashboardPage from "../components/dashboard_page.vue";
 // import Navbar from "../components/navbar_page.vue";
 import Room from "../components/room/list_room_page.vue";
 import Report from "../components/report/report_page.vue";
+import Service from "../components/service/list_product_page.vue";
 Vue.use(Router);
 
 const routes = [
@@ -40,9 +41,14 @@ const routes = [
       {
         path: "report",
         name: "Reports",
-
         component: Report,
         meta: { title: "Bate - Báo cáo" },
+      },
+      {
+        path: "service",
+        name: "Service",
+        component: Service,
+        meta: { title: "Bate - Dịch vụ" },
       },
     ],
   },

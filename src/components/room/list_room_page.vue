@@ -1,8 +1,13 @@
 <template>
   <div class="container">
-    <v-row class="row-title-item"><h2 class="title">Danh sách phòng</h2>
-      <v-btn @click="showCreateRoom" depressed >
-        <v-icon style="color: white;">mdi-plus</v-icon>
+    <v-row class="row-title-item"
+      ><h2 class="title">Danh sách phòng</h2>
+      <v-btn
+        class="gradient-button"
+        @click="showCreateRoom"
+        style="color: white"
+      >
+        <v-icon style="color: white">mdi-plus</v-icon>
         <span>Thêm phòng</span>
       </v-btn>
     </v-row>
@@ -37,16 +42,23 @@
     <v-container>
       <v-row>
         <v-col
-          v-for="(room,index) in rooms"
+          v-for="(room, index) in rooms"
           :key="index"
           cols="12"
           sm="6"
           md="4"
           lg="2"
         >
-          <v-card :class="{'room-card-free':room.isAvailable,'room-card-using':!room.isAvailable }">
+          <v-card
+            :class="{
+              'room-card-free': room.isAvailable,
+              'room-card-using': !room.isAvailable,
+            }"
+          >
             <v-list-item>
-              <v-icon v-if="room.type===1" large>mdi-bed-single-outline</v-icon>
+              <v-icon v-if="room.type === 1" large
+                >mdi-bed-single-outline</v-icon
+              >
               <v-icon v-else large>mdi-bed-double-outline</v-icon>
               <div class="room-info">
                 <span>{{ room.name }}</span>
@@ -60,26 +72,39 @@
       <div class="popup-content">
         <h3>Tạo phòng mới</h3>
         <v-text-field v-model="newRoom.name" label="Tên phòng"></v-text-field>
-        <v-checkbox v-model="newRoom.isSingle" label="Phòng đơn"></v-checkbox>
-        <v-checkbox v-model="newRoom.isDouble" label="Phòng đôi"></v-checkbox>
-        <v-btn @click="addRoom">Xác nhận</v-btn>
+        <v-radio-group v-model="newRoom.type" row>
+          <v-radio label="Phòng đơn" value="1"></v-radio>
+          <v-radio label="Phòng đôi" value="2"></v-radio>
+        </v-radio-group>
+        <div class="button-container">
+          <v-btn
+            class="gradient-button-cancel"
+            style="color: #007bff"
+            @click="hideCreateRoom"
+            >Hủy</v-btn
+          >
+          <v-btn
+            class="gradient-button-confirm"
+            style="color: white"
+            @click="addRoom"
+            >Xác nhận</v-btn
+          >
+        </div>
       </div>
     </div>
   </div>
- 
 </template>
 
 <script>
 export default {
-
   data() {
     return {
       isShowCreateRoom: false,
       newRoom: {
         name: "",
-        isSingle: false,
-        isDouble: false,
+        type: 1,
       },
+
       rooms: [
         {
           id: 1,
@@ -273,23 +298,26 @@ export default {
       ],
     };
   },
-  methods:{
-  showCreateRoom(){
-    this.isShowCreateRoom = true;
-    console.log(this.isShowCreateRoom);
-  },
-  hideCreateRoom(){
-    this.isShowCreateRoom = false;
-  },
-  addRoom(){
-    this.rooms.push(this.newRoom);
-    this.newRoom = {
-      name: "",
-      isSingle: false,
-      isDouble: false,
-    };
-    this.hideCreateRoom();
-  }
+  methods: {
+    showCreateRoom() {
+      this.isShowCreateRoom = true;
+      console.log(this.isShowCreateRoom);
+    },
+    hideCreateRoom() {
+      this.isShowCreateRoom = false;
+    },
+    addRoom() {
+      const roomType = parseInt(this.newRoom.type, 10);
+      this.rooms.push({
+        id: this.rooms.length + 1,
+        name: this.newRoom.name,
+        type: roomType,
+        price: 1000,
+        isAvailable: true,
+      });
+      console.log(this.rooms);
+      this.hideCreateRoom();
+    },
   },
 
   computed: {
@@ -304,7 +332,71 @@ export default {
 </script>
 
 <style scoped>
+.gradient-button-cancel {
+  flex: 1;
+  border: none;
+  color: #23aeff;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: background 0.3s ease;
+}
+.gradient-button-confirm {
+  flex: 1;
+  background: linear-gradient(45deg, #007bff, #00d4ff);
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: background 0.3s ease;
+}
+.button-container {
+  display: flex;
+  justify-content: space-between;
+}
+.gradient-button {
+  background: linear-gradient(45deg, #007bff, #00d4ff);
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: background 0.3s ease;
+}
 
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.popup-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+}
 .row-title-item {
   display: flex;
   justify-content: space-between;
@@ -312,14 +404,7 @@ export default {
   margin-bottom: 10px;
   margin-top: 10px;
 }
-button{
-  background-color: #3684f9;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-}
+
 .count {
   font-size: 20px;
   font-weight: bold;

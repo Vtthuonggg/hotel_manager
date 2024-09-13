@@ -24,6 +24,16 @@
           cáo</router-link
         >
       </li>
+      <li class="navbar-item">
+        <router-link
+          to="/dashboard/service"
+          active-class="active-link"
+          exact-active-class="exact-active-link"
+        >
+          <v-icon style="color: black">mdi-food</v-icon
+          ><span class="bold-text"></span>Dịch vụ</router-link
+        >
+      </li>
       <li
         class="navbar-item1 dropdown"
         @mouseover="showDropdown"
@@ -276,11 +286,11 @@ i {
 
 .exact-active-link {
   background-color: rgba(0, 0, 0, 0.1);
-  color:#1DB4F0 !important;
+  color: #1db4f0 !important;
 }
 .active-link i,
 .exact-active-link i {
-  color:#1DB4F0;
+  color: #1db4f0 !important;
 }
 .logout-item a {
   color: red !important;
