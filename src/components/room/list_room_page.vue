@@ -39,9 +39,10 @@
           md="4"
           lg="2"
         >
-          <v-card class="room-card">
+          <v-card :class="{'room-card-free':room.isAvailable,'room-card-using':!room.isAvailable }">
             <v-list-item>
-              <v-icon large>mdi-bed-empty</v-icon>
+              <v-icon v-if="room.description==='Phòng đơn'" large>mdi-bed-single</v-icon>
+              <v-icon v-else large>mdi-bed-double</v-icon>
               <div class="room-info">
                 <span>{{ room.name }}</span>
               </div>
@@ -61,7 +62,7 @@ export default {
         {
           id: 1,
           name: "P102",
-          description: "Phòng đơn",
+          description: "Phòng đôi",
           pice: 1000,
           isAvailable: true,
         },
@@ -75,7 +76,28 @@ export default {
         {
           id: 3,
           name: "P103",
-          description: "Phòng đơn",
+          description: "Phòng đôi",
+          pice: 1000,
+          isAvailable: false,
+        },
+        {
+          id: 1,
+          name: "P102",
+          description: "Phòng đôi",
+          pice: 1000,
+          isAvailable: true,
+        },
+        {
+          id: 2,
+          name: "P102",
+          description: "Phòng đôi",
+          pice: 1000,
+          isAvailable: true,
+        },
+        {
+          id: 3,
+          name: "P103",
+          description: "Phòng đôi",
           pice: 1000,
           isAvailable: false,
         },
@@ -110,28 +132,7 @@ export default {
         {
           id: 2,
           name: "P102",
-          description: "Phòng đơn",
-          pice: 1000,
-          isAvailable: true,
-        },
-        {
-          id: 3,
-          name: "P103",
-          description: "Phòng đơn",
-          pice: 1000,
-          isAvailable: false,
-        },
-        {
-          id: 1,
-          name: "P102",
-          description: "Phòng đơn",
-          pice: 1000,
-          isAvailable: true,
-        },
-        {
-          id: 2,
-          name: "P102",
-          description: "Phòng đơn",
+          description: "Phòng đôi",
           pice: 1000,
           isAvailable: true,
         },
@@ -262,6 +263,7 @@ export default {
 </script>
 
 <style scoped>
+
 .count {
   font-size: 20px;
   font-weight: bold;
@@ -282,7 +284,14 @@ export default {
   margin-bottom: 20px;
   border-radius: 0 0 15px 15px !important;
 }
-.room-card {
+.room-card-using {
+  background-color: greenyellow !important;
+  padding: 10px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.room-card-free {
+  background-color: white !important;
   padding: 10px;
   text-align: center;
   margin-bottom: 10px;
