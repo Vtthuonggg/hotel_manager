@@ -18,6 +18,8 @@ const routes = [
   {
     path: "/register",
     name: "Register",
+    meta: { title: "Bate - Đăng ký" },
+
     component: RegisterPage,
   },
 
@@ -33,11 +35,14 @@ const routes = [
         path: "listroom",
         name: "ListRoom",
         component: Room,
+        meta: { title: "Bate - Danh sách phòng" },
       },
       {
         path: "report",
         name: "Reports",
+
         component: Report,
+        meta: { title: "Bate - Báo cáo" },
       },
     ],
   },
@@ -48,5 +53,8 @@ const router = new Router({
   base: process.env.BASE_URL,
   routes,
 });
-
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title || "Bate - Quản lý khách sạn";
+  next();
+});
 export default router;

@@ -23,7 +23,7 @@
             required
           />
         </div>
-        <button type="submit">Đăng ký</button>
+        <button type="submit" class="gradient-button">Đăng ký</button>
       </form>
     </div>
     <div class="login-link">
@@ -74,49 +74,51 @@ export default {
   margin-top: 10px;
 }
 .register-container {
-  max-width: 25%;
+  max-width: 400px;
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin-top: 10%;
+  margin-top: 5%;
   border-radius: 12px;
-
 }
 input:focus {
-  border-color: #0056B3;
+  border-color: #0056b3;
   outline: none;
   box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
 }
 .login-link {
-  max-width: 25%;
+  max-width: 400px;
   margin: 0 auto;
   text-align: right;
   margin-top: 10px;
 }
 .login-link a {
-  color: blue; 
+  color: blue;
 }
 .form-group {
-  
   text-align: left;
   margin-bottom: 15px;
-
 }
-button {
+.gradient-button {
   width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
+  background: linear-gradient(45deg, #007bff, #00d4ff);
   border: none;
-  border-radius: 5px;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
   cursor: pointer;
   border-radius: 12px;
-
+  transition: background 0.3s ease;
 }
-button:hover {
-  background-color: #0056b3;
+
+.gradient-button:hover {
+  background: linear-gradient(45deg, #0056b3, #0099cc);
 }
 input {
   border-radius: 12px;

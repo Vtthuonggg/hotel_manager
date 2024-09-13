@@ -14,7 +14,7 @@
           <label for="password">Mật khẩu:</label>
           <input type="password" id="password" v-model="password" required />
         </div>
-        <button type="submit">Đăng nhập</button>
+        <button type="submit" class="gradient-button">Đăng nhập</button>
       </form>
     </div>
     <div class="register-link">
@@ -60,8 +60,7 @@ export default {
   margin-top: 10px;
 }
 .login-container {
-
-  max-width: 25%;
+  max-width: 400px;
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
@@ -69,7 +68,6 @@ export default {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin-top: 5%;
   border-radius: 12px;
-
 }
 
 .form-group {
@@ -77,12 +75,11 @@ export default {
   margin-bottom: 15px;
 }
 input:focus {
-  border-color: #0056B3;
+  border-color: #0056b3;
   outline: none;
   box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
 }
 label {
-  
   display: block;
   margin-bottom: 5px;
 }
@@ -95,29 +92,36 @@ input {
   border: 1px solid #ccc;
 }
 
-button {
+.gradient-button {
   width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
+  background: linear-gradient(45deg, #007bff, #00d4ff); /* Gradient màu xanh */
   border: none;
-  border-radius: 5px;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
   cursor: pointer;
   border-radius: 12px;
-
+  transition: background 0.3s ease;
 }
 
-button:hover {
-  background-color: #0056b3;
+.gradient-button:hover {
+  background: linear-gradient(
+    45deg,
+    #0056b3,
+    #0099cc
+  ); /* Gradient màu xanh đậm hơn khi hover */
 }
 .register-link {
-  max-width: 25%;
+  max-width: 400px;
   margin: 0 auto;
   text-align: right;
   margin-top: 10px;
 }
-.register-link a{
+.register-link a {
   color: blue;
 }
-
 </style>

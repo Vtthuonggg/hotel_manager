@@ -114,8 +114,6 @@
 </template>
 
 <script>
-// import { is } from "core-js/core/object";
-
 export default {
   name: "AppNavbar",
   data() {
@@ -136,6 +134,9 @@ export default {
       },
     };
   },
+  // created() {
+  //   this.fetchHotelInfo();
+  // },
   methods: {
     showDropdown() {
       this.dropdownVisible = true;
@@ -163,6 +164,14 @@ export default {
       this.$toast.success("Lưu thông tin thành công");
       this.hideInputInfo();
     },
+    // async fetchHotelInfo() {
+    //   try {
+    //     const response = await axios.get(`${BASE_URL}hotel/info`);
+    //     this.info = response.data;
+    //   } catch (error) {
+    //     console.error("Error fetching hotel info:", error);
+    //   }
+    // },
   },
 };
 </script>
@@ -267,7 +276,7 @@ i {
 
 .exact-active-link {
   background-color: rgba(0, 0, 0, 0.1);
-  color: rgb(0, 157, 255)!important;
+  color: rgb(0, 157, 255) !important;
 }
 .active-link i,
 .exact-active-link i {
