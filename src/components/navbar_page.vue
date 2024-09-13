@@ -276,11 +276,11 @@ i {
 
 .exact-active-link {
   background-color: rgba(0, 0, 0, 0.1);
-  color: rgb(0, 157, 255) !important;
+  color:#1DB4F0 !important;
 }
 .active-link i,
 .exact-active-link i {
-  color: rgb(0, 157, 255);
+  color:#1DB4F0;
 }
 .logout-item a {
   color: red !important;

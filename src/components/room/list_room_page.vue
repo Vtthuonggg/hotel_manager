@@ -1,6 +1,11 @@
 <template>
   <div class="container">
-    <h2 class="title">Danh sách phòng</h2>
+    <v-row class="row-title-item"><h2 class="title">Danh sách phòng</h2>
+      <v-btn @click="showCreateRoom" depressed >
+        <v-icon style="color: white;">mdi-plus</v-icon>
+        <span>Thêm phòng</span>
+      </v-btn>
+    </v-row>
     <v-divider></v-divider>
     <v-row justify="center" class="row-item">
       <v-col cols="12" md="6" lg="4">
@@ -32,8 +37,8 @@
     <v-container>
       <v-row>
         <v-col
-          v-for="room in rooms"
-          :key="room.id"
+          v-for="(room,index) in rooms"
+          :key="index"
           cols="12"
           sm="6"
           md="4"
@@ -41,8 +46,8 @@
         >
           <v-card :class="{'room-card-free':room.isAvailable,'room-card-using':!room.isAvailable }">
             <v-list-item>
-              <v-icon v-if="room.description==='Phòng đơn'" large>mdi-bed-single</v-icon>
-              <v-icon v-else large>mdi-bed-double</v-icon>
+              <v-icon v-if="room.type===1" large>mdi-bed-single-outline</v-icon>
+              <v-icon v-else large>mdi-bed-double-outline</v-icon>
               <div class="room-info">
                 <span>{{ room.name }}</span>
               </div>
@@ -51,206 +56,242 @@
         </v-col>
       </v-row>
     </v-container>
+    <div v-if="isShowCreateRoom" class="popup">
+      <div class="popup-content">
+        <h3>Tạo phòng mới</h3>
+        <v-text-field v-model="newRoom.name" label="Tên phòng"></v-text-field>
+        <v-checkbox v-model="newRoom.isSingle" label="Phòng đơn"></v-checkbox>
+        <v-checkbox v-model="newRoom.isDouble" label="Phòng đôi"></v-checkbox>
+        <v-btn @click="addRoom">Xác nhận</v-btn>
+      </div>
+    </div>
   </div>
+ 
 </template>
 
 <script>
 export default {
+
   data() {
     return {
+      isShowCreateRoom: false,
+      newRoom: {
+        name: "",
+        isSingle: false,
+        isDouble: false,
+      },
       rooms: [
         {
           id: 1,
           name: "P102",
-          description: "Phòng đôi",
+          type: 1,
           pice: 1000,
           isAvailable: true,
         },
         {
           id: 2,
           name: "P102",
-          description: "Phòng đơn",
+          type: 2,
           pice: 1000,
           isAvailable: true,
         },
         {
           id: 3,
           name: "P103",
-          description: "Phòng đôi",
+          type: 2,
           pice: 1000,
           isAvailable: false,
         },
         {
           id: 1,
           name: "P102",
-          description: "Phòng đôi",
+          type: 2,
           pice: 1000,
           isAvailable: true,
         },
         {
           id: 2,
           name: "P102",
-          description: "Phòng đôi",
+          type: 2,
           pice: 1000,
           isAvailable: true,
         },
         {
           id: 3,
           name: "P103",
-          description: "Phòng đôi",
+          type: 2,
           pice: 1000,
           isAvailable: false,
         },
         {
           id: 1,
           name: "P102",
-          description: "Phòng đơn",
+          type: 2,
           pice: 1000,
           isAvailable: true,
         },
         {
           id: 2,
           name: "P102",
-          description: "Phòng đơn",
+          type: 2,
           pice: 1000,
           isAvailable: true,
         },
         {
           id: 3,
           name: "P103",
-          description: "Phòng đơn",
+          type: 2,
           pice: 1000,
           isAvailable: false,
         },
         {
           id: 1,
           name: "P102",
-          description: "Phòng đơn",
+          type: 2,
           pice: 1000,
           isAvailable: true,
         },
         {
           id: 2,
           name: "P102",
-          description: "Phòng đôi",
+          type: 2,
           pice: 1000,
           isAvailable: true,
         },
         {
           id: 3,
           name: "P103",
-          description: "Phòng đơn",
+          type: 2,
           pice: 1000,
           isAvailable: false,
         },
         {
           id: 1,
           name: "P102",
-          description: "Phòng đơn",
+          type: 2,
           pice: 1000,
           isAvailable: true,
         },
         {
           id: 2,
           name: "P102",
-          description: "Phòng đơn",
+          type: 2,
           pice: 1000,
           isAvailable: true,
         },
         {
           id: 3,
           name: "P103",
-          description: "Phòng đơn",
+          type: 2,
           pice: 1000,
           isAvailable: false,
         },
         {
           id: 1,
           name: "P102",
-          description: "Phòng đơn",
+          type: 2,
           pice: 1000,
           isAvailable: true,
         },
         {
           id: 2,
           name: "P102",
-          description: "Phòng đơn",
+          type: 2,
           pice: 1000,
           isAvailable: true,
         },
         {
           id: 3,
           name: "P103",
-          description: "Phòng đơn",
+          type: 2,
           pice: 1000,
           isAvailable: false,
         },
         {
           id: 1,
           name: "P102",
-          description: "Phòng đơn",
+          type: 2,
           pice: 1000,
           isAvailable: true,
         },
         {
           id: 2,
           name: "P102",
-          description: "Phòng đơn",
+          type: 2,
           pice: 1000,
           isAvailable: true,
         },
         {
           id: 3,
           name: "P103",
-          description: "Phòng đơn",
+          type: 2,
           pice: 1000,
           isAvailable: false,
         },
         {
           id: 1,
           name: "P102",
-          description: "Phòng đơn",
+          type: 2,
           pice: 1000,
           isAvailable: true,
         },
         {
           id: 2,
           name: "P102",
-          description: "Phòng đơn",
+          type: 2,
           pice: 1000,
           isAvailable: true,
         },
         {
           id: 3,
           name: "P103",
-          description: "Phòng đơn",
+          type: 2,
           pice: 1000,
           isAvailable: false,
         },
         {
           id: 1,
           name: "P102",
-          description: "Phòng đơn",
+          type: 2,
           pice: 1000,
           isAvailable: true,
         },
         {
           id: 2,
           name: "P102",
-          description: "Phòng đơn",
+          type: 2,
           pice: 1000,
           isAvailable: true,
         },
         {
           id: 3,
           name: "P103",
-          description: "Phòng đơn",
+          type: 2,
           pice: 1000,
           isAvailable: false,
         },
       ],
     };
   },
+  methods:{
+  showCreateRoom(){
+    this.isShowCreateRoom = true;
+    console.log(this.isShowCreateRoom);
+  },
+  hideCreateRoom(){
+    this.isShowCreateRoom = false;
+  },
+  addRoom(){
+    this.rooms.push(this.newRoom);
+    this.newRoom = {
+      name: "",
+      isSingle: false,
+      isDouble: false,
+    };
+    this.hideCreateRoom();
+  }
+  },
+
   computed: {
     getAvailableRooms() {
       return this.rooms.filter((room) => room.isAvailable).length;
@@ -264,6 +305,21 @@ export default {
 
 <style scoped>
 
+.row-title-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+button{
+  background-color: #3684f9;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
 .count {
   font-size: 20px;
   font-weight: bold;
