@@ -20,10 +20,32 @@
           label="Giá tiền"
           type="number"
         ></v-text-field>
+        <div class="image-upload-container">
+          <input
+            type="file"
+            @change="onFileChange"
+            ref="fileInput"
+            style="display: none"
+          />
+          <div v-if="newService.image" class="image-preview">
+            <img
+              :src="newService.image"
+              alt="Service Image"
+              class="uploaded-image"
+            />
+            <v-icon class="delete-icon" @click="removeImage">mdi-close</v-icon>
+          </div>
+          <div v-else>
+            <v-icon class="upload-icon" @click="triggerFileInput"
+              >mdi-upload</v-icon
+            >
+            <p class="image-text">Chọn ảnh</p>
+          </div>
+        </div>
         <div class="button-container">
           <v-btn
             class="gradient-button-cancel"
-            style="color: #007bff"
+            style="color: #00bfff"
             @click="hideCreateService"
             >Hủy</v-btn
           >
@@ -39,6 +61,7 @@
   </div>
 </template>
 <script>
+import { uploadImage } from "@/api/service_api.js";
 export default {
   data() {
     return {
@@ -46,6 +69,8 @@ export default {
       newService: {
         name: "",
         price: null,
+        image: null,
+        imageFile: null,
       },
       listSevices: [],
     };
@@ -58,11 +83,35 @@ export default {
       this.isShowCreateService = false;
     },
     async addService() {
-      this.listSevices.push(this.newService);
-      console.log("New service:", this.newService);
-      this.$toast.success("Thêm dịch vụ thành công");
-      this.hideCreateService();
+      if (this.newService.imageFile) {
+        try {
+          // Tải ảnh lên dịch vụ lưu trữ và lấy URL
+          const imageUrl = await uploadImage(this.newService.imageFile);
+          this.newService.image = imageUrl;
+          console.log("Uploaded image URL:", imageUrl);
+        } catch (error) {
+          console.error("Error uploading image:", error);
+          this.$toast.error("Tải ảnh lên thất bại");
+          return;
+        }
+      }
+
+      // try {
+      //   const response = await axios.post(`${BASE_URL}/services`, {
+      //     name: this.newService.name,
+      //     price: this.newService.price,
+      //     image: this.newService.image,
+      //   });
+      //   this.listSevices.push(response.data);
+      //   console.log("New service:", response.data);
+      //   this.$toast.success("Thêm dịch vụ thành công");
+      //   this.hideCreateService();
+      // } catch (error) {
+      //   console.error("Error adding service:", error);
+      //   this.$toast.error("Thêm dịch vụ thất bại");
+      // }
     },
+
     validateInteger(event) {
       const value = parseInt(event.target.value, 10);
       if (!isNaN(value)) {
@@ -71,10 +120,62 @@ export default {
         this.newService.price = 0;
       }
     },
+    onFileChange(event) {
+      const file = event.target.files[0];
+      if (file) {
+        this.newService.imageFile = file;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.newService.image = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    },
+    triggerFileInput() {
+      this.$refs.fileInput.click();
+    },
+    removeImage() {
+      this.newService.image = null;
+      this.newService.imageFile = null;
+      this.$refs.fileInput.value = null;
+    },
   },
 };
 </script>
 <style scoped>
+.image-upload-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+.image-text {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+.upload-icon {
+  font-size: 48px !important;
+  color: #00bfff !important;
+}
+
+.image-preview {
+  position: relative;
+  display: inline-block;
+}
+
+.uploaded-image {
+  max-width: 100%;
+  height: auto;
+}
+
+.delete-icon {
+  position: absolute !important;
+  top: 8px;
+  right: 8px;
+  font-size: 24px;
+  cursor: pointer;
+  background: white;
+  border-radius: 50%;
+}
 .gradient-button-cancel {
   flex: 1;
   border: none;
@@ -143,7 +244,7 @@ export default {
   background-color: white;
   padding: 20px;
   border-radius: 10px;
-  width: 300px;
+  width: 350px;
 }
 .row-title-item {
   display: flex;

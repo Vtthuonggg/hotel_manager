@@ -94,7 +94,7 @@ input {
 
 .gradient-button {
   width: 100%;
-  background: linear-gradient(45deg, #007bff, #00d4ff); /* Gradient màu xanh */
+  background: linear-gradient(45deg, #007bff, #00d4ff);
   border: none;
   color: white;
   padding: 10px 20px;
@@ -109,11 +109,7 @@ input {
 }
 
 .gradient-button:hover {
-  background: linear-gradient(
-    45deg,
-    #0056b3,
-    #0099cc
-  ); /* Gradient màu xanh đậm hơn khi hover */
+  background: linear-gradient(45deg, #0056b3, #0099cc);
 }
 .register-link {
   max-width: 400px;
