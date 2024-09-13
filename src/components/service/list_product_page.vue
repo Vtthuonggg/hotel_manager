@@ -16,9 +16,10 @@
         <h3>Tạo dịch vụ</h3>
         <v-text-field v-model="newService.name" label="Tên"></v-text-field>
         <v-text-field
-          v-model.number="newService.price"
+          v-model="formattedPrice"
           label="Giá tiền"
           type="number"
+          @input="updatePrice"
         ></v-text-field>
         <div class="image-upload-container">
           <input
@@ -39,7 +40,7 @@
             <v-icon class="upload-icon" @click="triggerFileInput"
               >mdi-upload</v-icon
             >
-            <p class="image-text">Chọn ảnh</p>
+            <p class="image-text">Tải ảnh lên</p>
           </div>
         </div>
         <div class="button-container">
@@ -61,6 +62,7 @@
   </div>
 </template>
 <script>
+import { formatCurrency } from "@/utils/format_currency";
 import { uploadImage } from "@/api/service_api.js";
 export default {
   data() {
@@ -75,7 +77,29 @@ export default {
       listSevices: [],
     };
   },
+  computed: {
+    formattedPrice: {
+      get() {
+        return this.newService.price !== null
+          ? formatCurrency(this.newService.price)
+          : "";
+      },
+      set(value) {
+        if (typeof value === "string") {
+          this.newService.price = parseInt(value.replace(/\D/g, ""), 10) || 0;
+        } else {
+          this.newService.price = value;
+        }
+      },
+    },
+  },
   methods: {
+    updatePrice(event) {
+      if (event && event.target && event.target.value !== undefined) {
+        const value = event.target.value.replace(/\D/g, "");
+        this.newService.price = parseInt(value, 10) || 0;
+      }
+    },
     showCreateService() {
       this.isShowCreateService = true;
     },
@@ -185,7 +209,7 @@ export default {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  margin: 4px 2px;
+  margin: 4px 5px;
   cursor: pointer;
   border-radius: 12px;
   transition: background 0.3s ease;
@@ -200,7 +224,7 @@ export default {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  margin: 4px 2px;
+  margin: 4px 5px;
   cursor: pointer;
   border-radius: 12px;
   transition: background 0.3s ease;
