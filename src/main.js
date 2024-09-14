@@ -9,7 +9,7 @@ import "@mdi/font/css/materialdesignicons.css";
 Vue.use(Vuetify);
 Vue.config.productionTip = false;
 Vue.use(Toast, {
-  duration: 2000,
+  duration: 1500,
   hideProgressBar: true,
 });
 

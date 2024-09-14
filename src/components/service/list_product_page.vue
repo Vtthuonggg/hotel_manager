@@ -11,6 +11,39 @@
         <span>Thêm dịch vụ</span>
       </v-btn>
     </v-row>
+    <v-divider></v-divider>
+    <v-container v-if="listSevices.length > 0">
+      <v-row>
+        <v-col
+          v-for="(item, index) in listSevices"
+          :key="index"
+          cols="12"
+          sm="6"
+        md="6"
+        lg="6"
+        >
+        <v-card class="service-card">
+          <v-list-item>
+            <div class="image-container">
+            <v-img
+              :src="item.image"
+              class="service-image"
+              aspect-ratio="1"
+            ></v-img>
+            </div>
+            <div class="service-info">
+              <span>{{ item.name }}</span>
+            </div>
+            <div class="service-price">
+              <span>{{ item.price }}đ</span>
+            </div>
+          </v-list-item>
+        </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+
+
     <div v-if="isShowCreateService" class="popup">
       <div class="popup-content">
         <h3>Tạo dịch vụ</h3>
@@ -113,6 +146,20 @@ export default {
           const imageUrl = await uploadImage(this.newService.imageFile);
           this.newService.image = imageUrl;
           console.log("Uploaded image URL:", imageUrl);
+
+          this.listSevices.push({
+            name: this.newService.name,
+            price: this.newService.price,
+            image: imageUrl,
+          });
+          this.newService = {
+            name: "",
+            price: "",
+            image: "",
+            imageFile: null,
+          };
+          this.$toast.success("Thêm dịch vụ thành công");
+        this.hideCreateService();
         } catch (error) {
           console.error("Error uploading image:", error);
           this.$toast.error("Tải ảnh lên thất bại");
@@ -147,6 +194,10 @@ export default {
     onFileChange(event) {
       const file = event.target.files[0];
       if (file) {
+        if (!file.type.startsWith('image/')) {
+          this.$toast.error("Vui lòng chọn một file ảnh hợp lệ.");
+          return;
+        }
         this.newService.imageFile = file;
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -167,6 +218,34 @@ export default {
 };
 </script>
 <style scoped>
+.service-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.image-container {
+  width: 120px;
+  height: 120px;
+  overflow: hidden;
+  margin: 10px;
+}
+
+.service-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; 
+}
+
+.service-info {
+  flex: 1;
+  text-align: center;
+}
+
+
+.service-price {
+  text-align: right;
+}
 .image-upload-container {
   position: relative;
   display: inline-block;

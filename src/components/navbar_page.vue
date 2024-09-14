@@ -66,30 +66,18 @@
         <div class="price-setting">
           <label for="single-room">Phòng đơn:</label>
           <input
-            type="text"
+            type="number"
             id="single-room"
-            v-model="roomPrice.singleRoomPrice"
+            v-model="formattedSingleRoomPrice"
           />
         </div>
         <div class="price-setting">
           <label for="double-room">Phòng đôi:</label>
           <input
-            type="text"
+            type="number"
             id="double-room"
-            v-model="roomPrice.doubleRoomPrice"
+            v-model="formattedDoubleRoomPrice"
           />
-        </div>
-        <div class="price-setting">
-          <label for="triple-room">Phòng ba:</label>
-          <input
-            type="text"
-            id="triple-room"
-            v-model="roomPrice.tripleRoomPrice"
-          />
-        </div>
-        <div class="price-setting">
-          <label for="quad-room">Phòng bốn:</label>
-          <input type="text" id="quad-room" v-model="roomPrice.quadRoomPrice" />
         </div>
         <button class="save-button" @click="savePrices">Lưu</button>
       </div>
@@ -103,6 +91,18 @@
           <v-spacer></v-spacer>
           <span class="close" @click="hideInputInfo">&times;</span></v-row
         >
+        <div class="avatar-container">
+      <input type="file" @change="onFileChange" class="file-input"  ref="fileInput"/>
+      <div class="avatar" @click="triggerFileInput">
+        <div  v-if="info.avatar">
+        <img :src="info.avatar" alt="Avatar" />
+       
+      </div>
+
+        <v-icon v-else class="upload-icon" >mdi-upload</v-icon>
+        
+      </div>
+    </div>
         <div>
           <label for="name">Tên khách sạn:</label>
           <input type="text" id="name" v-model="info.name" />
@@ -124,6 +124,9 @@
 </template>
 
 <script>
+import { formatCurrency } from "@/utils/format_currency";
+import Cookies from "js-cookie";
+import { uploadImage } from "@/api/service_api.js";
 export default {
   name: "AppNavbar",
   data() {
@@ -141,6 +144,8 @@ export default {
         name: "",
         phone: "",
         address: "",
+        avatar: "", 
+        avatarFile: null,
       },
     };
   },
@@ -148,6 +153,26 @@ export default {
   //   this.fetchHotelInfo();
   // },
   methods: {
+  
+    triggerFileInput() {
+      this.$refs.fileInput.click();
+    },
+    onFileChange(e) {
+      const file = e.target.files[0];
+      if (file) {
+        // Kiểm tra loại MIME của file
+        if (!file.type.startsWith('image/')) {
+          this.$toast.error("Vui lòng chọn một file ảnh hợp lệ.");
+          return;
+        }
+        this.info.avatarFile = file;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.info.avatar = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    },
     showDropdown() {
       this.dropdownVisible = true;
     },
@@ -155,6 +180,14 @@ export default {
       this.dropdownVisible = false;
     },
     showPriceModal() {
+      const singleRoomPrice = Cookies.get("singleRoomPrice", );
+      const doubleRoomPrice = Cookies.get("doubleRoomPrice");
+      if (singleRoomPrice) {
+        this.roomPrice.singleRoomPrice = parseInt(singleRoomPrice, 10);
+      }
+      if (doubleRoomPrice) {
+        this.roomPrice.doubleRoomPrice = parseInt(doubleRoomPrice, 10);
+      }
       this.isPriceModalVisible = true;
     },
     hidePriceModal() {
@@ -167,11 +200,28 @@ export default {
       this.isInputInfo = false;
     },
     savePrices() {
+      Cookies.set("singleRoomPrice", this.roomPrice.singleRoomPrice,{ expires: 7, secure: true, sameSite: 'Strict' });
+      Cookies.set("doubleRoomPrice", this.roomPrice.doubleRoomPrice,{ expires: 7, secure: true, sameSite: 'Strict' });
       this.$toast.success("Lưu giá phòng thành công");
       this.hidePriceModal();
     },
-    saveInfo() {
-      this.$toast.success("Lưu thông tin thành công");
+  async  saveInfo() {
+      if (this.info.avatar) {
+        try {
+          // Tải ảnh lên dịch vụ lưu trữ và lấy URL
+          const imageUrl = await uploadImage(this.info.avatarFile);
+          this.info.avatar = imageUrl;
+          console.log("Uploaded image URL:", imageUrl);
+          this.$toast.success("Lưu thông tin thành công");
+        } catch (error) {
+          console.error("Error uploading image:", error);
+          this.$toast.error("Tải ảnh lên thất bại");
+          return;
+        }
+      }
+
+
+      
       this.hideInputInfo();
     },
     // async fetchHotelInfo() {
@@ -182,11 +232,74 @@ export default {
     //     console.error("Error fetching hotel info:", error);
     //   }
     // },
-  },
+  },  computed :{
+    formattedSingleRoomPrice: {
+      get() {
+        return this.roomPrice.singleRoomPrice !== null
+          ? formatCurrency(this.roomPrice.singleRoomPrice)
+          : "";
+      },
+      set(value) {
+        if (typeof value === "string") {
+          this.roomPrice.singleRoomPrice = parseInt(value.replace(/\D/g, ""), 10) || 0;
+        } else {
+          this.roomPrice.singleRoomPrice = value;
+        }
+      },
+    },
+    formattedDoubleRoomPrice: {
+      get() {
+        return this.roomPrice.doubleRoomPrice !== null
+          ? formatCurrency(this.roomPrice.doubleRoomPrice)
+          : "";
+      },
+      set(value) {
+        if (typeof value === "string") {
+          this.roomPrice.doubleRoomPrice = parseInt(value.replace(/\D/g, ""), 10) || 0;
+        } else {
+          this.roomPrice.doubleRoomPrice = value;
+        }
+      },
+    },
+  }
 };
 </script>
 
 <style scoped>
+
+.avatar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center ;
+  margin-bottom: 10px;
+}
+
+.file-input {
+  display: none;
+}
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar i {
+ 
+  font-size: 
+  40px;
+  color: #888;
+}
+.avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  cursor: pointer;
+}
 .header {
   display: flex;
   justify-content: space-between;
@@ -197,18 +310,18 @@ export default {
 }
 .save-button {
   width: 100%;
-  background-color: #007bff; /* Màu nền */
-  color: white; /* Màu chữ */
-  border: none; /* Bỏ viền */
-  padding: 10px 20px; /* Khoảng cách bên trong */
-  font-size: 16px; /* Kích thước chữ */
-  border-radius: 5px; /* Bo góc */
-  cursor: pointer; /* Con trỏ chuột */
-  transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu nền */
+  background-color: #007bff; 
+  color: white; 
+  border: none; 
+  padding: 10px 20px;
+  font-size: 16px; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  transition: background-color 0.3s ease; 
 }
 
 .save-button:hover {
-  background-color: #0056b3; /* Màu nền khi hover */
+  background-color: #0056b3; 
 }
 .navbar {
   background-color: white;
@@ -353,7 +466,7 @@ i {
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
-  max-width: 500px;
+  max-width: 300px;
   border-radius: 10px;
   margin-top: 10px;
 }

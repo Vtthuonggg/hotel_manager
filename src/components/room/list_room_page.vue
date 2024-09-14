@@ -39,7 +39,7 @@
       </v-col>
     </v-row>
 
-    <v-container>
+    <v-container v-if="rooms.length > 0">
       <v-row>
         <v-col
           v-for="(room, index) in rooms"
@@ -96,6 +96,7 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
 export default {
   data() {
     return {
@@ -105,197 +106,7 @@ export default {
         type: 1,
       },
 
-      rooms: [
-        {
-          id: 1,
-          name: "P102",
-          type: 1,
-          pice: 1000,
-          isAvailable: true,
-        },
-        {
-          id: 2,
-          name: "P102",
-          type: 2,
-          pice: 1000,
-          isAvailable: true,
-        },
-        {
-          id: 3,
-          name: "P103",
-          type: 2,
-          pice: 1000,
-          isAvailable: false,
-        },
-        {
-          id: 1,
-          name: "P102",
-          type: 2,
-          pice: 1000,
-          isAvailable: true,
-        },
-        {
-          id: 2,
-          name: "P102",
-          type: 2,
-          pice: 1000,
-          isAvailable: true,
-        },
-        {
-          id: 3,
-          name: "P103",
-          type: 2,
-          pice: 1000,
-          isAvailable: false,
-        },
-        {
-          id: 1,
-          name: "P102",
-          type: 2,
-          pice: 1000,
-          isAvailable: true,
-        },
-        {
-          id: 2,
-          name: "P102",
-          type: 2,
-          pice: 1000,
-          isAvailable: true,
-        },
-        {
-          id: 3,
-          name: "P103",
-          type: 2,
-          pice: 1000,
-          isAvailable: false,
-        },
-        {
-          id: 1,
-          name: "P102",
-          type: 2,
-          pice: 1000,
-          isAvailable: true,
-        },
-        {
-          id: 2,
-          name: "P102",
-          type: 2,
-          pice: 1000,
-          isAvailable: true,
-        },
-        {
-          id: 3,
-          name: "P103",
-          type: 2,
-          pice: 1000,
-          isAvailable: false,
-        },
-        {
-          id: 1,
-          name: "P102",
-          type: 2,
-          pice: 1000,
-          isAvailable: true,
-        },
-        {
-          id: 2,
-          name: "P102",
-          type: 2,
-          pice: 1000,
-          isAvailable: true,
-        },
-        {
-          id: 3,
-          name: "P103",
-          type: 2,
-          pice: 1000,
-          isAvailable: false,
-        },
-        {
-          id: 1,
-          name: "P102",
-          type: 2,
-          pice: 1000,
-          isAvailable: true,
-        },
-        {
-          id: 2,
-          name: "P102",
-          type: 2,
-          pice: 1000,
-          isAvailable: true,
-        },
-        {
-          id: 3,
-          name: "P103",
-          type: 2,
-          pice: 1000,
-          isAvailable: false,
-        },
-        {
-          id: 1,
-          name: "P102",
-          type: 2,
-          pice: 1000,
-          isAvailable: true,
-        },
-        {
-          id: 2,
-          name: "P102",
-          type: 2,
-          pice: 1000,
-          isAvailable: true,
-        },
-        {
-          id: 3,
-          name: "P103",
-          type: 2,
-          pice: 1000,
-          isAvailable: false,
-        },
-        {
-          id: 1,
-          name: "P102",
-          type: 2,
-          pice: 1000,
-          isAvailable: true,
-        },
-        {
-          id: 2,
-          name: "P102",
-          type: 2,
-          pice: 1000,
-          isAvailable: true,
-        },
-        {
-          id: 3,
-          name: "P103",
-          type: 2,
-          pice: 1000,
-          isAvailable: false,
-        },
-        {
-          id: 1,
-          name: "P102",
-          type: 2,
-          pice: 1000,
-          isAvailable: true,
-        },
-        {
-          id: 2,
-          name: "P102",
-          type: 2,
-          pice: 1000,
-          isAvailable: true,
-        },
-        {
-          id: 3,
-          name: "P103",
-          type: 2,
-          pice: 1000,
-          isAvailable: false,
-        },
-      ],
+      rooms:[]
     };
   },
   methods: {
@@ -308,11 +119,16 @@ export default {
     },
     addRoom() {
       const roomType = parseInt(this.newRoom.type, 10);
+      let price = 0;
+      if (roomType === 1) {
+        price = Cookies.get("singleRoomPrice");
+      } else if (roomType === 2) {
+        price = Cookies.get("doubleRoomPrice");
+      }
       this.rooms.push({
-        id: this.rooms.length + 1,
         name: this.newRoom.name,
         type: roomType,
-        price: 1000,
+        price: price,
         isAvailable: true,
       });
       console.log(this.rooms);
@@ -327,6 +143,7 @@ export default {
     getUsingRooms() {
       return this.rooms.filter((room) => !room.isAvailable).length;
     },
+  
   },
 };
 </script>
@@ -341,7 +158,7 @@ export default {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  margin: 4px 2px;
+  margin: 4px 5px;
   cursor: pointer;
   border-radius: 12px;
   transition: background 0.3s ease;
@@ -356,7 +173,7 @@ export default {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  margin: 4px 2px;
+  margin: 4px 5px;
   cursor: pointer;
   border-radius: 12px;
   transition: background 0.3s ease;
