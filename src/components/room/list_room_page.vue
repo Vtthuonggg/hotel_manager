@@ -60,7 +60,7 @@
               'room-card-free': room.isAvailable,
               'room-card-using': !room.isAvailable,
             }"
-            @click="createOrder"
+            @click="createOrder(room)"
           >
             <v-list-item>
               <v-icon v-if="room.type === 1" large
@@ -146,25 +146,25 @@ export default {
 
       rooms: [
         {
-          name: "Phòng 1",
+          name: "P101",
           type: 1,
           price: 100000,
           isAvailable: true,
         },
         {
-          name: "Phòng 2",
+          name: "P102",
           type: 2,
           price: 200000,
           isAvailable: false,
         },
         {
-          name: "Phòng 3",
+          name: "P103",
           type: 1,
           price: 100000,
           isAvailable: true,
         },
         {
-          name: "Phòng 4",
+          name: "P104",
           type: 2,
           price: 200000,
           isAvailable: false,
@@ -176,9 +176,12 @@ export default {
     toggleDropdown(index) {
       this.rooms[index].dropdown = !this.rooms[index].dropdown;
     },
-    createOrder() {
+    createOrder(room) {
       // Logic to navigate to create order page
-      this.$router.push({ name: "CreateOrder" });
+      this.$router.push({
+        name: "CreateOrder",
+        params: { title: "Tạo đơn", detail: room },
+      });
     },
     editRoom() {
       // Logic to show edit room popup with pre-filled information

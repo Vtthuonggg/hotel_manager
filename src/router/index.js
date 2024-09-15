@@ -8,6 +8,7 @@ import DashboardPage from "../components/dashboard_page.vue";
 import Room from "../components/room/list_room_page.vue";
 import Report from "../components/report/report_page.vue";
 import Service from "../components/service/list_product_page.vue";
+import CreateOrrder from "../components/order/create_order_page.vue";
 Vue.use(Router);
 
 const routes = [
@@ -27,8 +28,13 @@ const routes = [
     path: "/register",
     name: "Register",
     meta: { title: "Bate - Đăng ký" },
-
     component: RegisterPage,
+  },
+  {
+    path: "/create-order",
+    name: "CreateOrder",
+    meta: { title: "Bate - Tạo đơn" },
+    component: CreateOrrder,
   },
 
   {
