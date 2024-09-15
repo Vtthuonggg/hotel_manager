@@ -50,10 +50,9 @@
           <li @click="showPriceModal">
             <a href="#"> <i class="fa-solid fa-coins"></i>Cài đặt giá phòng</a>
           </li>
-          <li class="logout-item">
-            <router-link to="/login"
-              ><i class="fa-solid fa-right-from-bracket"></i>Đăng
-              xuất</router-link
+          <li class="logout-item" @click="handleLockout">
+            <a href="#"
+              ><i class="fa-solid fa-right-from-bracket"></i>Đăng xuất</a
             >
           </li>
         </ul>
@@ -92,17 +91,20 @@
           <span class="close" @click="hideInputInfo">&times;</span></v-row
         >
         <div class="avatar-container">
-      <input type="file" @change="onFileChange" class="file-input"  ref="fileInput"/>
-      <div class="avatar" @click="triggerFileInput">
-        <div  v-if="info.avatar">
-        <img :src="info.avatar" alt="Avatar" />
-       
-      </div>
+          <input
+            type="file"
+            @change="onFileChange"
+            class="file-input"
+            ref="fileInput"
+          />
+          <div class="avatar" @click="triggerFileInput">
+            <div v-if="info.avatar">
+              <img :src="info.avatar" alt="Avatar" />
+            </div>
 
-        <v-icon v-else class="upload-icon" >mdi-upload</v-icon>
-        
-      </div>
-    </div>
+            <v-icon v-else class="upload-icon">mdi-upload</v-icon>
+          </div>
+        </div>
         <div>
           <label for="name">Tên khách sạn:</label>
           <input type="text" id="name" v-model="info.name" />
@@ -144,7 +146,7 @@ export default {
         name: "",
         phone: "",
         address: "",
-        avatar: "", 
+        avatar: "",
         avatarFile: null,
       },
     };
@@ -153,15 +155,17 @@ export default {
   //   this.fetchHotelInfo();
   // },
   methods: {
-  
+    handleLockout() {
+      Cookies.remove("have_user");
+      this.$router.push("/login");
+    },
     triggerFileInput() {
       this.$refs.fileInput.click();
     },
     onFileChange(e) {
       const file = e.target.files[0];
       if (file) {
-        // Kiểm tra loại MIME của file
-        if (!file.type.startsWith('image/')) {
+        if (!file.type.startsWith("image/")) {
           this.$toast.error("Vui lòng chọn một file ảnh hợp lệ.");
           return;
         }
@@ -180,7 +184,7 @@ export default {
       this.dropdownVisible = false;
     },
     showPriceModal() {
-      const singleRoomPrice = Cookies.get("singleRoomPrice", );
+      const singleRoomPrice = Cookies.get("singleRoomPrice");
       const doubleRoomPrice = Cookies.get("doubleRoomPrice");
       if (singleRoomPrice) {
         this.roomPrice.singleRoomPrice = parseInt(singleRoomPrice, 10);
@@ -200,12 +204,20 @@ export default {
       this.isInputInfo = false;
     },
     savePrices() {
-      Cookies.set("singleRoomPrice", this.roomPrice.singleRoomPrice,{ expires: 7, secure: true, sameSite: 'Strict' });
-      Cookies.set("doubleRoomPrice", this.roomPrice.doubleRoomPrice,{ expires: 7, secure: true, sameSite: 'Strict' });
+      Cookies.set("singleRoomPrice", this.roomPrice.singleRoomPrice, {
+        expires: 7,
+        secure: true,
+        sameSite: "Strict",
+      });
+      Cookies.set("doubleRoomPrice", this.roomPrice.doubleRoomPrice, {
+        expires: 7,
+        secure: true,
+        sameSite: "Strict",
+      });
       this.$toast.success("Lưu giá phòng thành công");
       this.hidePriceModal();
     },
-  async  saveInfo() {
+    async saveInfo() {
       if (this.info.avatar) {
         try {
           // Tải ảnh lên dịch vụ lưu trữ và lấy URL
@@ -220,8 +232,6 @@ export default {
         }
       }
 
-
-      
       this.hideInputInfo();
     },
     // async fetchHotelInfo() {
@@ -232,7 +242,8 @@ export default {
     //     console.error("Error fetching hotel info:", error);
     //   }
     // },
-  },  computed :{
+  },
+  computed: {
     formattedSingleRoomPrice: {
       get() {
         return this.roomPrice.singleRoomPrice !== null
@@ -241,7 +252,8 @@ export default {
       },
       set(value) {
         if (typeof value === "string") {
-          this.roomPrice.singleRoomPrice = parseInt(value.replace(/\D/g, ""), 10) || 0;
+          this.roomPrice.singleRoomPrice =
+            parseInt(value.replace(/\D/g, ""), 10) || 0;
         } else {
           this.roomPrice.singleRoomPrice = value;
         }
@@ -255,22 +267,22 @@ export default {
       },
       set(value) {
         if (typeof value === "string") {
-          this.roomPrice.doubleRoomPrice = parseInt(value.replace(/\D/g, ""), 10) || 0;
+          this.roomPrice.doubleRoomPrice =
+            parseInt(value.replace(/\D/g, ""), 10) || 0;
         } else {
           this.roomPrice.doubleRoomPrice = value;
         }
       },
     },
-  }
+  },
 };
 </script>
 
 <style scoped>
-
 .avatar-container {
   display: flex;
   justify-content: center;
-  align-items: center ;
+  align-items: center;
   margin-bottom: 10px;
 }
 
@@ -284,9 +296,7 @@ export default {
 }
 
 .avatar i {
- 
-  font-size: 
-  40px;
+  font-size: 40px;
   color: #888;
 }
 .avatar {
@@ -310,18 +320,18 @@ export default {
 }
 .save-button {
   width: 100%;
-  background-color: #007bff; 
-  color: white; 
-  border: none; 
+  background-color: #007bff;
+  color: white;
+  border: none;
   padding: 10px 20px;
-  font-size: 16px; 
-  border-radius: 5px; 
-  cursor: pointer; 
-  transition: background-color 0.3s ease; 
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .save-button:hover {
-  background-color: #0056b3; 
+  background-color: #0056b3;
 }
 .navbar {
   background-color: white;

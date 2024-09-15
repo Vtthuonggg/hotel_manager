@@ -25,6 +25,7 @@
 
 <script>
 // import { login } from "../api/login_api.js";
+import Cookies from "js-cookie";
 export default {
   data() {
     return {
@@ -34,9 +35,11 @@ export default {
   },
   methods: {
     async handleLogin() {
-      console.log("Username:", this.username);
-      console.log("Password:", this.password);
-
+      Cookies.set("have_user", true, {
+        expires: 7,
+        secure: true,
+        sameSite: "Strict",
+      });
       // try {
       //   await login(this.username, this.password);
       this.$toast.success("Đăng nhập thành công");

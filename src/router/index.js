@@ -1,4 +1,5 @@
 import Vue from "vue";
+import Cookies from "js-cookie";
 import Router from "vue-router";
 import LoginPage from "../components/login_page.vue";
 import RegisterPage from "../components/register_page.vue";
@@ -10,7 +11,13 @@ import Service from "../components/service/list_product_page.vue";
 Vue.use(Router);
 
 const routes = [
-  { path: "/", redirect: "/login" },
+  {
+    path: "/",
+    redirect: () => {
+      const haveUser = Cookies.get("have_user") === "true";
+      return haveUser ? "/dashboard" : "/login";
+    },
+  },
   {
     path: "/login",
     name: "Login",

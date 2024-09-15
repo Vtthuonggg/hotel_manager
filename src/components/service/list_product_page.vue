@@ -22,28 +22,47 @@
           md="6"
           lg="6"
         >
-          <v-card class="service-card">
-            <v-list-item class="service-list-item">
-              <div class="image-container">
-                <v-img
-                  :src="item.image"
-                  class="service-image"
-                  aspect-ratio="1"
-                ></v-img>
+          <v-card
+            :class="{
+              'room-card-free': room.isAvailable,
+              'room-card-using': !room.isAvailable,
+            }"
+            @click="createOrder"
+          >
+            <v-list-item>
+              <v-icon v-if="room.type === 1" large
+                >mdi-bed-single-outline</v-icon
+              >
+              <v-icon v-else large>mdi-bed-double-outline</v-icon>
+              <div class="room-info">
+                <span>{{ room.name }}</span>
               </div>
-              <v-col>
-                <div class="service-details">
-                  <div class="service-info">
-                    <span>Tên: {{ item.name }}</span>
-                  </div>
-                  <div class="service-price">
-                    <span>Giá tiền: {{ item.price }}đ</span>
-                  </div>
-                </div>
-                <v-divider></v-divider>
-              </v-col>
+              <v-spacer></v-spacer>
+              <v-menu
+                v-model="room.dropdown"
+                :close-on-content-click="false"
+                offset-y
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    icon
+                    v-bind="attrs"
+                    v-on="on"
+                    @click.stop="toggleDropdown(index)"
+                  >
+                    <v-icon>mdi-dots-vertical</v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item @click="editRoom">
+                    <v-list-item-title>Sửa</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="deleteRoom">
+                    <v-list-item-title>Xóa</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
             </v-list-item>
-            <v-divider></v-divider>
           </v-card>
         </v-col>
       </v-row>
