@@ -19,54 +19,36 @@
           :key="index"
           cols="12"
           sm="6"
-          md="6"
-          lg="6"
+        md="6"
+        lg="6"
         >
-          <v-card
-            :class="{
-              'room-card-free': room.isAvailable,
-              'room-card-using': !room.isAvailable,
-            }"
-            @click="createOrder"
-          >
-            <v-list-item>
-              <v-icon v-if="room.type === 1" large
-                >mdi-bed-single-outline</v-icon
-              >
-              <v-icon v-else large>mdi-bed-double-outline</v-icon>
-              <div class="room-info">
-                <span>{{ room.name }}</span>
-              </div>
-              <v-spacer></v-spacer>
-              <v-menu
-                v-model="room.dropdown"
-                :close-on-content-click="false"
-                offset-y
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    icon
-                    v-bind="attrs"
-                    v-on="on"
-                    @click.stop="toggleDropdown(index)"
-                  >
-                    <v-icon>mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-list-item @click="editRoom">
-                    <v-list-item-title>Sửa</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item @click="deleteRoom">
-                    <v-list-item-title>Xóa</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-list-item>
-          </v-card>
+        <v-card class="service-card">
+          <v-list-item>
+            <div class="image-container">
+            <v-img
+              :src="item.image"
+              class="service-image"
+              aspect-ratio="1"
+            ></v-img>
+            </div>
+            <v-col>
+            <div class="info-service">
+            <div class="service-info">
+              <span>{{ item.name }}</span>
+            </div>
+            <div class="service-price">
+              <span>{{ item.price }}đ</span>
+            </div>
+          </div>
+        <v-divider></v-divider>
+      </v-col>
+
+          </v-list-item>
+        </v-card>
         </v-col>
       </v-row>
     </v-container>
+
 
     <div v-if="isShowCreateService" class="popup">
       <div class="popup-content">
@@ -131,7 +113,9 @@ export default {
         image: null,
         imageFile: null,
       },
-      listSevices: [],
+      listSevices: [{name: "CocaCola", price: 10000, image: "https://res.cloudinary.com/dfxdq0iwq/image/upload/v1726576569/tfievesjykbp8zu8h1yh.jpg"}
+        ,{name: "Bia Sài Gòn", price: 15000, image: "https://res.cloudinary.com/dfxdq0iwq/image/upload/v1726576938/mn4iiwvkcwrrykbgaxt0.jpg"}
+      ],
     };
   },
   computed: {
@@ -183,7 +167,7 @@ export default {
             imageFile: null,
           };
           this.$toast.success("Thêm dịch vụ thành công");
-          this.hideCreateService();
+        this.hideCreateService();
         } catch (error) {
           console.error("Error uploading image:", error);
           this.$toast.error("Tải ảnh lên thất bại");
@@ -218,7 +202,7 @@ export default {
     onFileChange(event) {
       const file = event.target.files[0];
       if (file) {
-        if (!file.type.startsWith("image/")) {
+        if (!file.type.startsWith('image/')) {
           this.$toast.error("Vui lòng chọn một file ảnh hợp lệ.");
           return;
         }
@@ -242,32 +226,12 @@ export default {
 };
 </script>
 <style scoped>
-.service-list-item {
-  display: flex;
-  align-items: center;
-}
-
-.image-container {
-  flex-shrink: 0;
-}
-
-.service-details {
-  display: flex;
+.info-service{    display: flex;
   justify-content: space-between;
-  width: 100%;
-  padding-left: 16px;
-}
-
-.service-info,
-.service-price {
-  margin-bottom: 10px;
   font-weight: bold;
-  display: flex;
-  align-items: center;
-}
-
+  width: 100%;
+ }
 .service-card {
-  max-width: 500xp;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -283,13 +247,14 @@ export default {
 .service-image {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: contain; 
 }
 
 .service-info {
   flex: 1;
-  text-align: center;
+  text-align: left;
 }
+
 
 .service-price {
   text-align: right;
