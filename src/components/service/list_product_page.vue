@@ -37,7 +37,7 @@
               <span>{{ item.name }}</span>
             </div>
             <div class="service-price">
-              <span>{{ item.price }}đ</span>
+              <span>{{ formatCurrency(item.price) }}đ</span>
             </div>
           </div>
         <v-divider></v-divider>
@@ -135,6 +135,7 @@ export default {
     },
   },
   methods: {
+    formatCurrency,
     updatePrice(event) {
       if (event && event.target && event.target.value !== undefined) {
         const value = event.target.value.replace(/\D/g, "");
