@@ -2,7 +2,6 @@
   <div>
     <img alt="Vue logo" src="../assets/logo.png" class="logo" />
     <h3 class="name-group">Quản lý khách sạn</h3>
-
     <div class="login-container">
       <h2>Đăng nhập</h2>
       <form @submit.prevent="handleLogin">
@@ -62,6 +61,7 @@ export default {
 .name-group {
   margin-top: 10px;
 }
+
 .login-container {
   max-width: 400px;
   margin: 0 auto;
