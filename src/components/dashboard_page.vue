@@ -1,7 +1,8 @@
-
 <template>
   <div>
-    <NavBar />
+    <header>
+      <NavBar />
+    </header>
     <router-view />
   </div>
 </template>

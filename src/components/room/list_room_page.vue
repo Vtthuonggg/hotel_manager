@@ -177,12 +177,12 @@ export default {
       this.rooms[index].dropdown = !this.rooms[index].dropdown;
     },
     createOrder(room) {
-     const title = room.isAvailable ? "Tạo đơn" : "Cập nhật đơn";
+      const title = room.isAvailable ? "Tạo đơn" : "Cập nhật đơn";
       this.$router.push({
         name: "CreateOrder",
         params: { title: title, detail: room },
       });
-      title==='';
+      title === "";
     },
     editRoom() {
       // Logic to show edit room popup with pre-filled information
