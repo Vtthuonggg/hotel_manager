@@ -347,7 +347,6 @@ export default {
     async saveInfo() {
       if (this.info.avatar) {
         try {
-          // Tải ảnh lên dịch vụ lưu trữ và lấy URL
           const imageUrl = await uploadImage(this.info.avatarFile);
           this.info.avatar = imageUrl;
           console.log("Uploaded image URL:", imageUrl);

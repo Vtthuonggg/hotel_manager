@@ -11,110 +11,87 @@
     <v-divider class="custom-divider"></v-divider>
     <div class="content-container">
       <div class="left-pane">
-        <v-row>
-          <v-menu
-            ref="startDateMenu"
-            v-model="startDateMenu"
-            :nudge-right="40"
-            transition="scale-transition"
-            offset-y
-            min-width="290px"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field
-                class="custom-input"
+        <v-row class="time-row">
+          <v-col>
+            <v-menu
+              ref="startDateMenu"
+              v-model="startDateMenu"
+              :nudge-right="40"
+              transition="scale-transition"
+              offset-y
+              min-width="290px"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  class="custom-input"
+                  v-model="formattedStartDate"
+                  label="Ngày bắt đầu"
+                  prepend-inner-icon="mdi-calendar-range"
+                  v-bind="attrs"
+                  v-on="on"
+                  dense
+                  outlined
+                ></v-text-field>
+              </template>
+              <v-date-picker
+                locale="vi"
                 v-model="startDate"
-                label="Ngày bắt đầu"
-                prepend-inner-icon="mdi-calendar-range"
-                v-bind="attrs"
-                v-on="on"
-                dense
-                outlined
-              ></v-text-field>
-            </template>
-            <v-date-picker
-              locale="vi"
-              v-model="startDate"
-              @input="startDateMenu = false"
-              :allowed-dates="allowedDates"
-            ></v-date-picker>
-          </v-menu>
-          <v-menu
-            ref="startTimeMenu"
-            v-model="startTimeMenu"
-            :nudge-right="40"
-            transition="scale-transition"
-            offset-y
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field
-                outlined
-                class="custom-input"
-                v-model="startTime"
-                label="Thời gian bắt đầu"
-                prepend-inner-icon="mdi-clock"
-                readonly
-                dense
-                v-bind="attrs"
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-time-picker
+                @input="startDateMenu = false"
+                :allowed-dates="allowedDates"
+              ></v-date-picker>
+            </v-menu>
+          </v-col>
+          <v-col>
+            <v-text-field
+              outlined
+              type="time"
+              class="custom-input"
               v-model="startTime"
-              @input="startTimeMenu = false"
-            ></v-time-picker>
-          </v-menu>
+              label="Thời gian bắt đầu"
+              prepend-inner-icon="mdi-clock"
+              dense
+            ></v-text-field>
+          </v-col>
         </v-row>
-        <v-row>
-          <v-menu
-            ref="endDateMenu"
-            v-model="endDateMenu"
-            :nudge-right="40"
-            transition="scale-transition"
-            offset-y
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field
+        <v-row class="time-row">
+          <v-col col="8">
+            <v-menu
+              ref="endDateMenu"
+              v-model="endDateMenu"
+              :nudge-right="40"
+              transition="scale-transition"
+              offset-y
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="formattedEndDate"
+                  outlined
+                  dense
+                  class="custom-input"
+                  label="Ngày kết thúc"
+                  prepend-inner-icon="mdi-calendar"
+                  readonly
+                  v-bind="attrs"
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-date-picker
                 v-model="endDate"
-                outlined
-                dense
-                class="custom-input"
-                label="Ngày kết thúc"
-                prepend-inner-icon="mdi-calendar"
-                readonly
-                v-bind="attrs"
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-date-picker
-              v-model="endDate"
-              @input="endDateMenu = false"
-            ></v-date-picker>
-          </v-menu>
-          <v-menu
-            ref="endTimeMenu"
-            v-model="endTimeMenu"
-            :nudge-right="40"
-            transition="scale-transition"
-            offset-y
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field
-                class="custom-input"
-                v-model="endTime"
-                label="Thời gian kết thúc"
-                prepend-inner-icon="mdi-clock"
-                v-bind="attrs"
-                v-on="on"
-                dense
-                outlined
-              ></v-text-field>
-            </template>
-            <v-time-picker
+                @input="endDateMenu = false"
+              ></v-date-picker>
+            </v-menu>
+          </v-col>
+          <v-col col="4">
+            <v-text-field
+              type="time"
+              class="custom-input"
               v-model="endTime"
-              @input="endTimeMenu = false"
-            ></v-time-picker>
-          </v-menu>
+              label="Thời gian kết thúc"
+              prepend-inner-icon="mdi-clock"
+              dense
+              outlined
+            ></v-text-field>
+          </v-col>
         </v-row>
       </div>
       <div class="vertical-divider"></div>
@@ -134,9 +111,9 @@ export default {
     return {
       title: "",
       room: {},
-      startDate: moment().format("DD/MM/YYYY"),
+      startDate: moment().format("YYYY-MM-DD"),
       startTime: moment().format("HH:mm"),
-      endDate: moment().format("DD/MM/YYYY"),
+      endDate: moment().format("YYYY-MM-DD"),
       endTime: moment().format("HH:mm"),
       endDateMenu: false,
       endTimeMenu: false,
@@ -145,14 +122,23 @@ export default {
     };
   },
   computed: {
+    formattedStartDate() {
+      return moment(this.startDate).format("DD-MM-YYYY");
+    },
+    formattedEndDate() {
+      return moment(this.endDate).format("DD-MM-YYYY");
+    },
     totalTime() {
-      if (this.startTime && this.endTime) {
-        const start = new Date(`1970-01-01T${this.startTime}:00`);
-        const end = new Date(`1970-01-01T${this.endTime}:00`);
-        const diff = (end - start) / 1000 / 60;
-        const hours = Math.floor(diff / 60);
-        const minutes = diff % 60;
-        return `${hours} giờ ${minutes} phút`;
+      if (this.startDate && this.startTime && this.endDate && this.endTime) {
+        const start = moment(`${this.startDate}T${this.startTime}:00`);
+        const end = moment(`${this.endDate}T${this.endTime}:00`);
+
+        const diff = moment.duration(end.diff(start));
+        const days = Math.floor(diff.asDays());
+        const hours = Math.floor(diff.asHours() % 24);
+        const minutes = diff.minutes();
+
+        return `${days} ngày ${hours} giờ ${minutes} phút`;
       }
       return "";
     },
@@ -193,6 +179,9 @@ export default {
 };
 </script>
 <style scoped>
+.time-row {
+  justify-content: flex-end;
+}
 .custom-input {
   max-height: 40px !important;
   border-radius: 10px;
