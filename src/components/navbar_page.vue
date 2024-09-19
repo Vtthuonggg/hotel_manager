@@ -52,7 +52,7 @@
           </li>
           <li @click="showInputQr">
             <a href="#">
-              <i class="fa-solid fa-coins"></i>Cài đặt Qr thanh toán</a
+              <i class="fa-solid fa-qrcode"></i>Cài đặt Qr thanh toán</a
             >
           </li>
           <li class="logout-item" @click="handleLockout">
@@ -91,12 +91,13 @@
         <span class="close" @click="hideInputQr">&times;</span>
         <h2 class="title">Cài đặt Qr thanh toán</h2>
         <div class="price-setting">
-          <label>Số tài khoản</label>
+          <label>Số tài khoản: </label>
           <input type="text" v-model="accountNumer" />
         </div>
         <div class="price-setting">
-          <label>Ngân hàng</label>
+          <label>Ngân hàng: </label>
           <v-select
+            class="select-bank"
             :options="banks"
             label="name"
             @input="onBankSelect"
@@ -104,10 +105,15 @@
             v-model="bankCode"
             :filterable="true"
             :searchable="true"
+            :clearable="false"
             placeholder="Chọn ngân hàng"
+            no-data-text="Không có dữ liệu"
           />
         </div>
-        <button class="save-button" @click="saveQrCode">Lưu</button>
+        <div v-if="qrCodeUrl" class="qr-code">
+          <img :src="qrCodeUrl" alt="QR Code" />
+        </div>
+        <button class="save-button" @click="saveQrCode">Tạo mã</button>
       </div>
     </div>
     <div v-if="isInputInfo" class="form-container">
@@ -146,6 +152,7 @@
           <label for="address">Địa chỉ:</label>
           <input type="text" id="address" v-model="info.address" />
         </div>
+
         <div>
           <button class="save-button" @click="saveInfo">Lưu</button>
         </div>
@@ -167,6 +174,7 @@ export default {
   },
   data() {
     return {
+      qrCodeUrl: "",
       accountNumer: "",
       bankCode: "",
       isInputQr: false,
@@ -198,7 +206,6 @@ export default {
         { name: "ACB", code: "ACB" },
         { name: "TPBank", code: "TPB" },
         { name: "Sacombank", code: "STB" },
-        { name: "Sacombank", code: "STB" },
         { name: "HDBank", code: "HDB" },
         { name: "VietCapitalBank", code: "VCCB" },
         { name: "SCB", code: "SCB" },
@@ -226,7 +233,6 @@ export default {
         { name: "SeaABank", code: "SEAB" },
         { name: "COOPBANK", code: "COOPBANK" },
         { name: "LPBank", code: "LPB" },
-        { name: "LPBank", code: "LPB" },
         { name: "KienLongBank", code: "KLB" },
         { name: "KBank", code: "KBank" },
         { name: "DongABank", code: "DOB" },
@@ -241,10 +247,37 @@ export default {
       this.bankCode = selectedBankCode;
     },
     saveQrCode() {
-      this.hideInputQr();
+      this.qrCodeUrl = `https://img.vietqr.io/image/${this.bankCode}-${this.accountNumer}-qr_only.png`;
+      Cookies.set("qrCodeUrl", this.qrCodeUrl, {
+        expires: 30,
+        secure: true,
+        sameSite: "Strict",
+      });
+      Cookies.set("accountNumber", this.accountNumer, {
+        expires: 30,
+        secure: true,
+        sameSite: "Strict",
+      });
+      Cookies.set("selectedBank", this.bankCode, {
+        expires: 30,
+        secure: true,
+        sameSite: "Strict",
+      });
     },
     showInputQr() {
+      const qrCodeUrl = Cookies.get("qrCodeUrl");
+      const accountNumber = Cookies.get("accountNumber");
+      const selectedBank = Cookies.get("selectedBank");
       this.isInputQr = true;
+      if (qrCodeUrl) {
+        this.qrCodeUrl = qrCodeUrl;
+      }
+      if (accountNumber) {
+        this.accountNumer = accountNumber;
+      }
+      if (selectedBank) {
+        this.bankCode = selectedBank;
+      }
     },
     hideInputQr() {
       this.isInputQr = false;
@@ -373,6 +406,18 @@ export default {
 </script>
 
 <style scoped>
+.qr-code {
+  margin-top: 15px;
+  text-align: center;
+}
+.qr-code img {
+  max-width: 100%;
+  height: auto;
+}
+.select-bank {
+  width: 70%;
+  margin-bottom: 15px;
+}
 .avatar-container {
   display: flex;
   justify-content: center;
@@ -570,7 +615,8 @@ i {
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
-  max-width: 300px;
+  max-width: 400px;
+  max-height: 600px;
   border-radius: 10px;
   margin-top: 10px;
 }
