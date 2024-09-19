@@ -50,6 +50,11 @@
           <li @click="showPriceModal">
             <a href="#"> <i class="fa-solid fa-coins"></i>Cài đặt giá phòng</a>
           </li>
+          <li @click="showInputQr">
+            <a href="#">
+              <i class="fa-solid fa-coins"></i>Cài đặt Qr thanh toán</a
+            >
+          </li>
           <li class="logout-item" @click="handleLockout">
             <a href="#"
               ><i class="fa-solid fa-right-from-bracket"></i>Đăng xuất</a
@@ -79,6 +84,30 @@
           />
         </div>
         <button class="save-button" @click="savePrices">Lưu</button>
+      </div>
+    </div>
+    <div v-if="isInputQr" class="modal">
+      <div class="modal-content">
+        <span class="close" @click="hideInputQr">&times;</span>
+        <h2 class="title">Cài đặt Qr thanh toán</h2>
+        <div class="price-setting">
+          <label>Số tài khoản</label>
+          <input type="text" v-model="accountNumer" />
+        </div>
+        <div class="price-setting">
+          <label>Ngân hàng</label>
+          <v-select
+            :options="banks"
+            label="name"
+            @input="onBankSelect"
+            :reduce="(bank) => bank.code"
+            v-model="bankCode"
+            :filterable="true"
+            :searchable="true"
+            placeholder="Chọn ngân hàng"
+          />
+        </div>
+        <button class="save-button" @click="saveQrCode">Lưu</button>
       </div>
     </div>
     <div v-if="isInputInfo" class="form-container">
@@ -126,13 +155,21 @@
 </template>
 
 <script>
+import "vue-select/dist/vue-select.css";
+import vSelect from "vue-select";
 import { formatCurrency } from "@/utils/format_currency";
 import Cookies from "js-cookie";
 import { uploadImage } from "@/api/service_api.js";
 export default {
   name: "AppNavbar",
+  components: {
+    vSelect,
+  },
   data() {
     return {
+      accountNumer: "",
+      bankCode: "",
+      isInputQr: false,
       dropdownVisible: false,
       isInputInfo: false,
       isPriceModalVisible: false,
@@ -149,12 +186,69 @@ export default {
         avatar: "",
         avatarFile: null,
       },
+      banks: [
+        { name: "VPBank", code: "VPB" },
+        { name: "Vietcombank", code: "VCB" },
+        { name: "VietinBank", code: "ICB" },
+        { name: "BIDV", code: "BIDV" },
+        { name: "Agribank", code: "VBA" },
+        { name: "OCB", code: "OCB" },
+        { name: "MBBank", code: "MB" },
+        { name: "Techcombank", code: "TCB" },
+        { name: "ACB", code: "ACB" },
+        { name: "TPBank", code: "TPB" },
+        { name: "Sacombank", code: "STB" },
+        { name: "Sacombank", code: "STB" },
+        { name: "HDBank", code: "HDB" },
+        { name: "VietCapitalBank", code: "VCCB" },
+        { name: "SCB", code: "SCB" },
+        { name: "VIB", code: "VIB" },
+        { name: "SHB", code: "SHB" },
+        { name: "Eximbank", code: "EIB" },
+        { name: "MSB", code: "MSB" },
+        { name: "CAKE", code: "CAKE" },
+        { name: "Ubank", code: "Ubank" },
+        { name: "Timo", code: "Timo" },
+        { name: "ViettelMoney", code: "VTLMONEY" },
+        { name: "VNPTMoney", code: "VNPTMONEY" },
+        { name: "SaigonBank", code: "SGICB" },
+        { name: "BacABank", code: "BAB" },
+        { name: "PVcomBank", code: "PVCB" },
+        { name: "Oceanbank", code: "Oceanbank" },
+        { name: "NCB", code: "NCB" },
+        { name: "ShinhanBank", code: "SHBVN" },
+        { name: "ABBANK", code: "ABB" },
+        { name: "VietABank", code: "VAB" },
+        { name: "NamABank", code: "NAB" },
+        { name: "PGBank", code: "PGB" },
+        { name: "VietBank", code: "VIETBANK" },
+        { name: "BaoVietBank", code: "BVB" },
+        { name: "SeaABank", code: "SEAB" },
+        { name: "COOPBANK", code: "COOPBANK" },
+        { name: "LPBank", code: "LPB" },
+        { name: "LPBank", code: "LPB" },
+        { name: "KienLongBank", code: "KLB" },
+        { name: "KBank", code: "KBank" },
+        { name: "DongABank", code: "DOB" },
+      ],
     };
   },
   // created() {
   //   this.fetchHotelInfo();
   // },
   methods: {
+    onBankSelect(selectedBankCode) {
+      this.bankCode = selectedBankCode;
+    },
+    saveQrCode() {
+      this.hideInputQr();
+    },
+    showInputQr() {
+      this.isInputQr = true;
+    },
+    hideInputQr() {
+      this.isInputQr = false;
+    },
     handleLockout() {
       Cookies.remove("have_user");
       this.$router.push("/login");
