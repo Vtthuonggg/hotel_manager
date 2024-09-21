@@ -6,7 +6,7 @@
       </li>
       <li class="navbar-item">
         <router-link
-          to="/dashboard/listroom"
+          to="/dashboard/list-room"
           active-class="active-link"
           exact-active-class="exact-active-link"
         >
@@ -47,9 +47,7 @@
           <li @click="showInputInfo">
             <a href="#"><i class="fa-solid fa-hotel"></i>Cài đặt thông tin</a>
           </li>
-          <li @click="showPriceModal">
-            <a href="#"> <i class="fa-solid fa-coins"></i>Cài đặt giá phòng</a>
-          </li>
+       
           <li @click="showInputQr">
             <a href="#">
               <i class="fa-solid fa-qrcode"></i>Cài đặt Qr thanh toán</a
@@ -63,29 +61,7 @@
         </ul>
       </li>
     </ul>
-    <div v-if="isPriceModalVisible" class="modal">
-      <div class="modal-content">
-        <span class="close" @click="hidePriceModal">&times;</span>
-        <h2 class="title">Cài đặt giá phòng</h2>
-        <div class="price-setting">
-          <label for="single-room">Phòng đơn:</label>
-          <input
-            type="number"
-            id="single-room"
-            v-model="formattedSingleRoomPrice"
-          />
-        </div>
-        <div class="price-setting">
-          <label for="double-room">Phòng đôi:</label>
-          <input
-            type="number"
-            id="double-room"
-            v-model="formattedDoubleRoomPrice"
-          />
-        </div>
-        <button class="save-button" @click="savePrices">Lưu</button>
-      </div>
-    </div>
+    
     <div v-if="isInputQr" class="modal">
       <div class="modal-content">
         <span class="close" @click="hideInputQr">&times;</span>
@@ -164,7 +140,6 @@
 <script>
 import "vue-select/dist/vue-select.css";
 import vSelect from "vue-select";
-import { formatCurrency } from "@/utils/format_currency";
 import Cookies from "js-cookie";
 import { uploadImage } from "@/api/service_api.js";
 export default {
@@ -180,7 +155,6 @@ export default {
       isInputQr: false,
       dropdownVisible: false,
       isInputInfo: false,
-      isPriceModalVisible: false,
       roomPrice: {
         singleRoomPrice: "",
         doubleRoomPrice: "",
@@ -310,40 +284,15 @@ export default {
     hideDropdown() {
       this.dropdownVisible = false;
     },
-    showPriceModal() {
-      const singleRoomPrice = Cookies.get("singleRoomPrice");
-      const doubleRoomPrice = Cookies.get("doubleRoomPrice");
-      if (singleRoomPrice) {
-        this.roomPrice.singleRoomPrice = parseInt(singleRoomPrice, 10);
-      }
-      if (doubleRoomPrice) {
-        this.roomPrice.doubleRoomPrice = parseInt(doubleRoomPrice, 10);
-      }
-      this.isPriceModalVisible = true;
-    },
-    hidePriceModal() {
-      this.isPriceModalVisible = false;
-    },
+
+ 
     showInputInfo() {
       this.isInputInfo = true;
     },
     hideInputInfo() {
       this.isInputInfo = false;
     },
-    savePrices() {
-      Cookies.set("singleRoomPrice", this.roomPrice.singleRoomPrice, {
-        expires: 7,
-        secure: true,
-        sameSite: "Strict",
-      });
-      Cookies.set("doubleRoomPrice", this.roomPrice.doubleRoomPrice, {
-        expires: 7,
-        secure: true,
-        sameSite: "Strict",
-      });
-      this.$toast.success("Lưu giá phòng thành công");
-      this.hidePriceModal();
-    },
+ 
     async saveInfo() {
       if (this.info.avatar) {
         try {
@@ -369,38 +318,7 @@ export default {
     //   }
     // },
   },
-  computed: {
-    formattedSingleRoomPrice: {
-      get() {
-        return this.roomPrice.singleRoomPrice !== null
-          ? formatCurrency(this.roomPrice.singleRoomPrice)
-          : "";
-      },
-      set(value) {
-        if (typeof value === "string") {
-          this.roomPrice.singleRoomPrice =
-            parseInt(value.replace(/\D/g, ""), 10) || 0;
-        } else {
-          this.roomPrice.singleRoomPrice = value;
-        }
-      },
-    },
-    formattedDoubleRoomPrice: {
-      get() {
-        return this.roomPrice.doubleRoomPrice !== null
-          ? formatCurrency(this.roomPrice.doubleRoomPrice)
-          : "";
-      },
-      set(value) {
-        if (typeof value === "string") {
-          this.roomPrice.doubleRoomPrice =
-            parseInt(value.replace(/\D/g, ""), 10) || 0;
-        } else {
-          this.roomPrice.doubleRoomPrice = value;
-        }
-      },
-    },
-  },
+
 };
 </script>
 

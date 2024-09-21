@@ -57,7 +57,7 @@
         <v-text-field
           v-model="formattedPrice"
           label="Giá tiền"
-          type="number"
+          type="text"
           @input="updatePrice"
         ></v-text-field>
         <div class="image-upload-container">
@@ -121,11 +121,13 @@ export default {
   computed: {
     formattedPrice: {
       get() {
+        console.log("newService.price", this.newService.price);
         return this.newService.price !== null
           ? formatCurrency(this.newService.price)
           : "";
       },
       set(value) {
+        console.log("value", value);
         if (typeof value === "string") {
           this.newService.price = parseInt(value.replace(/\D/g, ""), 10) || 0;
         } else {

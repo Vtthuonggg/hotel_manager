@@ -43,10 +43,10 @@ const routes = [
     children: [
       {
         path: "",
-        redirect: "listroom",
+        redirect: "list-room",
       },
       {
-        path: "listroom",
+        path: "list-room",
         name: "ListRoom",
         component: Room,
         meta: { title: "Bate - Danh sách phòng" },
