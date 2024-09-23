@@ -100,7 +100,7 @@
 </template>
 <script>
 import { formatCurrency } from "@/utils/format_currency";
-import { uploadImage } from "@/api/service_api.js";
+import { uploadImage, createService, getListService } from "@/api/service_api.js";
 export default {
   data() {
     return {
@@ -116,7 +116,7 @@ export default {
           name: "CocaCola",
           price: 10000,
           image:
-            "https://res.cloudinary.com/dfxdq0iwq/image/upload/v1726576569/tfievesjykbp8zu8h1yh.jpg",
+            null,
         },
         {
           name: "Bia Sài Gòn",
@@ -127,6 +127,9 @@ export default {
       ],
     };
   },
+  // created(){
+  //   this.fetchListService();
+  // },
   computed: {
     formattedPrice: {
       get() {
@@ -146,6 +149,16 @@ export default {
     },
   },
   methods: {
+
+    async fetchListService(){
+      console.log('Đang fetch')
+  try{
+   await getListService();
+  // this.listSevices = res;
+  }catch(e){
+  this.$toast.error("Có lỗi xảy ra")
+}
+    },
     formatCurrency,
     updatePrice(event) {
       if (event && event.target && event.target.value !== undefined) {
@@ -162,16 +175,16 @@ export default {
     async addService() {
       if (this.newService.imageFile) {
         try {
-          // Tải ảnh lên dịch vụ lưu trữ và lấy URL
           const imageUrl = await uploadImage(this.newService.imageFile);
           this.newService.image = imageUrl;
           console.log("Uploaded image URL:", imageUrl);
 
-          this.listSevices.push({
+        var data=  {
             name: this.newService.name,
             price: this.newService.price,
             image: imageUrl,
-          });
+          };
+          await createService(data)
           this.newService = {
             name: "",
             price: "",
@@ -181,26 +194,12 @@ export default {
           this.$toast.success("Thêm dịch vụ thành công");
           this.hideCreateService();
         } catch (error) {
-          console.error("Error uploading image:", error);
-          this.$toast.error("Tải ảnh lên thất bại");
+          this.$toast.error("Có lỗi xảy ra");
           return;
         }
       }
 
-      // try {
-      //   const response = await axios.post(`${BASE_URL}/services`, {
-      //     name: this.newService.name,
-      //     price: this.newService.price,
-      //     image: this.newService.image,
-      //   });
-      //   this.listSevices.push(response.data);
-      //   console.log("New service:", response.data);
-      //   this.$toast.success("Thêm dịch vụ thành công");
-      //   this.hideCreateService();
-      // } catch (error) {
-      //   console.error("Error adding service:", error);
-      //   this.$toast.error("Thêm dịch vụ thất bại");
-      // }
+      
     },
 
     validateInteger(event) {
