@@ -136,13 +136,11 @@ export default {
   computed: {
     formattedPrice: {
       get() {
-        console.log("newService.price", this.newService.price);
         return this.newService.price !== null
           ? formatCurrency(this.newService.price)
           : "";
       },
       set(value) {
-        console.log("value", value);
         if (typeof value === "string") {
           this.newService.price = parseInt(value.replace(/\D/g, ""), 10) || 0;
         } else {
@@ -153,10 +151,9 @@ export default {
   },
   methods: {
     async fetchListService() {
-      console.log("Đang fetch");
       try {
-        await getListService();
-        // this.listSevices = res;
+        var res = await getListService();
+        this.listSevices = res;
       } catch (e) {
         this.$toast.error("Có lỗi xảy ra");
       }
@@ -179,7 +176,6 @@ export default {
         try {
           const imageUrl = await uploadImage(this.newService.imageFile);
           this.newService.image = imageUrl;
-          console.log("Uploaded image URL:", imageUrl);
 
           var data = {
             name: this.newService.name,

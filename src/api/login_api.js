@@ -7,7 +7,6 @@ export const login = async (username, password) => {
       email: username,
       password: password,
     });
-    console.log("Register response:", response.data);
     return response.data;
   } catch (error) {
     console.error("Login error:", error);
@@ -16,7 +15,6 @@ export const login = async (username, password) => {
 };
 
 export const register = async (data) => {
-  console.log("Register data:", data);
   try {
     const response = await axios.post(`${BASE_URL}account/register`, data);
     return response.data;
