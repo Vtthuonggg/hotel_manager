@@ -4,7 +4,7 @@ const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dfxdq0iwq/image/upload";
 const UPLOAD_PRESET = "wcayf2ib";
 export const createService = async (data) => {
   try {
-    const response = await axios.post(`${BASE_URL}api/service/add`, data);
+    const response = await axios.post(`${BASE_URL}service/add`, data);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -12,11 +12,11 @@ export const createService = async (data) => {
   }
 };
 export const getListService = async () => {
-  console.log("Đã gọi vào api")
+  console.log("Đã gọi vào api");
   try {
-    const response = await axios.get(`api/service/list`);
-    console.log("ĐÂY ROOIFIII ")
-    console.log()
+    const response = await axios.get(`${BASE_URL}service/list`);
+    console.log("ĐÂY ROOIFIII ");
+    console.log(response.data);
 
     return response.data;
   } catch (error) {

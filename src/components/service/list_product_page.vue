@@ -100,7 +100,11 @@
 </template>
 <script>
 import { formatCurrency } from "@/utils/format_currency";
-import { uploadImage, createService, getListService } from "@/api/service_api.js";
+import {
+  uploadImage,
+  createService,
+  getListService,
+} from "@/api/service_api.js";
 export default {
   data() {
     return {
@@ -115,8 +119,7 @@ export default {
         {
           name: "CocaCola",
           price: 10000,
-          image:
-            null,
+          image: null,
         },
         {
           name: "Bia Sài Gòn",
@@ -127,9 +130,9 @@ export default {
       ],
     };
   },
-  // created(){
-  //   this.fetchListService();
-  // },
+  created() {
+    this.fetchListService();
+  },
   computed: {
     formattedPrice: {
       get() {
@@ -149,15 +152,14 @@ export default {
     },
   },
   methods: {
-
-    async fetchListService(){
-      console.log('Đang fetch')
-  try{
-   await getListService();
-  // this.listSevices = res;
-  }catch(e){
-  this.$toast.error("Có lỗi xảy ra")
-}
+    async fetchListService() {
+      console.log("Đang fetch");
+      try {
+        await getListService();
+        // this.listSevices = res;
+      } catch (e) {
+        this.$toast.error("Có lỗi xảy ra");
+      }
     },
     formatCurrency,
     updatePrice(event) {
@@ -179,12 +181,12 @@ export default {
           this.newService.image = imageUrl;
           console.log("Uploaded image URL:", imageUrl);
 
-        var data=  {
+          var data = {
             name: this.newService.name,
             price: this.newService.price,
             image: imageUrl,
           };
-          await createService(data)
+          await createService(data);
           this.newService = {
             name: "",
             price: "",
@@ -198,8 +200,6 @@ export default {
           return;
         }
       }
-
-      
     },
 
     validateInteger(event) {
