@@ -15,7 +15,7 @@ const routes = [
   {
     path: "/",
     redirect: () => {
-      const haveUser = Cookies.get("have_user") === "true";
+      const haveUser = Cookies.get("accountId") != null;
       return haveUser ? "/dashboard" : "/login";
     },
   },

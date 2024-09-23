@@ -1,12 +1,13 @@
 import axios from "axios";
-import { BASE_URL } from "./BASE_URL";
+// import { BASE_URL } from "./BASE_URL";
 
 export const login = async (username, password) => {
   try {
-    const response = await axios.post(`${BASE_URL}staff/login`, {
+    const response = await axios.post(`api/account/login`, {
       email: username,
       password: password,
     });
+    console.log("Register response:", response.data);
     return response.data;
   } catch (error) {
     console.error("Login error:", error);
@@ -14,16 +15,13 @@ export const login = async (username, password) => {
   }
 };
 
-export const register = async (username, password) => {
-  console.log(`${BASE_URL}account/register`);
+export const register = async (data) => {
+  console.log("Register data:", data);
   try {
-    const response = await axios.post(`${BASE_URL}account/register`, {
-      email: username,
-      password: password,
-    });
+    const response = await axios.post(`api/account/register`, data);
     return response.data;
   } catch (error) {
-    console.error("Register error:", error);
+    console.error(error);
     throw error;
   }
 };

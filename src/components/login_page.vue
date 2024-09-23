@@ -23,7 +23,7 @@
 </template>
 
 <script>
-// import { login } from "../api/login_api.js";
+import { login } from "../api/login_api.js";
 import Cookies from "js-cookie";
 export default {
   data() {
@@ -34,18 +34,18 @@ export default {
   },
   methods: {
     async handleLogin() {
-      Cookies.set("have_user", true, {
-        expires: 7,
-        secure: true,
-        sameSite: "Strict",
-      });
-      // try {
-      //   await login(this.username, this.password);
-      this.$toast.success("Đăng nhập thành công");
-      // } catch (error) {
-      //   this.$toast.error(error.toString());
-      // }
-      this.$router.push("/dashboard");
+      try {
+        var res = await login(this.username, this.password);
+        this.$toast.success("Đăng nhập thành công");
+        this.$router.push("/dashboard");
+        Cookies.set("accountId", res, {
+          expires: 7,
+          secure: true,
+          sameSite: "Strict",
+        });
+      } catch (error) {
+        this.$toast.error("Tài khoản mật khẩu không chính xác");
+      }
     },
   },
 };

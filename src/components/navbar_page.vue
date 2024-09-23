@@ -47,7 +47,7 @@
           <li @click="showInputInfo">
             <a href="#"><i class="fa-solid fa-hotel"></i>Cài đặt thông tin</a>
           </li>
-       
+
           <li @click="showInputQr">
             <a href="#">
               <i class="fa-solid fa-qrcode"></i>Cài đặt Qr thanh toán</a
@@ -61,7 +61,7 @@
         </ul>
       </li>
     </ul>
-    
+
     <div v-if="isInputQr" class="modal">
       <div class="modal-content">
         <span class="close" @click="hideInputQr">&times;</span>
@@ -257,7 +257,7 @@ export default {
       this.isInputQr = false;
     },
     handleLockout() {
-      Cookies.remove("have_user");
+      Cookies.remove("accountId");
       this.$router.push("/login");
     },
     triggerFileInput() {
@@ -285,14 +285,13 @@ export default {
       this.dropdownVisible = false;
     },
 
- 
     showInputInfo() {
       this.isInputInfo = true;
     },
     hideInputInfo() {
       this.isInputInfo = false;
     },
- 
+
     async saveInfo() {
       if (this.info.avatar) {
         try {
@@ -318,7 +317,6 @@ export default {
     //   }
     // },
   },
-
 };
 </script>
 

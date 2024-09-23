@@ -19,36 +19,34 @@
           :key="index"
           cols="12"
           sm="6"
-        md="6"
-        lg="6"
+          md="6"
+          lg="6"
         >
-        <v-card class="service-card">
-          <v-list-item>
-            <div class="image-container">
-            <v-img
-              :src="item.image"
-              class="service-image"
-              aspect-ratio="1"
-            ></v-img>
-            </div>
-            <v-col>
-            <div class="info-service">
-            <div class="service-info">
-              <span>{{ item.name }}</span>
-            </div>
-            <div class="service-price">
-              <span>{{ formatCurrency(item.price) }}đ</span>
-            </div>
-          </div>
-        <v-divider></v-divider>
-      </v-col>
-
-          </v-list-item>
-        </v-card>
+          <v-card class="service-card">
+            <v-list-item>
+              <div class="image-container">
+                <v-img
+                  :src="item.image"
+                  class="service-image"
+                  aspect-ratio="1"
+                ></v-img>
+              </div>
+              <v-col>
+                <div class="info-service">
+                  <div class="service-info">
+                    <span>{{ item.name }}</span>
+                  </div>
+                  <div class="service-price">
+                    <span>{{ formatCurrency(item.price) }}đ</span>
+                  </div>
+                </div>
+                <v-divider></v-divider>
+              </v-col>
+            </v-list-item>
+          </v-card>
         </v-col>
       </v-row>
     </v-container>
-
 
     <div v-if="isShowCreateService" class="popup">
       <div class="popup-content">
@@ -113,8 +111,19 @@ export default {
         image: null,
         imageFile: null,
       },
-      listSevices: [{name: "CocaCola", price: 10000, image: "https://res.cloudinary.com/dfxdq0iwq/image/upload/v1726576569/tfievesjykbp8zu8h1yh.jpg"}
-        ,{name: "Bia Sài Gòn", price: 15000, image: "https://res.cloudinary.com/dfxdq0iwq/image/upload/v1726576938/mn4iiwvkcwrrykbgaxt0.jpg"}
+      listSevices: [
+        {
+          name: "CocaCola",
+          price: 10000,
+          image:
+            "https://res.cloudinary.com/dfxdq0iwq/image/upload/v1726576569/tfievesjykbp8zu8h1yh.jpg",
+        },
+        {
+          name: "Bia Sài Gòn",
+          price: 15000,
+          image:
+            "https://res.cloudinary.com/dfxdq0iwq/image/upload/v1726576938/mn4iiwvkcwrrykbgaxt0.jpg",
+        },
       ],
     };
   },
@@ -170,7 +179,7 @@ export default {
             imageFile: null,
           };
           this.$toast.success("Thêm dịch vụ thành công");
-        this.hideCreateService();
+          this.hideCreateService();
         } catch (error) {
           console.error("Error uploading image:", error);
           this.$toast.error("Tải ảnh lên thất bại");
@@ -205,7 +214,7 @@ export default {
     onFileChange(event) {
       const file = event.target.files[0];
       if (file) {
-        if (!file.type.startsWith('image/')) {
+        if (!file.type.startsWith("image/")) {
           this.$toast.error("Vui lòng chọn một file ảnh hợp lệ.");
           return;
         }
@@ -229,11 +238,12 @@ export default {
 };
 </script>
 <style scoped>
-.info-service{    display: flex;
+.info-service {
+  display: flex;
   justify-content: space-between;
   font-weight: bold;
   width: 100%;
- }
+}
 .service-card {
   display: flex;
   align-items: center;
@@ -250,14 +260,13 @@ export default {
 .service-image {
   width: 100%;
   height: 100%;
-  object-fit: contain; 
+  object-fit: contain;
 }
 
 .service-info {
   flex: 1;
   text-align: left;
 }
-
 
 .service-price {
   text-align: right;

@@ -7,8 +7,20 @@
       <h2>Đăng ký</h2>
       <form @submit.prevent="checkConfirmPassword">
         <div class="form-group">
-          <label for="username">Tài khoản:</label>
-          <input type="text" id="username" v-model="username" required />
+          <label for="email">Tài khoản:</label>
+          <input type="text" id="email" v-model="email" required />
+        </div>
+        <div class="form-group">
+          <label for="username">Tên:</label>
+          <input type="text" id="username" v-model="name" required />
+        </div>
+        <div class="form-group">
+          <label for="phone">Số điện thoại:</label>
+          <input type="text" id="phone" v-model="phone" required />
+        </div>
+        <div class="form-group">
+          <label for="address">Địa chỉ:</label>
+          <input type="text" id="address" v-model="address" required />
         </div>
         <div class="form-group">
           <label for="password">Mật khẩu:</label>
@@ -37,8 +49,11 @@ import { register } from "../api/login_api.js";
 export default {
   data() {
     return {
-      username: "",
+      email: "",
       password: "",
+      name: "",
+      phone: "",
+      address: "",
       confirmPassword: "",
     };
   },
@@ -53,8 +68,18 @@ export default {
     },
 
     async handleRegister() {
+      const data = {
+        email: this.email,
+        password: this.password,
+        name: this.name,
+        phone: this.phone,
+        address: this.address,
+      };
+      console.log(data);
       try {
-        await register(this.username, this.password);
+        await register(data);
+        this.$toast.success("Đăng ký thành công");
+        this.$router.push("/login");
       } catch (e) {
         this.$toast.error(e.toString());
       }
