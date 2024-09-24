@@ -178,6 +178,7 @@ export default {
             imageFile: null,
           };
           this.$toast.success("Thêm dịch vụ thành công");
+          this.fetchListService();
           this.hideCreateService();
         } catch (error) {
           this.$toast.error("Có lỗi xảy ra");

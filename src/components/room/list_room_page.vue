@@ -146,7 +146,7 @@
 </template>
 
 <script>
-import { getListRoom } from "@/api/room_api.js";
+import { getListRoom, createRoom } from "@/api/room_api.js";
 import { mask } from "vue-the-mask";
 export default {
   data() {
@@ -207,17 +207,22 @@ export default {
     hideCreateRoom() {
       this.isShowCreateRoom = false;
     },
-    addRoom() {
+    async addRoom() {
       const roomType = parseInt(this.newRoom.type, 10);
       const price = parseInt(this.newRoom.price.replace(/,/g, ""), 10);
-
-      this.rooms.push({
-        name: this.newRoom.name,
-        type: roomType,
+      var data = {
+        numberRoom: this.newRoom.name,
+        typeRoom: roomType,
         price: price,
-        isAvailable: true,
-      });
-      this.hideCreateRoom();
+      };
+      try {
+        await createRoom(data);
+        this.$toast.success("Thêm phòng thành công");
+        this.fetchListRooom();
+        this.hideCreateRoom();
+      } catch (e) {
+        this.$toast.error("Có lỗi xảy ra");
+      }
     },
   },
 

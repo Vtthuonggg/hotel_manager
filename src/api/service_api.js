@@ -1,10 +1,14 @@
 import axios from "axios";
 import { BASE_URL } from "./BASE_URL";
+import Cookies from "js-cookie";
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dfxdq0iwq/image/upload";
 const UPLOAD_PRESET = "wcayf2ib";
+const accountId = Cookies.get("accountId");
 export const createService = async (data) => {
   try {
-    const response = await axios.post(`${BASE_URL}service/add`, data);
+    const response = await axios.post(`${BASE_URL}service/add`, data, {
+      params: { idAccount: accountId },
+    });
     return response.data;
   } catch (error) {
     console.error(error);
@@ -13,10 +17,11 @@ export const createService = async (data) => {
 };
 export const getListService = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}service/list`, {
+    const response = await axios.get(`${BASE_URL}service/getlist`, {
       headers: {
         "ngrok-skip-browser-warning": "true",
       },
+      params: { idAccount: accountId },
     });
 
     return response.data;
