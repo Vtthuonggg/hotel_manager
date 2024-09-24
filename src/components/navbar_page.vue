@@ -297,7 +297,6 @@ export default {
         try {
           const imageUrl = await uploadImage(this.info.avatarFile);
           this.info.avatar = imageUrl;
-          console.log("Uploaded image URL:", imageUrl);
           this.$toast.success("Lưu thông tin thành công");
         } catch (error) {
           console.error("Error uploading image:", error);

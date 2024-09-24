@@ -227,10 +227,10 @@ export default {
       return "#".repeat(length).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
     },
     getAvailableRooms() {
-      return this.rooms.filter((room) => room.isAvailable).length;
+      return this.rooms.filter((room) => room.available).length;
     },
     getUsingRooms() {
-      return this.rooms.filter((room) => !room.isAvailable).length;
+      return this.rooms.filter((room) => !room.available).length;
     },
   },
 };

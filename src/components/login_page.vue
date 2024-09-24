@@ -39,7 +39,7 @@ export default {
         var res = await login(this.username, this.password);
         this.$toast.success("Đăng nhập thành công");
         this.$router.push("/dashboard");
-        Cookies.set("accountId", res, {
+        Cookies.set("accountId", res.accountId, {
           expires: 7,
           secure: true,
           sameSite: "Strict",

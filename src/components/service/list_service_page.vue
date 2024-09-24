@@ -115,19 +115,7 @@ export default {
         image: null,
         imageFile: null,
       },
-      listSevices: [
-        {
-          name: "CocaCola",
-          price: 10000,
-          image: null,
-        },
-        {
-          name: "Bia Sài Gòn",
-          price: 15000,
-          image:
-            "https://res.cloudinary.com/dfxdq0iwq/image/upload/v1726576938/mn4iiwvkcwrrykbgaxt0.jpg",
-        },
-      ],
+      listSevices: [],
     };
   },
   created() {
