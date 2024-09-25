@@ -24,16 +24,25 @@
         </div>
         <div class="form-group">
           <label for="password">Mật khẩu:</label>
-          <input type="password" id="password" v-model="password" required />
+          <input :type="showConfirmPassword ?'text': 'password'" id="password" v-model="password" required />
+          <span @click="togglePasswordVisibility" class="toggle-password">
+            <i :class="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
+          </span>
         </div>
         <div class="form-group">
           <label for="confirm-password">Nhập lại mật khẩu:</label>
+          
           <input
-            type="password"
+            :type="showConfirmPassword ?'text': 'password'"
             id="confirm-password"
             v-model="confirmPassword"
             required
-          />
+          /> <span
+            @click="toggleConfirmPasswordVisibility"
+            class="toggle-password"
+          >
+            <i :class="showConfirmPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
+          </span>
         </div>
         <button type="submit" class="gradient-button">Đăng ký</button>
       </form>
@@ -55,6 +64,8 @@ export default {
       phone: "",
       address: "",
       confirmPassword: "",
+      showPassword: false, 
+      showConfirmPassword: false,
     };
   },
 
@@ -83,6 +94,13 @@ export default {
       } catch (e) {
         this.$toast.error(e.toString());
       }
+    }, togglePasswordVisibility() {
+      this.showPassword = !this.showPassword;
+    },
+
+    // Chuyển đổi trạng thái hiển thị mật khẩu xác nhận
+    toggleConfirmPasswordVisibility() {
+      this.showConfirmPassword = !this.showConfirmPassword;
     },
   },
 };
@@ -156,5 +174,28 @@ input {
 label {
   display: block;
   margin-bottom: 5px;
+}.password-group {
+  position: relative;
 }
+
+input[type="password"],
+input[type="text"] {
+  width: 100%;
+  padding-right: 40px; 
+}
+
+.toggle-password {
+  position: absolute;
+  left: 1080px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color:grey;
+  font-size: 18px;
+}
+
+.toggle-password:hover {
+  color: grey;
+}
+
 </style>
