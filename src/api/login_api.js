@@ -24,3 +24,13 @@ export const register = async (data) => {
     throw error;
   }
 };
+
+export const getAccountInfo = async (id) => {
+  try {
+    const response = await axios.get(`${BASE_URL}account/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

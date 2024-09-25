@@ -1,81 +1,98 @@
 <template>
   <div v-if="isShowPaymentRoom" class="popup">
-<div class="pop-container">
-    <div>
-      <span class="close" @click="closePopup">&times;</span>
-      <h1 class="hotel-name">{{ detailInvoice.inforHotel.hotelName }}</h1>
-      
-      <hr class="dashed-line" />
-    </div>
-    <div>
-      <h1 class="bill">HÓA ĐƠN THANH TOÁN</h1>
-      <img :src="qrCodeUrl" alt="QR Code" class="qr-img" />
-    </div>
-    <h3 style="padding-top: 30px">Thông tin đặt phòng</h3>
-    <div class="infor-booking">
-      <div><span><b>Phòng: </b><br>{{ detailInvoice.bookingDto.room.numberRoom }}</span></div>
-      <div><span>
-        <b> Giờ check-in: </b>
-        <br>{{ new Date(detailInvoice.bookingDto.timeIn).toLocaleString() }}
-      </span></div>
-      <div><span>
-        <b>Giờ check-out: </b>
-        <br>{{ new Date(detailInvoice.bookingDto.timeOut).toLocaleString() }}
-      </span></div>
-      <div><span>
-        <b>Tổng giá: </b>
-        <br>{{ formatCurrency(detailInvoice.bookingDto.totalPrice) }} VND
-      </span></div>
-    </div>
-    <h3>Thông tin dịch vụ</h3>
-    <div class="infor-service">
-      <table>
-        <thead>
-          <tr>
-            <th>Tên dịch vụ: </th>
-            <th>Đơn giá: </th>
-            <th>SL: </th>
-            <th>Tổng: </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(servie,index) in detailInvoice.serviceDtoList" :key="index">
-            <td>{{servie.nameService}}</td>
-            <td>{{formatCurrency(servie.price)}} VND</td>
-            <td>{{ servie.quantity }}</td>
-            <td>{{ formatCurrency(servie.amount)}} VND</td>
-          </tr>
-        </tbody>
-      </table>  
+    <div class="pop-container">
+      <div>
+        <span class="close" @click="closePopup">&times;</span>
+        <h1 class="hotel-name">{{ detailInvoice.inforHotel.hotelName }}</h1>
 
-    </div>
-    <hr class="dashed-line" />
-    <div class="invoice-room">
-      <h3>
-        Tổng giá phòng: {{ formatCurrency(detailInvoice.totalAmount) }} VND
-      </h3>
-    </div>
-    <hr class="dashed-line" />
-    <div class="infor-hotel">
-      {{ detailInvoice.inforHotel.hotelAddress }}
-      <br />
-      {{ detailInvoice.inforHotel.hotline }}
+        <hr class="dashed-line" />
+      </div>
+      <div>
+        <h1 class="bill">HÓA ĐƠN THANH TOÁN</h1>
+        <img :src="qrCodeUrl" alt="QR Code" class="qr-img" />
+      </div>
+      <h3 style="padding-top: 30px">THÔNG TIN ĐẶT PHÒNG</h3>
+      <div class="infor-booking">
+        <div>
+          <span
+            ><b>Phòng: </b><br />{{
+              detailInvoice.bookingDto.room.numberRoom
+            }}</span
+          >
+        </div>
+        <div>
+          <span>
+            <b> Giờ check-in: </b>
+            <br />{{
+              new Date(detailInvoice.bookingDto.timeIn).toLocaleString()
+            }}
+          </span>
+        </div>
+        <div>
+          <span>
+            <b>Giờ check-out: </b>
+            <br />{{
+              new Date(detailInvoice.bookingDto.timeOut).toLocaleString()
+            }}
+          </span>
+        </div>
+        <div>
+          <span>
+            <b>Tổng giá: </b>
+            <br />{{ formatCurrency(detailInvoice.bookingDto.totalPrice) }} VND
+          </span>
+        </div>
+      </div>
+      <h3>THÔNG TIN DỊCH VỤ</h3>
+      <div class="infor-service">
+        <table>
+          <thead>
+            <tr>
+              <th>Tên dịch vụ:</th>
+              <th>Đơn giá:</th>
+              <th>SL:</th>
+              <th>Tổng:</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(servie, index) in detailInvoice.serviceDtoList"
+              :key="index"
+            >
+              <td>{{ servie.nameService }}</td>
+              <td>{{ formatCurrency(servie.price) }} VND</td>
+              <td>{{ servie.quantity }}</td>
+              <td>{{ formatCurrency(servie.amount) }} VND</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <hr class="dashed-line" />
+      <div class="invoice-room">
+        <h3>
+          TỔNG GIÁ PHÒNG: {{ formatCurrency(detailInvoice.totalAmount) }} VND
+        </h3>
+      </div>
+      <hr class="dashed-line" />
+      <div class="infor-hotel">
+        {{ detailInvoice.inforHotel.hotelAddress }}
+        <br />
+        {{ detailInvoice.inforHotel.hotline }}
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
 import Cookies from "js-cookie";
 import { formatCurrency } from "@/utils/format_currency";
 export default {
-  props : {
-    isShowPaymentRoom : Boolean,
-
+  props: {
+    isShowPaymentRoom: Boolean,
   },
   data() {
     return {
-      qrCodeUrl: '',
+      qrCodeUrl: "",
       detailInvoice: {
         inforHotel: {
           hotelName: "Viet",
@@ -130,18 +147,20 @@ export default {
     formatCurrency,
 
     closePopup() {
-      this.$emit('closePopup');
-    }
-  }
+      this.$emit("closePopup");
+    },
+  },
 };
 </script>
 
 <style>
-.pop-container{
+.pop-container {
   border: #000 1px solid;
-  width: 70%;
+  width: 60%;
   background-color: white;
   padding: 30px;
+  max-height: 90vh;
+  overflow: auto;
 }
 .dashed-line {
   border: none;
@@ -164,7 +183,7 @@ export default {
   justify-content: space-between;
   text-align: left;
 }
-h3{
+h3 {
   margin: 10px;
 }
 .infor-service {
@@ -172,11 +191,8 @@ h3{
   justify-content: space-between;
 }
 .popup {
-
-  width: 100% ;
-  height: 100% ;
- 
-
+  width: 100%;
+  height: 100%;
 }
 .close {
   color: #aaa;
@@ -193,14 +209,14 @@ h3{
 table {
   width: 100%;
   border-collapse: collapse;
-  margin: 20px ;
+  margin: 20px;
 }
 
-th, td {
+th,
+td {
   text-align: center;
 }
-th{
+th {
   padding-bottom: 10px;
 }
-
 </style>

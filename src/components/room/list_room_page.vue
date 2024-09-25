@@ -125,11 +125,7 @@
       <div class="popup-content">
         <h3>Tạo phòng mới</h3>
         <v-text-field v-model="newRoom.name" label="Tên phòng"></v-text-field>
-        <v-text-field
-          v-model="newRoom.price"
-          label="Giá phòng"
-          v-mask="dynamicMask"
-        ></v-text-field>
+        <v-text-field v-model="formattedPrice" label="Giá phòng"></v-text-field>
         <v-radio-group v-model="newRoom.type" row>
           <v-radio color="#1db4f0" label="Phòng đơn" value="1"></v-radio>
           <v-radio color="#1db4f0" label="Phòng đôi" value="2"></v-radio>
@@ -151,28 +147,28 @@
       </div>
     </div>
     <div v-if="isShowPaymentRoom">
-
-        <Invoice :isShowPaymentRoom="isShowPaymentRoom" @closePopup="hidePaymentRoom"></Invoice>
-  </div>
+      <Invoice
+        :isShowPaymentRoom="isShowPaymentRoom"
+        @closePopup="hidePaymentRoom"
+      ></Invoice>
+    </div>
   </div>
 </template>
 
 <script>
 import { getListRoom, createRoom } from "@/api/room_api.js";
-import { mask } from "vue-the-mask";
 import Invoice from "../invoice_page.vue";
-
-
+import { formatCurrency } from "@/utils/format_currency";
 export default {
-  components : {
-      Invoice, 
+  components: {
+    Invoice,
   },
   data() {
     return {
       selectedRoom: null,
       menu: false,
       isShowCreateRoom: false,
-      isShowPaymentRoom : false,
+      isShowPaymentRoom: false,
       newRoom: {
         name: "",
         type: 1,
@@ -182,13 +178,12 @@ export default {
       rooms: [],
     };
   },
-  directives: {
-    mask,
-  },
+
   created() {
     this.fetchListRooom();
   },
   methods: {
+    formatCurrency,
     async fetchListRooom() {
       try {
         var res = await getListRoom();
@@ -252,9 +247,19 @@ export default {
   },
 
   computed: {
-    dynamicMask() {
-      const length = this.newRoom.price.toString().length;
-      return "#".repeat(length).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+    formattedPrice: {
+      get() {
+        return this.newRoom.price !== null
+          ? formatCurrency(this.newRoom.price)
+          : "";
+      },
+      set(value) {
+        if (typeof value === "string") {
+          this.newRoom.price = parseInt(value.replace(/\D/g, ""), 10) || 0;
+        } else {
+          this.newRoom.price = value;
+        }
+      },
     },
     getAvailableRooms() {
       return this.rooms.filter((room) => room.available).length;
@@ -402,5 +407,4 @@ export default {
   flex-direction: column;
   align-items: center;
 }
-
 </style>

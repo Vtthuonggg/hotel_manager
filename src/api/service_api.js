@@ -4,7 +4,9 @@ import Cookies from "js-cookie";
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dfxdq0iwq/image/upload";
 const UPLOAD_PRESET = "wcayf2ib";
 const accountId = Cookies.get("accountId");
+
 export const createService = async (data) => {
+  data.idAccount = accountId;
   try {
     const response = await axios.post(`${BASE_URL}service/add`, data, {
       params: { idAccount: accountId },
@@ -15,6 +17,7 @@ export const createService = async (data) => {
     throw error;
   }
 };
+
 export const getListService = async () => {
   try {
     const response = await axios.get(`${BASE_URL}service/getlist`, {
@@ -30,6 +33,42 @@ export const getListService = async () => {
     throw error;
   }
 };
+
+export const getServiceInfo = async (id) => {
+  try {
+    const response = await axios.get(`${BASE_URL}service/${id}`, {
+      headers: {
+        "ngrok-skip-browser-warning": "true",
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+export const updateService = async (data, id) => {
+  try {
+    const response = await axios.put(`${BASE_URL}service/${id}`, data);
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+export const deleteeService = async (id) => {
+  try {
+    const response = await axios.put(`${BASE_URL}service/delete/${id}`);
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 export const uploadImage = async (file) => {
   const formData = new FormData();
   formData.append("file", file);
