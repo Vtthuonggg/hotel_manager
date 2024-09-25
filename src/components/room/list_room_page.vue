@@ -150,11 +150,9 @@
         </div>
       </div>
     </div>
-    <div v-if="isShowPaymentRoom" class="popup2">
-      <div class="modal-content">
-        <span class="close" @click="showPaymentRoom">&times;</span>
-        <Invoice :isShowPaymentRoom="isShowPaymentRoom" :closePopup="hidePaymentRoom"></Invoice>
-    </div>
+    <div v-if="isShowPaymentRoom">
+
+        <Invoice :isShowPaymentRoom="isShowPaymentRoom" @closePopup="hidePaymentRoom"></Invoice>
   </div>
   </div>
 </template>
@@ -404,10 +402,5 @@ export default {
   flex-direction: column;
   align-items: center;
 }
-.popup2{
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  }
+
 </style>

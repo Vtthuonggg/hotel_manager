@@ -2,9 +2,7 @@
   <div v-if="isShowPaymentRoom" class="popup">
 <div class="pop-container">
     <div>
-      <v-btn icon @click="closePopup" class="close-btn">
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
+      <span class="close" @click="closePopup">&times;</span>
       <h1 class="hotel-name">{{ detailInvoice.inforHotel.hotelName }}</h1>
       
       <hr class="dashed-line" />
@@ -31,14 +29,25 @@
     </div>
     <h3>Thông tin dịch vụ</h3>
     <div class="infor-service">
-      <ul>
-        <li v-for="service in detailInvoice.serviceDtoList" :key="service.id">
-          <strong>{{ formatCurrency(service.nameService) }}</strong> -
-          {{ formatCurrency(service.quantity) }} x
-          {{ formatCurrency(service.price) }} VND =
-          {{ formatCurrency(service.amount) }} VND
-        </li>
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>Tên dịch vụ: </th>
+            <th>Đơn giá: </th>
+            <th>SL: </th>
+            <th>Tổng: </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(servie,index) in detailInvoice.serviceDtoList" :key="index">
+            <td>{{servie.nameService}}</td>
+            <td>{{formatCurrency(servie.price)}} VND</td>
+            <td>{{ servie.quantity }}</td>
+            <td>{{ formatCurrency(servie.amount)}} VND</td>
+          </tr>
+        </tbody>
+      </table>  
+
     </div>
     <hr class="dashed-line" />
     <div class="invoice-room">
@@ -48,9 +57,9 @@
     </div>
     <hr class="dashed-line" />
     <div class="infor-hotel">
-      <b>{{ detailInvoice.inforHotel.hotelAddress }}</b
-      ><br />
-      <b>{{ detailInvoice.inforHotel.hotline }}</b>
+      {{ detailInvoice.inforHotel.hotelAddress }}
+      <br />
+      {{ detailInvoice.inforHotel.hotline }}
     </div>
   </div>
 </div>
@@ -153,24 +162,14 @@ export default {
   font-family: Arial, Helvetica, sans-serif;
   display: flex;
   justify-content: space-between;
+  text-align: left;
+}
+h3{
+  margin: 10px;
 }
 .infor-service {
-  font-family: Arial, Helvetica, sans-serif;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin:auto;
-}
-.invoice-room {
-  padding: 50px 0 50px 0;
-}
-.infor-hotel {
-  padding: 50px 0 50px 0;
-}
-.close-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+  justify-content: space-between;
 }
 .popup {
 
@@ -179,4 +178,29 @@ export default {
  
 
 }
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px ;
+}
+
+th, td {
+  text-align: center;
+}
+th{
+  padding-bottom: 10px;
+}
+
 </style>
