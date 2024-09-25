@@ -10,6 +10,14 @@
         <v-icon style="color: white">mdi-plus</v-icon>
         <span>Thêm phòng</span>
       </v-btn>
+      <v-btn
+        class="gradient-button"
+        @click="showPaymentRoom"
+        style="color: white"
+      >
+        <v-icon style="color: white">mdi-plus</v-icon>
+        <span>Thanh toán</span>
+      </v-btn>
     </v-row>
     <v-divider></v-divider>
     <v-row justify="center" class="row-item">
@@ -142,18 +150,29 @@
         </div>
       </div>
     </div>
+    <div v-if="isShowPaymentRoom">
+
+        <Invoice :isShowPaymentRoom="isShowPaymentRoom" @closePopup="hidePaymentRoom"></Invoice>
+  </div>
   </div>
 </template>
 
 <script>
 import { getListRoom, createRoom } from "@/api/room_api.js";
 import { mask } from "vue-the-mask";
+import Invoice from "../invoice_page.vue";
+
+
 export default {
+  components : {
+      Invoice, 
+  },
   data() {
     return {
       selectedRoom: null,
       menu: false,
       isShowCreateRoom: false,
+      isShowPaymentRoom : false,
       newRoom: {
         name: "",
         type: 1,
@@ -203,6 +222,12 @@ export default {
 
     showCreateRoom() {
       this.isShowCreateRoom = true;
+    },
+    showPaymentRoom() {
+      this.isShowPaymentRoom = true;
+    },
+    hidePaymentRoom() {
+      this.isShowPaymentRoom = false;
     },
     hideCreateRoom() {
       this.isShowCreateRoom = false;
@@ -377,4 +402,5 @@ export default {
   flex-direction: column;
   align-items: center;
 }
+
 </style>

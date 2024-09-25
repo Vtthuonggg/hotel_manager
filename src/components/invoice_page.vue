@@ -1,7 +1,10 @@
 <template>
-  <div>
+  <div v-if="isShowPaymentRoom" class="popup">
+<div class="pop-container">
     <div>
+      <span class="close" @click="closePopup">&times;</span>
       <h1 class="hotel-name">{{ detailInvoice.inforHotel.hotelName }}</h1>
+      
       <hr class="dashed-line" />
     </div>
     <div>
@@ -10,30 +13,41 @@
     </div>
     <h3 style="padding-top: 30px">Thông tin đặt phòng</h3>
     <div class="infor-booking">
-      <p><b>Phòng: </b>{{ detailInvoice.bookingDto.room.numberRoom }}</p>
-      <p>
+      <div><span><b>Phòng: </b><br>{{ detailInvoice.bookingDto.room.numberRoom }}</span></div>
+      <div><span>
         <b> Giờ check-in: </b>
-        {{ new Date(detailInvoice.bookingDto.timeIn).toLocaleString() }}
-      </p>
-      <p>
+        <br>{{ new Date(detailInvoice.bookingDto.timeIn).toLocaleString() }}
+      </span></div>
+      <div><span>
         <b>Giờ check-out: </b>
-        {{ new Date(detailInvoice.bookingDto.timeOut).toLocaleString() }}
-      </p>
-      <p>
+        <br>{{ new Date(detailInvoice.bookingDto.timeOut).toLocaleString() }}
+      </span></div>
+      <div><span>
         <b>Tổng giá: </b>
-        {{ formatCurrency(detailInvoice.bookingDto.totalPrice) }} VND
-      </p>
+        <br>{{ formatCurrency(detailInvoice.bookingDto.totalPrice) }} VND
+      </span></div>
     </div>
     <h3>Thông tin dịch vụ</h3>
     <div class="infor-service">
-      <ul>
-        <li v-for="service in detailInvoice.serviceDtoList" :key="service.id">
-          <strong>{{ formatCurrency(service.nameService) }}</strong> -
-          {{ formatCurrency(service.quantity) }} x
-          {{ formatCurrency(service.price) }} VND =
-          {{ formatCurrency(service.amount) }} VND
-        </li>
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>Tên dịch vụ: </th>
+            <th>Đơn giá: </th>
+            <th>SL: </th>
+            <th>Tổng: </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(servie,index) in detailInvoice.serviceDtoList" :key="index">
+            <td>{{servie.nameService}}</td>
+            <td>{{formatCurrency(servie.price)}} VND</td>
+            <td>{{ servie.quantity }}</td>
+            <td>{{ formatCurrency(servie.amount)}} VND</td>
+          </tr>
+        </tbody>
+      </table>  
+
     </div>
     <hr class="dashed-line" />
     <div class="invoice-room">
@@ -43,20 +57,25 @@
     </div>
     <hr class="dashed-line" />
     <div class="infor-hotel">
-      <b>{{ detailInvoice.inforHotel.hotelAddress }}</b
-      ><br />
-      <b>{{ detailInvoice.inforHotel.hotline }}</b>
+      {{ detailInvoice.inforHotel.hotelAddress }}
+      <br />
+      {{ detailInvoice.inforHotel.hotline }}
     </div>
   </div>
+</div>
 </template>
 
 <script>
 import Cookies from "js-cookie";
 import { formatCurrency } from "@/utils/format_currency";
 export default {
+  props : {
+    isShowPaymentRoom : Boolean,
+
+  },
   data() {
     return {
-      qrCodeUrl: "",
+      qrCodeUrl: '',
       detailInvoice: {
         inforHotel: {
           hotelName: "Viet",
@@ -100,17 +119,30 @@ export default {
       },
     };
   },
-  methods: {
-    formatCurrency,
-  },
+
   mounted() {
-    this.qrCodeUrl = Cookies.get("qrCodeUrl");
+    const numberBank = Cookies.get("accountNumber");
+    const selectedBank = Cookies.get("selectedBank");
+    this.qrCodeUrl = `https://img.vietqr.io/image/${selectedBank}-${numberBank}-qr_only.png?amount=${this.detailInvoice.totalAmount}`;
     console.log(this.qrCodeUrl);
   },
+  methods: {
+    formatCurrency,
+
+    closePopup() {
+      this.$emit('closePopup');
+    }
+  }
 };
 </script>
 
 <style>
+.pop-container{
+  border: #000 1px solid;
+  width: 70%;
+  background-color: white;
+  padding: 30px;
+}
 .dashed-line {
   border: none;
   border-top: 2px dashed #000;
@@ -118,34 +150,57 @@ export default {
   margin: 20px 0;
 }
 .hotel-name {
-  margin: 50px;
-  padding-bottom: 30px;
+  margin-bottom: 30px;
+  font-size: 20px;
   font-family: "Times New Roman", Times, serif;
 }
-.bill {
-  padding: 30px 0 30px 0;
-}
+
 .qr-img {
   width: 20%;
 }
 .infor-booking {
   font-family: Arial, Helvetica, sans-serif;
-  padding: 50px 0 50px 0;
-  text-align: left;
-  margin-left: 42%;
-}
-.infor-service {
-  font-family: Arial, Helvetica, sans-serif;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-left: 40%;
-  padding-top: 30px;
+  text-align: left;
 }
-.invoice-room {
-  padding: 50px 0 50px 0;
+h3{
+  margin: 10px;
 }
-.infor-hotel {
-  padding: 50px 0 50px 0;
+.infor-service {
+  display: flex;
+  justify-content: space-between;
 }
+.popup {
+
+  width: 100% ;
+  height: 100% ;
+ 
+
+}
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px ;
+}
+
+th, td {
+  text-align: center;
+}
+th{
+  padding-bottom: 10px;
+}
+
 </style>
