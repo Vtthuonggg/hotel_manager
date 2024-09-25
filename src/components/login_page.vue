@@ -8,11 +8,21 @@
         <div class="form-group">
           <label for="username">Tài khoản:</label>
           <input type="text" id="username" v-model="username" required />
+          
         </div>
         <div class="form-group">
-          <label for="password">Mật khẩu:</label>
-          <input type="password" id="password" v-model="password" required />
-        </div>
+          <v-text-field
+      outlined
+        :type="showPassword ? 'password' :'text'" 
+        id="password"
+        v-model="password"
+        required
+        :prepend-inner-icon="!showPassword ?'mdi-eye':'mdi-eye-off' "
+        @click:prepend-inner="togglePasswordVisibility"
+      dense
+      class="password-field"
+      ></v-text-field>
+    </div>
         <button type="submit" class="gradient-button">Đăng nhập</button>
       </form>
     </div>
@@ -25,11 +35,13 @@
 <script>
 import { login } from "../api/login_api.js";
 import Cookies from "js-cookie";
+
 export default {
   data() {
     return {
       username: "",
       password: "",
+      showPassword: false,
     };
   },
 
@@ -48,11 +60,22 @@ export default {
         this.$toast.error("Tài khoản mật khẩu không chính xác");
       }
     },
+    
+    togglePasswordVisibility() {
+      this.showPassword = !this.showPassword;
+      console.log('assdgsgdsgsdg')
+    },
+    // Chuyển đổi trạng thái hiển thị mật khẩu xác nhận
+    toggleConfirmPasswordVisibility() {
+      this.showConfirmPassword = !this.showConfirmPassword;
+    },
   },
+  showPassword(){this.isShowPass = !this.isShowPass;}
 };
 </script>
 
 <style scoped>
+
 .logo {
   width: 10%;
   height: auto;
@@ -124,4 +147,20 @@ input {
 .register-link a {
   color: blue;
 }
+
+.password-group {
+  position: relative;
+}
+
+input[type="password"],
+input[type="text"] {
+  width: 100%;
+  padding-right: 40px; /* Thêm khoảng trống cho icon */
+}
+
+
+.password-field{
+  border-radius: 12px;
+}
+
 </style>

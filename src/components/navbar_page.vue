@@ -373,7 +373,7 @@ export default {
 }
 .save-button {
   width: 100%;
-  background-color: #007bff;
+  background:linear-gradient(45deg, #007bff, #00d4ff);
   color: white;
   border: none;
   padding: 10px 20px;

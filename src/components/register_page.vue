@@ -23,18 +23,33 @@
           <input type="text" id="address" v-model="address" required />
         </div>
         <div class="form-group">
-          <label for="password">Mật khẩu:</label>
-          <input type="password" id="password" v-model="password" required />
-        </div>
-        <div class="form-group">
-          <label for="confirm-password">Nhập lại mật khẩu:</label>
-          <input
-            type="password"
-            id="confirm-password"
-            v-model="confirmPassword"
-            required
-          />
-        </div>
+      <label for="password">Mật khẩu:</label>
+      <v-text-field
+      outlined
+        :type="showPassword ? 'password' :'text'" 
+        id="password"
+        v-model="password"
+        required
+        :prepend-inner-icon="!showPassword ?'mdi-eye':'mdi-eye-off' "
+        @click:prepend-inner="togglePasswordVisibility"
+      dense
+      class="password-field"
+      ></v-text-field>
+    </div>
+    <div class="form-group">
+      <label for="confirm-password">Nhập lại mật khẩu:</label>
+      <v-text-field
+      outlined
+      :type="showPassword ? 'password' :'text'" 
+        id="confirm-password"
+        v-model="confirmPassword"
+        required
+        :prepend-inner-icon="!showPassword ?'mdi-eye':'mdi-eye-off' "
+        @click:prepend-inner="togglePasswordVisibility"
+       dense
+      class="password-field"
+      ></v-text-field>
+    </div>
         <button type="submit" class="gradient-button">Đăng ký</button>
       </form>
     </div>
@@ -55,6 +70,8 @@ export default {
       phone: "",
       address: "",
       confirmPassword: "",
+      showPassword: false, 
+      showConfirmPassword: false,
     };
   },
 
@@ -83,7 +100,13 @@ export default {
       } catch (e) {
         this.$toast.error(e.toString());
       }
+    }, togglePasswordVisibility() {
+      this.showPassword = !this.showPassword;
+      console.log('abcfshdjfskfsdhjfgdsj')
     },
+
+    // Chuyển đổi trạng thái hiển thị mật khẩu xác nhận
+    
   },
 };
 </script>
@@ -125,6 +148,7 @@ input:focus {
 .form-group {
   text-align: left;
   margin-bottom: 15px;
+  width: 100%;
 }
 .gradient-button {
   width: 100%;
@@ -156,5 +180,19 @@ input {
 label {
   display: block;
   margin-bottom: 5px;
+}.password-group {
+  position: relative;
 }
+
+input[type="password"],
+input[type="text"] {
+  width: 100%;
+  padding-right: 40px; 
+}
+
+.password-field{
+  border-radius: 12px;
+}
+
+
 </style>
