@@ -23,27 +23,33 @@
           <input type="text" id="address" v-model="address" required />
         </div>
         <div class="form-group">
-          <label for="password">Mật khẩu:</label>
-          <input :type="showConfirmPassword ?'text': 'password'" id="password" v-model="password" required />
-          <span @click="togglePasswordVisibility" class="toggle-password">
-            <i :class="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
-          </span>
-        </div>
-        <div class="form-group">
-          <label for="confirm-password">Nhập lại mật khẩu:</label>
-          
-          <input
-            :type="showConfirmPassword ?'text': 'password'"
-            id="confirm-password"
-            v-model="confirmPassword"
-            required
-          /> <span
-            @click="toggleConfirmPasswordVisibility"
-            class="toggle-password"
-          >
-            <i :class="showConfirmPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
-          </span>
-        </div>
+      <label for="password">Mật khẩu:</label>
+      <v-text-field
+      outlined
+        :type="showPassword ? 'password' :'text'" 
+        id="password"
+        v-model="password"
+        required
+        :prepend-inner-icon="!showPassword ?'mdi-eye':'mdi-eye-off' "
+        @click:prepend-inner="togglePasswordVisibility"
+      dense
+      class="password-field"
+      ></v-text-field>
+    </div>
+    <div class="form-group">
+      <label for="confirm-password">Nhập lại mật khẩu:</label>
+      <v-text-field
+      outlined
+      :type="showPassword ? 'password' :'text'" 
+        id="confirm-password"
+        v-model="confirmPassword"
+        required
+        :prepend-inner-icon="!showPassword ?'mdi-eye':'mdi-eye-off' "
+        @click:prepend-inner="togglePasswordVisibility"
+       dense
+      class="password-field"
+      ></v-text-field>
+    </div>
         <button type="submit" class="gradient-button">Đăng ký</button>
       </form>
     </div>
@@ -96,12 +102,11 @@ export default {
       }
     }, togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
+      console.log('abcfshdjfskfsdhjfgdsj')
     },
 
     // Chuyển đổi trạng thái hiển thị mật khẩu xác nhận
-    toggleConfirmPasswordVisibility() {
-      this.showConfirmPassword = !this.showConfirmPassword;
-    },
+    
   },
 };
 </script>
@@ -143,6 +148,7 @@ input:focus {
 .form-group {
   text-align: left;
   margin-bottom: 15px;
+  width: 100%;
 }
 .gradient-button {
   width: 100%;
@@ -184,18 +190,9 @@ input[type="text"] {
   padding-right: 40px; 
 }
 
-.toggle-password {
-  position: absolute;
-  left: 1080px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  color:grey;
-  font-size: 18px;
+.password-field{
+  border-radius: 12px;
 }
 
-.toggle-password:hover {
-  color: grey;
-}
 
 </style>

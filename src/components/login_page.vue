@@ -11,12 +11,18 @@
           
         </div>
         <div class="form-group">
-          <label for="password">Mật khẩu:</label>
-          <input :type="showConfirmPassword ?'text': 'password'" id="password" v-model="password" required />
-          <span @click="togglePasswordVisibility" class="toggle-password">
-            <i :class="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
-          </span>
-        </div>
+          <v-text-field
+      outlined
+        :type="showPassword ? 'password' :'text'" 
+        id="password"
+        v-model="password"
+        required
+        :prepend-inner-icon="!showPassword ?'mdi-eye':'mdi-eye-off' "
+        @click:prepend-inner="togglePasswordVisibility"
+      dense
+      class="password-field"
+      ></v-text-field>
+    </div>
         <button type="submit" class="gradient-button">Đăng nhập</button>
       </form>
     </div>
@@ -57,6 +63,7 @@ export default {
     
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
+      console.log('assdgsgdsgsdg')
     },
     // Chuyển đổi trạng thái hiển thị mật khẩu xác nhận
     toggleConfirmPasswordVisibility() {
@@ -151,19 +158,12 @@ input[type="text"] {
   padding-right: 40px; /* Thêm khoảng trống cho icon */
 }
 
-.toggle-password {
-  position: absolute;
-  left: 1080px;
-  top: 50%;
-  transform: translateY(-50%);
+.password-icon {
+  right: 10px;
   cursor: pointer;
-  color: grey;
-  font-size: 18px;
 }
-
-.toggle-password:hover {
-  color:grey;
+.password-field{
+  border-radius: 12px;
 }
-
 
 </style>
