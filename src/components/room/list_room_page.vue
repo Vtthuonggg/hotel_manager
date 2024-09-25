@@ -7,6 +7,11 @@
         @click="showCreateRoom"
         style="color: white"
       >
+      <v-btn
+        class="gradient-button"
+        @click="showCreateRoom"
+        style="color: white"
+      >
         <v-icon style="color: white">mdi-plus</v-icon>
         <span>Thêm phòng</span>
       </v-btn>
@@ -16,6 +21,9 @@
       <v-col cols="12" md="6" lg="4">
         <v-card class="status-card">
           <v-list-item>
+            <v-icon style="color: #23b84f" large
+              >mdi-check-circle-outline</v-icon
+            >
             <v-icon style="color: #23b84f" large
               >mdi-check-circle-outline</v-icon
             >
@@ -58,6 +66,17 @@
           <v-menu v-model="menu" :close-on-content-click="false" offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-card
+        <v-col
+          v-for="(room, index) in rooms"
+          :key="index"
+          cols="12"
+          sm="6"
+          md="4"
+          lg="2"
+        >
+          <v-menu v-model="menu" :close-on-content-click="false" offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-card
                 :class="{
                   'room-card-free': room.available,
                   'room-card-using': !room.available,
@@ -67,6 +86,9 @@
                 @click="selectRoom(index)"
               >
                 <v-list-item>
+                  <v-icon v-if="room.type === 1" large
+                    >mdi-bed-single-outline</v-icon
+                  >
                   <v-icon v-if="room.type === 1" large
                     >mdi-bed-single-outline</v-icon
                   >
@@ -81,29 +103,39 @@
             <v-list v-if="selectedRoom === index">
               <v-list-item v-if="room.isAvailable" @click="startTimer">
                 <v-icon>mdi-clock</v-icon>
+            </template>
+            <v-list v-if="selectedRoom === index">
+              <v-list-item v-if="room.isAvailable" @click="startTimer">
+                <v-icon>mdi-clock</v-icon>
                 <v-list-item-title>Bắt đầu tính giờ</v-list-item-title>
               </v-list-item>
               <v-list-item v-if="room.isAvailable" @click="editRoom">
+                <v-icon>mdi-pencil</v-icon>
                 <v-icon>mdi-pencil</v-icon>
                 <v-list-item-title>Sửa</v-list-item-title>
               </v-list-item>
               <v-list-item v-if="room.isAvailable" @click="deleteRoom">
                 <v-icon>mdi-close</v-icon>
+                <v-icon>mdi-close</v-icon>
                 <v-list-item-title>Xóa</v-list-item-title>
               </v-list-item>
               <v-list-item v-if="room.isAvailable" @click="startTimer">
+                <v-icon>mdi-cash-edit</v-icon>
                 <v-icon>mdi-cash-edit</v-icon>
                 <v-list-item-title>Sửa giá phòng</v-list-item-title>
               </v-list-item>
               <v-list-item v-if="!room.isAvailable" @click="stopTimer">
                 <v-icon>mdi-clock-check</v-icon>
+                <v-icon>mdi-clock-check</v-icon>
                 <v-list-item-title>Ngừng tính giờ</v-list-item-title>
               </v-list-item>
               <v-list-item v-if="!room.isAvailable" @click="checkout">
                 <v-icon>mdi-currency-usd</v-icon>
+                <v-icon>mdi-currency-usd</v-icon>
                 <v-list-item-title>Thanh Toán</v-list-item-title>
               </v-list-item>
               <v-list-item v-if="!room.isAvailable" @click="addService">
+                <v-icon>mdi-room-service</v-icon>
                 <v-icon>mdi-room-service</v-icon>
 
                 <v-list-item-title>Thêm dịch vụ</v-list-item-title>
@@ -117,6 +149,11 @@
       <div class="popup-content">
         <h3>Tạo phòng mới</h3>
         <v-text-field v-model="newRoom.name" label="Tên phòng"></v-text-field>
+        <v-text-field
+          v-model="newRoom.price"
+          label="Giá phòng"
+          v-mask="dynamicMask"
+        ></v-text-field>
         <v-text-field
           v-model="newRoom.price"
           label="Giá phòng"
@@ -139,6 +176,18 @@
             @click="addRoom"
             >Xác nhận</v-btn
           >
+          <v-btn
+            class="gradient-button-cancel"
+            style="color: #007bff"
+            @click="hideCreateRoom"
+            >Hủy</v-btn
+          >
+          <v-btn
+            class="gradient-button-confirm"
+            style="color: white"
+            @click="addRoom"
+            >Xác nhận</v-btn
+          >
         </div>
       </div>
     </div>
@@ -146,7 +195,6 @@
 </template>
 
 <script>
-import { getListRoom, createRoom } from "@/api/room_api.js";
 import { mask } from "vue-the-mask";
 export default {
   data() {
@@ -165,9 +213,6 @@ export default {
   },
   directives: {
     mask,
-  },
-  created() {
-    this.fetchListRooom();
   },
   methods: {
     async fetchListRooom() {
@@ -201,6 +246,7 @@ export default {
       // Logic for adding service
     },
 
+
     showCreateRoom() {
       this.isShowCreateRoom = true;
     },
@@ -210,9 +256,10 @@ export default {
     async addRoom() {
       const roomType = parseInt(this.newRoom.type, 10);
       const price = parseInt(this.newRoom.price.replace(/,/g, ""), 10);
-      var data = {
-        numberRoom: this.newRoom.name,
-        typeRoom: roomType,
+
+      this.rooms.push({
+        name: this.newRoom.name,
+        type: roomType,
         price: price,
       };
       try {
@@ -228,7 +275,9 @@ export default {
 
   computed: {
     dynamicMask() {
+      console.log("dynamaa,a");
       const length = this.newRoom.price.toString().length;
+      return "#".repeat(length).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
       return "#".repeat(length).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
     },
     getAvailableRooms() {
