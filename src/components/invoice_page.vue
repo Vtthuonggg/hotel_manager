@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div v-if="isShowPaymentRoom">
+  <div class="payment-form">
     <div>
       <h1 class="hotel-name">{{ detailInvoice.inforHotel.hotelName }}</h1>
       <hr class="dashed-line" />
@@ -10,19 +11,19 @@
     </div>
     <h3 style="padding-top: 30px">Thông tin đặt phòng</h3>
     <div class="infor-booking">
-      <p><b>Phòng: </b>{{ detailInvoice.bookingDto.room.numberRoom }}</p>
-      <p>
+      <div><span><b>Phòng: </b><br>{{ detailInvoice.bookingDto.room.numberRoom }}</span></div>
+      <div><span>
         <b> Giờ check-in: </b>
-        {{ new Date(detailInvoice.bookingDto.timeIn).toLocaleString() }}
-      </p>
-      <p>
+        <br>{{ new Date(detailInvoice.bookingDto.timeIn).toLocaleString() }}
+      </span></div>
+      <div><span>
         <b>Giờ check-out: </b>
-        {{ new Date(detailInvoice.bookingDto.timeOut).toLocaleString() }}
-      </p>
-      <p>
+        <br>{{ new Date(detailInvoice.bookingDto.timeOut).toLocaleString() }}
+      </span></div>
+      <div><span>
         <b>Tổng giá: </b>
-        {{ formatCurrency(detailInvoice.bookingDto.totalPrice) }} VND
-      </p>
+        <br>{{ formatCurrency(detailInvoice.bookingDto.totalPrice) }} VND
+      </span></div>
     </div>
     <h3>Thông tin dịch vụ</h3>
     <div class="infor-service">
@@ -48,15 +49,20 @@
       <b>{{ detailInvoice.inforHotel.hotline }}</b>
     </div>
   </div>
+</div>
 </template>
 
 <script>
 import Cookies from "js-cookie";
 import { formatCurrency } from "@/utils/format_currency";
 export default {
+  props : {
+    isShowPaymentRoom : Boolean,
+
+  },
   data() {
     return {
-      qrCodeUrl: "",
+      qrCodeUrl: '',
       detailInvoice: {
         inforHotel: {
           hotelName: "Viet",
@@ -104,7 +110,9 @@ export default {
     formatCurrency,
   },
   mounted() {
-    this.qrCodeUrl = Cookies.get("qrCodeUrl");
+    const numberBank = Cookies.get("accountNumber");
+    const selectedBank = Cookies.get("selectedBank");
+    this.qrCodeUrl = `https://img.vietqr.io/image/${selectedBank}-${numberBank}-qr_only.png?amount=${this.detailInvoice.totalAmount}`;
     console.log(this.qrCodeUrl);
   },
 };
@@ -131,15 +139,15 @@ export default {
 .infor-booking {
   font-family: Arial, Helvetica, sans-serif;
   padding: 50px 0 50px 0;
-  text-align: left;
-  margin-left: 42%;
+  display: flex;
+  justify-content: space-between;
 }
 .infor-service {
   font-family: Arial, Helvetica, sans-serif;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  margin-left: 40%;
+  margin:auto;
   padding-top: 30px;
 }
 .invoice-room {
@@ -147,5 +155,9 @@ export default {
 }
 .infor-hotel {
   padding: 50px 0 50px 0;
+}
+.payment-form{
+  width:40%;
+  margin: auto;
 }
 </style>
