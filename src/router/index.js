@@ -9,6 +9,7 @@ import Room from "../components/room/list_room_page.vue";
 import Report from "../components/report/report_page.vue";
 import CreateOrrder from "../components/order/create_order_page.vue";
 import Service from "../components/service/list_service_page.vue";
+import Invoice from "../components/invoice_page.vue";
 Vue.use(Router);
 
 const routes = [
@@ -35,6 +36,12 @@ const routes = [
     name: "CreateOrder",
     meta: { title: "Bate - Tạo đơn" },
     component: CreateOrrder,
+  },
+  {
+    path: "/invoice",
+    name: "Invoice",
+    meta: { title: "Bate - Tạo hóa đơn" },
+    component: Invoice,
   },
 
   {
