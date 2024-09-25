@@ -158,10 +158,7 @@ input[type="text"] {
   padding-right: 40px; /* Thêm khoảng trống cho icon */
 }
 
-.password-icon {
-  right: 10px;
-  cursor: pointer;
-}
+
 .password-field{
   border-radius: 12px;
 }
