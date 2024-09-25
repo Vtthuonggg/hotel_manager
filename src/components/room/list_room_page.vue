@@ -153,7 +153,7 @@
     <div v-if="isShowPaymentRoom" class="popup2">
       <div class="modal-content">
         <span class="close" @click="showPaymentRoom">&times;</span>
-        <Invoice></Invoice>
+        <Invoice :isShowPaymentRoom="isShowPaymentRoom" :closePopup="hidePaymentRoom"></Invoice>
     </div>
   </div>
   </div>
@@ -227,6 +227,9 @@ export default {
     },
     showPaymentRoom() {
       this.isShowPaymentRoom = true;
+    },
+    hidePaymentRoom() {
+      this.isShowPaymentRoom = false;
     },
     hideCreateRoom() {
       this.isShowCreateRoom = false;

@@ -1,8 +1,12 @@
 <template>
-  <div v-if="isShowPaymentRoom">
-  <div class="payment-form">
+  <div v-if="isShowPaymentRoom" class="popup">
+<div class="pop-container">
     <div>
+      <v-btn icon @click="closePopup" class="close-btn">
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
       <h1 class="hotel-name">{{ detailInvoice.inforHotel.hotelName }}</h1>
+      
       <hr class="dashed-line" />
     </div>
     <div>
@@ -106,19 +110,30 @@ export default {
       },
     };
   },
-  methods: {
-    formatCurrency,
-  },
+
   mounted() {
     const numberBank = Cookies.get("accountNumber");
     const selectedBank = Cookies.get("selectedBank");
     this.qrCodeUrl = `https://img.vietqr.io/image/${selectedBank}-${numberBank}-qr_only.png?amount=${this.detailInvoice.totalAmount}`;
     console.log(this.qrCodeUrl);
   },
+  methods: {
+    formatCurrency,
+
+    closePopup() {
+      this.$emit('closePopup');
+    }
+  }
 };
 </script>
 
 <style>
+.pop-container{
+  border: #000 1px solid;
+  width: 70%;
+  background-color: white;
+  padding: 30px;
+}
 .dashed-line {
   border: none;
   border-top: 2px dashed #000;
@@ -126,19 +141,16 @@ export default {
   margin: 20px 0;
 }
 .hotel-name {
-  margin: 50px;
-  padding-bottom: 30px;
+  margin-bottom: 30px;
+  font-size: 20px;
   font-family: "Times New Roman", Times, serif;
 }
-.bill {
-  padding: 30px 0 30px 0;
-}
+
 .qr-img {
   width: 20%;
 }
 .infor-booking {
   font-family: Arial, Helvetica, sans-serif;
-  padding: 50px 0 50px 0;
   display: flex;
   justify-content: space-between;
 }
@@ -148,7 +160,6 @@ export default {
   justify-content: center;
   align-items: center;
   margin:auto;
-  padding-top: 30px;
 }
 .invoice-room {
   padding: 50px 0 50px 0;
@@ -156,8 +167,16 @@ export default {
 .infor-hotel {
   padding: 50px 0 50px 0;
 }
-.payment-form{
-  width:40%;
-  margin: auto;
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.popup {
+
+  width: 100% ;
+  height: 100% ;
+ 
+
 }
 </style>
