@@ -26,11 +26,11 @@
       <label for="password">Mật khẩu:</label>
       <v-text-field
       outlined
-        :type="showPassword ? 'password' :'text'" 
+        :type="showPassword ? 'text':'password'" 
         id="password"
         v-model="password"
         required
-        :prepend-inner-icon="!showPassword ?'mdi-eye':'mdi-eye-off' "
+        :prepend-inner-icon="showPassword ?'mdi-eye':'mdi-eye-off' "
         @click:prepend-inner="togglePasswordVisibility"
       dense
       class="password-field"
@@ -40,11 +40,11 @@
       <label for="confirm-password">Nhập lại mật khẩu:</label>
       <v-text-field
       outlined
-      :type="showPassword ? 'password' :'text'" 
+      :type="showPassword ? 'text':'password' " 
         id="confirm-password"
         v-model="confirmPassword"
         required
-        :prepend-inner-icon="!showPassword ?'mdi-eye':'mdi-eye-off' "
+        :prepend-inner-icon="showPassword ?'mdi-eye':'mdi-eye-off' "
         @click:prepend-inner="togglePasswordVisibility"
        dense
       class="password-field"
@@ -102,7 +102,6 @@ export default {
       }
     }, togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
-      console.log('abcfshdjfskfsdhjfgdsj')
     },
 
     // Chuyển đổi trạng thái hiển thị mật khẩu xác nhận
@@ -128,7 +127,7 @@ export default {
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin-top: 5%;
+  margin-top: 2%;
   border-radius: 12px;
 }
 input:focus {
@@ -141,6 +140,8 @@ input:focus {
   margin: 0 auto;
   text-align: right;
   margin-top: 10px;
+  margin-bottom: 50px
+
 }
 .login-link a {
   color: blue;

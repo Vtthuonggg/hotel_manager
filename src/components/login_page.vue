@@ -11,13 +11,14 @@
           
         </div>
         <div class="form-group">
+          <label for="password">Mật khẩu:</label>
           <v-text-field
       outlined
-        :type="showPassword ? 'password' :'text'" 
+        :type="showPassword ?  'text':'password'" 
         id="password"
         v-model="password"
         required
-        :prepend-inner-icon="!showPassword ?'mdi-eye':'mdi-eye-off' "
+        :prepend-inner-icon="showPassword ?'mdi-eye':'mdi-eye-off' "
         @click:prepend-inner="togglePasswordVisibility"
       dense
       class="password-field"
@@ -63,14 +64,9 @@ export default {
     
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
-      console.log('assdgsgdsgsdg')
     },
-    // Chuyển đổi trạng thái hiển thị mật khẩu xác nhận
-    toggleConfirmPasswordVisibility() {
-      this.showConfirmPassword = !this.showConfirmPassword;
-    },
+   
   },
-  showPassword(){this.isShowPass = !this.isShowPass;}
 };
 </script>
 
