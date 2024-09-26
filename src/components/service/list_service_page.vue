@@ -42,11 +42,7 @@
                 </div>
                 <v-divider></v-divider>
               </v-col>
-              <v-menu
-                offset-y
-                bottom
-                right
-              >
+              <v-menu offset-y bottom right>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn icon v-bind="attrs" v-on="on">
                     <v-icon>mdi-dots-vertical</v-icon>
@@ -72,7 +68,7 @@
         </v-col>
       </v-row>
     </v-container>
-<div v-if="isShowDelete" class="popup">
+    <div v-if="isShowDelete" class="popup">
       <div class="popup-content">
         <h3>Xác nhận xóa dịch vụ</h3>
         <div class="button-container">
@@ -90,10 +86,10 @@
           >
         </div>
       </div>
-</div>
-    <div v-if="isShowCreateService|| isShowEditService" class="popup">
+    </div>
+    <div v-if="isShowCreateService || isShowEditService" class="popup">
       <div class="popup-content">
-        <h3>{{ isShowCreateService?'Tạo dịch vụ':'Sửa dịch vụ' }}</h3>
+        <h3>{{ isShowCreateService ? "Tạo dịch vụ" : "Sửa dịch vụ" }}</h3>
         <v-text-field v-model="newService.name" label="Tên"></v-text-field>
         <v-text-field
           v-model="formattedPrice"
@@ -133,7 +129,7 @@
           <v-btn
             class="gradient-button-confirm"
             style="color: white"
-            @click="submitService(isShowCreateService? 1: 2)"
+            @click="submitService(isShowCreateService ? 1 : 2)"
             >Xác nhận</v-btn
           >
         </div>
@@ -153,7 +149,7 @@ import {
 export default {
   data() {
     return {
-      isShowDelete:false,
+      isShowDelete: false,
       isShowEditService: false,
       isShowCreateService: false,
       newService: {
@@ -163,9 +159,24 @@ export default {
         imageFile: null,
       },
       listSevices: [
-        {name: "coca", price:1000, image: 'https://www.coca-cola.com/content/dam/onexp/vn/home-image/coca-cola/Coca-Cola_OT%20320ml_VN-EX_Desktop.png'},
-        {name: "coca", price:1000, image: 'https://www.coca-cola.com/content/dam/onexp/vn/home-image/coca-cola/Coca-Cola_OT%20320ml_VN-EX_Desktop.png'},
-        {name: "coca", price:1000, image: 'https://www.coca-cola.com/content/dam/onexp/vn/home-image/coca-cola/Coca-Cola_OT%20320ml_VN-EX_Desktop.png'}
+        {
+          name: "coca",
+          price: 1000,
+          image:
+            "https://www.coca-cola.com/content/dam/onexp/vn/home-image/coca-cola/Coca-Cola_OT%20320ml_VN-EX_Desktop.png",
+        },
+        {
+          name: "coca",
+          price: 1000,
+          image:
+            "https://www.coca-cola.com/content/dam/onexp/vn/home-image/coca-cola/Coca-Cola_OT%20320ml_VN-EX_Desktop.png",
+        },
+        {
+          name: "coca",
+          price: 1000,
+          image:
+            "https://www.coca-cola.com/content/dam/onexp/vn/home-image/coca-cola/Coca-Cola_OT%20320ml_VN-EX_Desktop.png",
+        },
       ],
     };
   },
@@ -189,19 +200,18 @@ export default {
     },
   },
   methods: {
-    showDeletePop(){
+    showDeletePop() {
       this.isShowDelete = true;
     },
-  async  deleteService(item) {
-  try{
-  await deleteeService(item.id);
-  this.$toast.success("Xóa dịch vụ thành công");
-  }catch(e){
-  this.$toast.error("Có lỗi xảy ra");
+    async deleteService(item) {
+      try {
+        await deleteeService(item.id);
+        this.$toast.success("Xóa dịch vụ thành công");
+        this.fetchListService();
+      } catch (e) {
+        this.$toast.error("Có lỗi xảy ra");
       }
-    this.fetchListService();
     },
-
 
     async fetchListService() {
       try {
@@ -225,34 +235,33 @@ export default {
       this.isShowCreateService = false;
       this.isShowEditService = false;
       this.newService = {};
-
     },
     async submitService(type) {
       var data = {
-            name: this.newService.name,
-            price: this.newService.price,
-            image:null,
-          };
-        try {
-      if (this.newService.imageFile) {
+        name: this.newService.name,
+        price: this.newService.price,
+        image: null,
+      };
+      try {
+        if (this.newService.imageFile) {
           const imageUrl = await uploadImage(this.newService.imageFile);
           this.newService.image = imageUrl;
-         data.image = imageUrl;
-      }
-          if(type ==1){
-            await createService(data);
-            this.$toast.success("Thêm dịch vụ thành công");
-          }else{
-            await updateService(data, this.newService.id);
-            this.$toast.success("Sửa dịch vụ thành công");
-          }
-          this.newService = {};
-          this.fetchListService();
-          this.hideCreateEditService();
-        } catch (error) {
-          this.$toast.error("Có lỗi xảy ra");
-          return;
+          data.image = imageUrl;
         }
+        if (type == 1) {
+          await createService(data);
+          this.$toast.success("Thêm dịch vụ thành công");
+        } else {
+          await updateService(data, this.newService.id);
+          this.$toast.success("Sửa dịch vụ thành công");
+        }
+        this.newService = {};
+        this.fetchListService();
+        this.hideCreateEditService();
+      } catch (error) {
+        this.$toast.error("Có lỗi xảy ra");
+        return;
+      }
     },
 
     validateInteger(event) {
@@ -287,11 +296,9 @@ export default {
       this.$refs.fileInput.value = null;
     },
     editService(item) {
-      this.newService= {...item};
+      this.newService = { ...item };
       this.isShowEditService = true;
-      
     },
-   
   },
 };
 </script>

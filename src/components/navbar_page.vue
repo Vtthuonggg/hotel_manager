@@ -20,8 +20,8 @@
           active-class="active-link"
           exact-active-class="exact-active-link"
         >
-          <i class="fas fa-chart-bar"></i><span class="bold-text"></span>Báo
-          cáo</router-link
+          <v-icon style="color: black">mdi-chart-bar</v-icon
+          ><span class="bold-text"></span>Báo cáo</router-link
         >
       </li>
       <li class="navbar-item">
@@ -373,7 +373,7 @@ export default {
 }
 .save-button {
   width: 100%;
-  background:linear-gradient(45deg, #007bff, #00d4ff);
+  background: linear-gradient(45deg, #007bff, #00d4ff);
   color: white;
   border: none;
   padding: 10px 20px;

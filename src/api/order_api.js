@@ -26,7 +26,7 @@ export const updateOrder = async (data, id) => {
 
 export const getListOrder = async () => {
   try {
-    const response = await axios.put(`${BASE_URL}booking/getlist`, {
+    const response = await axios.get(`${BASE_URL}booking/getlist`, {
       params: { idAccount: accountId },
     });
     console.log(response.data);
@@ -38,7 +38,7 @@ export const getListOrder = async () => {
 
 export const getOrderInfo = async (idBooking) => {
   try {
-    const response = await axios.put(`${BASE_URL}booking/getbooking`, {
+    const response = await axios.get(`${BASE_URL}booking/getbooking`, {
       params: { idAccount: accountId, idBooking: idBooking },
     });
     console.log(response.data);

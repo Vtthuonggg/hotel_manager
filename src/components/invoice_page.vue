@@ -79,6 +79,11 @@
         <br />
         {{ detailInvoice.inforHotel.hotline }}
       </div>
+      <div class="confirm-button-container">
+        <button @click="confirmPayment" class="confirm-button">
+          Xác nhận thanh toán
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -144,6 +149,10 @@ export default {
     console.log(this.qrCodeUrl);
   },
   methods: {
+    confirmPayment() {
+      this.closePopup();
+      this.$toast.success("Thanh toán thành công");
+    },
     formatCurrency,
 
     closePopup() {
@@ -218,5 +227,20 @@ td {
 }
 th {
   padding-bottom: 10px;
+}
+.confirm-button-container {
+  text-align: center;
+  margin-top: 20px;
+}
+.confirm-button {
+  background-color: #2da8ff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+.confirm-button:hover {
+  background-color: #2da8ff;
 }
 </style>
