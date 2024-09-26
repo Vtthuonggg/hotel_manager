@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div class="container">
     <v-row class="row-title-item">
       <h2 class="title">Danh sách phòng</h2>
@@ -10,14 +11,7 @@
         <v-icon style="color: white">mdi-plus</v-icon>
         <span>Thêm phòng</span>
       </v-btn>
-      <v-btn
-        class="gradient-button"
-        @click="showPaymentRoom"
-        style="color: white"
-      >
-        <v-icon style="color: white">mdi-plus</v-icon>
-        <span>Thanh toán</span>
-      </v-btn>
+     
     </v-row>
     <v-divider></v-divider>
     <v-row justify="center" class="row-item">
@@ -107,7 +101,7 @@
                 <v-icon>mdi-clock-check</v-icon>
                 <v-list-item-title>Ngừng tính giờ</v-list-item-title>
               </v-list-item>
-              <v-list-item v-if="!room.isAvailable" @click="checkout">
+              <v-list-item v-if="!room.isAvailable" @click="showPaymentRoom">
                 <v-icon>mdi-currency-usd</v-icon>
                 <v-list-item-title>Thanh Toán</v-list-item-title>
               </v-list-item>
@@ -164,6 +158,7 @@
           >
         </div>
       </div>
+    </div>
     <div v-if="isShowPaymentRoom">
       <Invoice
         :isShowPaymentRoom="isShowPaymentRoom"
@@ -171,7 +166,7 @@
       ></Invoice>
     </div>
   </div>
-  </div>
+</div>
 </template>
 
 <script>
@@ -203,7 +198,7 @@ export default {
         numberRoom: "101",
         type: 1,
         price: 100000,
-        isAvailable: true,
+        isAvailable: false,
       }],
     };
   },
@@ -259,6 +254,7 @@ export default {
     },
     showPaymentRoom() {
       this.isShowPaymentRoom = true;
+      this.menu=false
     },
     hidePaymentRoom() {
       this.isShowPaymentRoom = false;
