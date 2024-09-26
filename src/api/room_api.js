@@ -58,3 +58,13 @@ export const createRoom = async (data) => {
     throw error;
   }
 };
+export const deleteRoom = async (id) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}room/deleteroom/${id}`);
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

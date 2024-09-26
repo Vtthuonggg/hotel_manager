@@ -95,7 +95,7 @@
                 <v-icon>mdi-pencil</v-icon>
                 <v-list-item-title>Sửa</v-list-item-title>
               </v-list-item>
-              <v-list-item v-if="room.isAvailable" @click="deleteRoom">
+              <v-list-item v-if="room.isAvailable" @click="showDeleteRoom(room.id)">
                 <v-icon>mdi-close</v-icon>
                 <v-list-item-title>Xóa</v-list-item-title>
               </v-list-item>
@@ -146,6 +146,24 @@
         </div>
       </div>
     </div>
+    <div v-if="isDeleteRoom " class="popup">
+      <div class="popup-content">
+        <h3>Xóa phòng</h3>
+        <div class="button-container">
+          <v-btn
+            class="gradient-button-cancel"
+            style="color: #007bff"
+            @click="hideDeleteRoom"
+            >Hủy</v-btn
+          >
+          <v-btn
+            class="gradient-button-confirm"
+            style="color: white"
+            @click="deletedRoom(roomId)"
+            >Xác nhận</v-btn
+          >
+        </div>
+      </div>
     <div v-if="isShowPaymentRoom">
       <Invoice
         :isShowPaymentRoom="isShowPaymentRoom"
@@ -153,10 +171,11 @@
       ></Invoice>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
-import { getListRoom, createRoom, updateRoom } from "@/api/room_api.js";
+import { getListRoom, createRoom, updateRoom, deleteRoom } from "@/api/room_api.js";
 import Invoice from "../invoice_page.vue";
 import { formatCurrency } from "@/utils/format_currency";
 export default {
@@ -165,11 +184,14 @@ export default {
   },
   data() {
     return {
+      roomId : null,
       isShowEditRoom: false,
       selectedRoom: null,
       menu: false,
       isShowCreateRoom: false,
       isShowPaymentRoom: false,
+      isDeleteRoom : false,
+
       newRoom: {
         name: "",
         type: 1,
@@ -208,9 +230,16 @@ export default {
       this.selectedRoom = index;
       this.menu = true;
     },
- 
-    deleteRoom() {
-      // Logic for deleting room
+    async deletedRoom(id){
+      try {
+      await deleteRoom(id);
+      this.isDeleteRoom = false;
+      this.$toast.success("Xóa thành công");
+      this.fetchListRooom();
+      }
+      catch (e){
+        this.$toast.error("Có lỗi xảy ra")
+      }
     },
     startTimer() {
       // Logic for starting timer
@@ -238,6 +267,15 @@ export default {
       this.isShowCreateRoom = false;
       this.isShowEditRoom = false;
     },
+    hideDeleteRoom(){
+      this.isDeleteRoom = false;
+    },
+    showDeleteRoom(id){
+      this.isDeleteRoom = true;
+      this.roomId = id;
+      console.log(id);
+    },
+
     async submit(type) {
       const roomType = parseInt(this.newRoom.type, 10);
       const price = typeof this.newRoom.price === 'string' 
