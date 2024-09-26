@@ -255,7 +255,7 @@ export default {
           this.$toast.success("Thêm phòng thành công");
         }else{
           console.log("Sửa");
-          await updateRoom(data);
+          await updateRoom(this.newRoom.id,data);
           this.$toast.success("Sửa phòng thành công");
         }
         this.fetchListRooom();

@@ -35,6 +35,18 @@ export const getRoomInfo = async (roomId) => {
     throw error;
   }
 };
+export const updateRoom = async (roomId, data) => {
+  console.log(accountId);
+  try {
+    const response = await axios.put(`${BASE_URL}room/update/${roomId}`, data
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 export const createRoom = async (data) => {
   data.idAccount = accountId;
   try {

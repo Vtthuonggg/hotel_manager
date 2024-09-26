@@ -115,7 +115,7 @@ export default {
         image: null,
         imageFile: null,
       },
-      listSevices: [],
+      listSevices: [{name: "coca", price:1000, image: 'https://www.coca-cola.com/content/dam/onexp/vn/home-image/coca-cola/Coca-Cola_OT%20320ml_VN-EX_Desktop.png'}],
     };
   },
   created() {
