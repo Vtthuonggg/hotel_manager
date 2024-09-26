@@ -67,8 +67,8 @@
             <template v-slot:activator="{ on, attrs }">
               <v-card
                 :class="{
-                  'room-card-free': room.available,
-                  'room-card-using': !room.available,
+                  'room-card-free': room.isAvailable,
+                  'room-card-using': !room.isAvailable,
                 }"
                 v-bind="attrs"
                 v-on="on"
@@ -91,7 +91,7 @@
                 <v-icon>mdi-clock</v-icon>
                 <v-list-item-title>Bắt đầu tính giờ</v-list-item-title>
               </v-list-item>
-              <v-list-item v-if="room.isAvailable" @click="editRoom">
+              <v-list-item v-if="room.isAvailable" @click="showEditRooom(room)">
                 <v-icon>mdi-pencil</v-icon>
                 <v-list-item-title>Sửa</v-list-item-title>
               </v-list-item>
@@ -121,26 +121,26 @@
         </v-col>
       </v-row>
     </v-container>
-    <div v-if="isShowCreateRoom" class="popup">
+    <div v-if="isShowCreateRoom || isShowEditRoom" class="popup">
       <div class="popup-content">
-        <h3>Tạo phòng mới</h3>
-        <v-text-field v-model="newRoom.name" label="Tên phòng"></v-text-field>
+       <h3>{{ isShowEditRoom ? `Sửa phòng: ${newRoom.name}` : 'Tạo phòng mới' }}</h3>
+        <v-text-field v-model="newRoom.numberRoom" label="Tên phòng"></v-text-field>
         <v-text-field v-model="formattedPrice" label="Giá phòng"></v-text-field>
         <v-radio-group v-model="newRoom.type" row>
-          <v-radio color="#1db4f0" label="Phòng đơn" value="1"></v-radio>
-          <v-radio color="#1db4f0" label="Phòng đôi" value="2"></v-radio>
+          <v-radio color="#1db4f0" label="Phòng đơn" :value=1></v-radio>
+          <v-radio color="#1db4f0" label="Phòng đôi" :value=2></v-radio>
         </v-radio-group>
         <div class="button-container">
           <v-btn
             class="gradient-button-cancel"
             style="color: #007bff"
-            @click="hideCreateRoom"
+            @click="hideCreateEditRoom"
             >Hủy</v-btn
           >
           <v-btn
             class="gradient-button-confirm"
             style="color: white"
-            @click="addRoom"
+            @click="submit(isShowEditRoom ? 2 : 1)"
             >Xác nhận</v-btn
           >
         </div>
@@ -156,7 +156,7 @@
 </template>
 
 <script>
-import { getListRoom, createRoom } from "@/api/room_api.js";
+import { getListRoom, createRoom, updateRoom } from "@/api/room_api.js";
 import Invoice from "../invoice_page.vue";
 import { formatCurrency } from "@/utils/format_currency";
 export default {
@@ -165,6 +165,7 @@ export default {
   },
   data() {
     return {
+      isShowEditRoom: false,
       selectedRoom: null,
       menu: false,
       isShowCreateRoom: false,
@@ -175,7 +176,13 @@ export default {
         price: "",
       },
 
-      rooms: [],
+      rooms: [{
+        id:2,
+        numberRoom: "101",
+        type: 1,
+        price: 100000,
+        isAvailable: true,
+      }],
     };
   },
 
@@ -183,6 +190,11 @@ export default {
     this.fetchListRooom();
   },
   methods: {
+    showEditRooom(room) {
+     this.newRoom={...room}
+      this.selectedRoom = null;
+      this.isShowEditRoom = true;
+    },
     formatCurrency,
     async fetchListRooom() {
       try {
@@ -196,9 +208,7 @@ export default {
       this.selectedRoom = index;
       this.menu = true;
     },
-    editRoom() {
-      // Logic for editing room
-    },
+ 
     deleteRoom() {
       // Logic for deleting room
     },
@@ -224,25 +234,36 @@ export default {
     hidePaymentRoom() {
       this.isShowPaymentRoom = false;
     },
-    hideCreateRoom() {
+    hideCreateEditRoom() {
       this.isShowCreateRoom = false;
+      this.isShowEditRoom = false;
     },
-    async addRoom() {
+    async submit(type) {
       const roomType = parseInt(this.newRoom.type, 10);
-      const price = parseInt(this.newRoom.price.replace(/,/g, ""), 10);
+      const price = typeof this.newRoom.price === 'string' 
+      ? parseInt(this.newRoom.price.replace(/,/g, ""), 10) 
+      : this.newRoom.price;
       var data = {
         numberRoom: this.newRoom.name,
         typeRoom: roomType,
         price: price,
       };
       try {
-        await createRoom(data);
-        this.$toast.success("Thêm phòng thành công");
+        if(type ==1){
+          console.log("Tạo");
+          await createRoom(data);
+          this.$toast.success("Thêm phòng thành công");
+        }else{
+          console.log("Sửa");
+          await updateRoom(data);
+          this.$toast.success("Sửa phòng thành công");
+        }
         this.fetchListRooom();
-        this.hideCreateRoom();
+        this.hideCreateEditRoom();
       } catch (e) {
         this.$toast.error("Có lỗi xảy ra");
       }
+      this.newRoom={}
     },
   },
 

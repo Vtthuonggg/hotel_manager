@@ -1,4 +1,7 @@
 export function formatCurrency(value) {
+  if (value === undefined || value === null) {
+    return '';
+  }
   return value
     .toLocaleString("vi-VN", {
       style: "currency",
