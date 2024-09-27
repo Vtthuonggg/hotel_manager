@@ -135,6 +135,9 @@
         </div>
       </div>
     </div>
+    <v-overlay :value="loading">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
   </div>
 </template>
 <script>
@@ -149,6 +152,7 @@ import {
 export default {
   data() {
     return {
+      loading: false,
       isShowDelete: false,
       isShowEditService: false,
       isShowCreateService: false,
@@ -203,22 +207,30 @@ export default {
     showDeletePop() {
       this.isShowDelete = true;
     },
+
     async deleteService(item) {
+      this.loading = true;
       try {
         await deleteeService(item.id);
         this.$toast.success("Xóa dịch vụ thành công");
+        this.isShowDelete = false;
         this.fetchListService();
       } catch (e) {
         this.$toast.error("Có lỗi xảy ra");
+      } finally {
+        this.loading = false;
       }
     },
 
     async fetchListService() {
+      this.loading = true;
       try {
         var res = await getListService();
         this.listSevices = res;
       } catch (e) {
         this.$toast.error("Có lỗi xảy ra");
+      } finally {
+        this.loading = false;
       }
     },
     formatCurrency,
@@ -242,6 +254,7 @@ export default {
         price: this.newService.price,
         image: null,
       };
+      this.loading = true;
       try {
         if (this.newService.imageFile) {
           const imageUrl = await uploadImage(this.newService.imageFile);
@@ -261,6 +274,8 @@ export default {
       } catch (error) {
         this.$toast.error("Có lỗi xảy ra");
         return;
+      } finally {
+        this.loading = false;
       }
     },
 

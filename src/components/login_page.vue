@@ -8,28 +8,30 @@
         <div class="form-group">
           <label for="username">Tài khoản:</label>
           <input type="text" id="username" v-model="username" required />
-          
         </div>
         <div class="form-group">
           <label for="password">Mật khẩu:</label>
           <v-text-field
-      outlined
-        :type="showPassword ?  'text':'password'" 
-        id="password"
-        v-model="password"
-        required
-        :append-icon="showPassword ?'mdi-eye':'mdi-eye-off' "
-        @click:append="togglePasswordVisibility"
-      dense
-      class="password-field"
-      ></v-text-field>
-    </div>
+            outlined
+            :type="showPassword ? 'text' : 'password'"
+            id="password"
+            v-model="password"
+            required
+            :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            @click:append="togglePasswordVisibility"
+            dense
+            class="password-field"
+          ></v-text-field>
+        </div>
         <button type="submit" class="gradient-button">Đăng nhập</button>
       </form>
     </div>
     <div class="register-link">
       <router-link to="/register">Đăng ký tài khoản</router-link>
     </div>
+    <v-overlay :value="loading">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
   </div>
 </template>
 
@@ -40,6 +42,7 @@ import Cookies from "js-cookie";
 export default {
   data() {
     return {
+      loading: false,
       username: "",
       password: "",
       showPassword: false,
@@ -48,6 +51,7 @@ export default {
 
   methods: {
     async handleLogin() {
+      this.loading = true;
       try {
         var res = await login(this.username, this.password);
         this.$toast.success("Đăng nhập thành công");
@@ -59,19 +63,19 @@ export default {
         });
       } catch (error) {
         this.$toast.error("Tài khoản mật khẩu không chính xác");
+      } finally {
+        this.loading = false;
       }
     },
-    
+
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
     },
-   
   },
 };
 </script>
 
 <style scoped>
-
 .logo {
   width: 10%;
   height: auto;
@@ -154,9 +158,7 @@ input[type="text"] {
   padding-right: 40px; /* Thêm khoảng trống cho icon */
 }
 
-
-.password-field{
+.password-field {
   border-radius: 12px;
 }
-
 </style>

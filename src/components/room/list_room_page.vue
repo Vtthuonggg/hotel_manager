@@ -186,6 +186,9 @@
           @close-popup="hideAddService"
         ></PopupAddService>
       </div>
+      <v-overlay :value="loading">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay>
     </div>
   </div>
 </template>
@@ -207,6 +210,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       showPopupAddService: false,
       roomId: null,
       isShowEditRoom: false,
@@ -286,11 +290,14 @@ export default {
     },
     formatCurrency,
     async fetchListRooom() {
+      this.loading = true;
       try {
         var res = await getListRoom();
         this.rooms = res;
       } catch (error) {
-        console.log(error);
+        this.$toast.error("Có lỗi xảy ra");
+      } finally {
+        this.loading = false;
       }
     },
     selectRoom(index) {

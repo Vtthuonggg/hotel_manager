@@ -23,39 +23,42 @@
           <input type="text" id="address" v-model="address" required />
         </div>
         <div class="form-group">
-      <label for="password">Mật khẩu:</label>
-      <v-text-field
-      outlined
-        :type="showPassword ? 'text':'password'" 
-        id="password"
-        v-model="password"
-        required
-        :append-icon="showPassword ?'mdi-eye':'mdi-eye-off' "
-        @click:append="togglePasswordVisibility"
-      dense
-      class="password-field"
-      ></v-text-field>
-    </div>
-    <div class="form-group">
-      <label for="confirm-password">Nhập lại mật khẩu:</label>
-      <v-text-field
-      outlined
-      :type="showPassword ? 'text':'password' " 
-        id="confirm-password"
-        v-model="confirmPassword"
-        required
-        :append-icon="showPassword ?'mdi-eye':'mdi-eye-off' "
-        @click:append="togglePasswordVisibility"
-       dense
-      class="password-field"
-      ></v-text-field>
-    </div>
+          <label for="password">Mật khẩu:</label>
+          <v-text-field
+            outlined
+            :type="showPassword ? 'text' : 'password'"
+            id="password"
+            v-model="password"
+            required
+            :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            @click:append="togglePasswordVisibility"
+            dense
+            class="password-field"
+          ></v-text-field>
+        </div>
+        <div class="form-group">
+          <label for="confirm-password">Nhập lại mật khẩu:</label>
+          <v-text-field
+            outlined
+            :type="showPassword ? 'text' : 'password'"
+            id="confirm-password"
+            v-model="confirmPassword"
+            required
+            :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            @click:append="togglePasswordVisibility"
+            dense
+            class="password-field"
+          ></v-text-field>
+        </div>
         <button type="submit" class="gradient-button">Đăng ký</button>
       </form>
     </div>
     <div class="login-link">
       <router-link to="/login">Trở lại đăng nhập</router-link>
     </div>
+    <v-overlay :value="loading">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
   </div>
 </template>
 
@@ -64,13 +67,14 @@ import { register } from "../api/login_api.js";
 export default {
   data() {
     return {
+      loading: false,
       email: "",
       password: "",
       name: "",
       phone: "",
       address: "",
       confirmPassword: "",
-      showPassword: false, 
+      showPassword: false,
       showConfirmPassword: false,
     };
   },
@@ -92,20 +96,21 @@ export default {
         phone: this.phone,
         address: this.address,
       };
-      console.log(data);
+      this.loading = true;
+
       try {
         await register(data);
         this.$toast.success("Đăng ký thành công");
         this.$router.push("/login");
       } catch (e) {
-        this.$toast.error(e.toString());
+        this.$toast.error("Có lỗi xảy ra");
+      } finally {
+        this.loading = false;
       }
-    }, togglePasswordVisibility() {
+    },
+    togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
     },
-
-    // Chuyển đổi trạng thái hiển thị mật khẩu xác nhận
-    
   },
 };
 </script>
@@ -140,7 +145,7 @@ input:focus {
   margin: 0 auto;
   text-align: right;
   margin-top: 10px;
-  margin-bottom: 50px
+  margin-bottom: 50px;
 }
 .login-link a {
   color: rgb(0, 123, 255);
@@ -180,19 +185,18 @@ input {
 label {
   display: block;
   margin-bottom: 5px;
-}.password-group {
+}
+.password-group {
   position: relative;
 }
 
 input[type="password"],
 input[type="text"] {
   width: 100%;
-  padding-right: 40px; 
+  padding-right: 40px;
 }
 
-.password-field{
+.password-field {
   border-radius: 12px;
 }
-
-
 </style>

@@ -74,6 +74,9 @@
             </v-col>
           </v-row>
         </v-container>
+        <v-overlay :value="loading">
+          <v-progress-circular indeterminate size="64"></v-progress-circular>
+        </v-overlay>
       </div>
     </div>
   </div>
@@ -93,6 +96,7 @@ export default {
 
   data() {
     return {
+      loading: false,
       selectedService: [],
       listService: [
         {
@@ -161,6 +165,7 @@ export default {
     },
     async fetchServices() {
       console.log("fetchServices");
+      this.loading = true;
       try {
         const response = await getListService();
         this.listService = response.data.map((service) => ({
@@ -169,6 +174,8 @@ export default {
         }));
       } catch (error) {
         this.$toast.error("Có lỗi xảy ra");
+      } finally {
+        this.loading = false;
       }
     },
     isNumber(event) {
@@ -220,9 +227,11 @@ export default {
 .service-info {
   flex: 1;
   text-align: left;
+  user-select: none;
 }
 
 .service-price {
+  user-select: none;
   text-align: right;
 }
 .popup {
