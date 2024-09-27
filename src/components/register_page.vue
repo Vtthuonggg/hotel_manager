@@ -30,8 +30,8 @@
         id="password"
         v-model="password"
         required
-        :prepend-inner-icon="showPassword ?'mdi-eye':'mdi-eye-off' "
-        @click:prepend-inner="togglePasswordVisibility"
+        :append-icon="showPassword ?'mdi-eye':'mdi-eye-off' "
+        @click:append="togglePasswordVisibility"
       dense
       class="password-field"
       ></v-text-field>
@@ -44,8 +44,8 @@
         id="confirm-password"
         v-model="confirmPassword"
         required
-        :prepend-inner-icon="showPassword ?'mdi-eye':'mdi-eye-off' "
-        @click:prepend-inner="togglePasswordVisibility"
+        :append-icon="showPassword ?'mdi-eye':'mdi-eye-off' "
+        @click:append="togglePasswordVisibility"
        dense
       class="password-field"
       ></v-text-field>
@@ -141,10 +141,9 @@ input:focus {
   text-align: right;
   margin-top: 10px;
   margin-bottom: 50px
-
 }
 .login-link a {
-  color: blue;
+  color: rgb(0, 123, 255);
 }
 .form-group {
   text-align: left;
