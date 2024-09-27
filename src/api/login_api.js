@@ -1,6 +1,7 @@
 import axios from "axios";
 import { BASE_URL } from "./BASE_URL";
-
+import Cookies from "js-cookie";
+const accountId = Cookies.get("accountId");
 export const login = async (username, password) => {
   try {
     const response = await axios.post(`${BASE_URL}account/login`, {
@@ -25,9 +26,14 @@ export const register = async (data) => {
   }
 };
 
-export const getAccountInfo = async (id) => {
+export const getAccountInfo = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}account/${id}`);
+    const response = await axios.get(`${BASE_URL}account/${accountId}`, {
+      headers: {
+        "ngrok-skip-browser-warning": "true",
+      },
+    });
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error(error);

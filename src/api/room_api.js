@@ -12,7 +12,7 @@ export const getListRoom = async () => {
       },
       params: { id: accountId },
     });
-
+    console.log(response.data)
     return response.data;
   } catch (error) {
     console.error(error);
@@ -36,11 +36,9 @@ export const getRoomInfo = async (roomId) => {
   }
 };
 export const updateRoom = async (roomId, data) => {
-  console.log(accountId);
   try {
-    const response = await axios.put(`${BASE_URL}room/update/${roomId}`, data
+    const response = await axios.put(`${BASE_URL}room/updateroom/${roomId}`, data
     );
-
     return response.data;
   } catch (error) {
     console.error(error);

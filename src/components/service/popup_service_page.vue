@@ -99,30 +99,7 @@ export default {
       loading: false,
       selectedService: [],
       listService: [
-        {
-          quantity: 1,
-          id: 1,
-          name: "coca",
-          price: 1000,
-          image:
-            "https://www.coca-cola.com/content/dam/onexp/vn/home-image/coca-cola/Coca-Cola_OT%20320ml_VN-EX_Desktop.png",
-        },
-        {
-          quantity: 1,
-          id: 2,
-          name: "coca",
-          price: 1000,
-          image:
-            "https://www.coca-cola.com/content/dam/onexp/vn/home-image/coca-cola/Coca-Cola_OT%20320ml_VN-EX_Desktop.png",
-        },
-        {
-          quantity: 1,
-          id: 3,
-          name: "coca",
-          price: 1000,
-          image:
-            "https://www.coca-cola.com/content/dam/onexp/vn/home-image/coca-cola/Coca-Cola_OT%20320ml_VN-EX_Desktop.png",
-        },
+      
       ],
     };
   },
@@ -164,11 +141,10 @@ export default {
       this.$emit("close-popup");
     },
     async fetchServices() {
-      console.log("fetchServices");
       this.loading = true;
       try {
         const response = await getListService();
-        this.listService = response.data.map((service) => ({
+        this.listService = response.map((service) => ({
           ...service,
           quantity: 1,
         }));

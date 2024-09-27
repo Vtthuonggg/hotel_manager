@@ -26,7 +26,7 @@ export const getListService = async () => {
       },
       params: { idAccount: accountId },
     });
-
+    console.log(response.data)
     return response.data;
   } catch (error) {
     console.error(error);
@@ -49,9 +49,10 @@ export const getServiceInfo = async (id) => {
   }
 };
 export const updateService = async (data, id) => {
+  console.log(data);
+  console.log(id);
   try {
-    const response = await axios.put(`${BASE_URL}service/${id}`, data);
-
+    const response = await axios.put(`${BASE_URL}service/update/${id}`, data);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -60,7 +61,7 @@ export const updateService = async (data, id) => {
 };
 export const deleteeService = async (id) => {
   try {
-    const response = await axios.put(`${BASE_URL}service/delete/${id}`);
+    const response = await axios.delete(`${BASE_URL}service/delete/${id}`);
 
     return response.data;
   } catch (error) {

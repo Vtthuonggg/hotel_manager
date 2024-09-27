@@ -142,6 +142,7 @@ import "vue-select/dist/vue-select.css";
 import vSelect from "vue-select";
 import Cookies from "js-cookie";
 import { uploadImage } from "@/api/service_api.js";
+import {getAccountInfo} from "@/api/login_api.js";
 export default {
   name: "AppNavbar",
   components: {
@@ -286,11 +287,27 @@ export default {
     },
 
     showInputInfo() {
+      console.log("showInputInfo");
       this.isInputInfo = true;
+      this.fetchUserInfo();
+
     },
     hideInputInfo() {
       this.isInputInfo = false;
+      this.info={ name: "",
+        phone: "",
+        address: "",
+        avatar: "",
+        avatarFile: null,}
     },
+async fetchUserInfo(){
+  try{
+var res = await getAccountInfo();
+this.info = res;
+}catch(error){
+  this.$toast.error("Có lỗi xảy ra");
+}
+},
 
     async saveInfo() {
       if (this.info.avatar) {
@@ -307,14 +324,7 @@ export default {
 
       this.hideInputInfo();
     },
-    // async fetchHotelInfo() {
-    //   try {
-    //     const response = await axios.get(`${BASE_URL}hotel/info`);
-    //     this.info = response.data;
-    //   } catch (error) {
-    //     console.error("Error fetching hotel info:", error);
-    //   }
-    // },
+
   },
 };
 </script>

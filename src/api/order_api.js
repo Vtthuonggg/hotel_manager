@@ -27,6 +27,9 @@ export const updateOrder = async (data, id) => {
 export const getListOrder = async () => {
   try {
     const response = await axios.get(`${BASE_URL}booking/getlist`, {
+      headers: {
+        "ngrok-skip-browser-warning": "true",
+      },
       params: { idAccount: accountId },
     });
     console.log(response.data);

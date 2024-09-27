@@ -55,7 +55,7 @@
                     </v-list-item-icon>
                     <v-list-item-title>Sửa</v-list-item-title>
                   </v-list-item>
-                  <v-list-item @click="showDeletePop">
+                  <v-list-item @click="showDeletePop(item.id)">
                     <v-list-item-icon>
                       <v-icon>mdi-delete</v-icon>
                     </v-list-item-icon>
@@ -81,7 +81,7 @@
           <v-btn
             class="gradient-button-confirm"
             style="color: white"
-            @click="deleteService(item)"
+            @click="deleteService(serviceId)"
             >Xác nhận</v-btn
           >
         </div>
@@ -96,7 +96,10 @@
           label="Giá tiền"
           type="text"
           @input="updatePrice"
-        ></v-text-field>
+          append-outer="đ"
+        ><template v-slot:append>
+        <span>đ</span>
+      </template></v-text-field>
         <div class="image-upload-container">
           <input
             type="file"
@@ -152,6 +155,7 @@ import {
 export default {
   data() {
     return {
+      serviceId: null,
       loading: false,
       isShowDelete: false,
       isShowEditService: false,
@@ -163,24 +167,7 @@ export default {
         imageFile: null,
       },
       listSevices: [
-        {
-          name: "coca",
-          price: 1000,
-          image:
-            "https://www.coca-cola.com/content/dam/onexp/vn/home-image/coca-cola/Coca-Cola_OT%20320ml_VN-EX_Desktop.png",
-        },
-        {
-          name: "coca",
-          price: 1000,
-          image:
-            "https://www.coca-cola.com/content/dam/onexp/vn/home-image/coca-cola/Coca-Cola_OT%20320ml_VN-EX_Desktop.png",
-        },
-        {
-          name: "coca",
-          price: 1000,
-          image:
-            "https://www.coca-cola.com/content/dam/onexp/vn/home-image/coca-cola/Coca-Cola_OT%20320ml_VN-EX_Desktop.png",
-        },
+       
       ],
     };
   },
@@ -204,14 +191,15 @@ export default {
     },
   },
   methods: {
-    showDeletePop() {
+    showDeletePop(id) {
+      this.serviceId =id;
       this.isShowDelete = true;
     },
 
-    async deleteService(item) {
+    async deleteService(id) {
       this.loading = true;
       try {
-        await deleteeService(item.id);
+        await deleteeService(id);
         this.$toast.success("Xóa dịch vụ thành công");
         this.isShowDelete = false;
         this.fetchListService();
@@ -246,7 +234,7 @@ export default {
     hideCreateEditService() {
       this.isShowCreateService = false;
       this.isShowEditService = false;
-      this.newService = {};
+      this.newService = {name: "", price: null, image: null, imageFile: null};
     },
     async submitService(type) {
       var data = {

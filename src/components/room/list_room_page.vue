@@ -60,15 +60,15 @@
               <template v-slot:activator="{ on, attrs }">
                 <v-card
                   :class="{
-                    'room-card-free': room.isAvailable,
-                    'room-card-using': !room.isAvailable,
+                    'room-card-free': room.available,
+                    'room-card-using': !room.available,
                   }"
                   v-bind="attrs"
                   v-on="on"
                   @click="selectRoom(index)"
                 >
                   <v-list-item>
-                    <v-icon v-if="room.type === 1" large
+                    <v-icon v-if="room.typeRoom === 1" large
                       >mdi-bed-single-outline</v-icon
                     >
                     <v-icon v-else large>mdi-bed-double-outline</v-icon>
@@ -80,37 +80,31 @@
                 </v-card>
               </template>
               <v-list v-if="selectedRoom === index">
-                <v-list-item v-if="room.isAvailable" @click="startTimer">
+                <v-list-item v-if="room.available" @click="startTimer">
                   <v-icon>mdi-clock</v-icon>
                   <v-list-item-title>Bắt đầu tính giờ</v-list-item-title>
                 </v-list-item>
                 <v-list-item
-                  v-if="room.isAvailable"
+                  v-if="room.available"
                   @click="showEditRooom(room)"
                 >
                   <v-icon>mdi-pencil</v-icon>
-                  <v-list-item-title>Sửa</v-list-item-title>
+                  <v-list-item-title>Sửa phòng</v-list-item-title>
                 </v-list-item>
                 <v-list-item
-                  v-if="room.isAvailable"
+                  v-if="room.available"
                   @click="showDeleteRoom(room.id)"
                 >
                   <v-icon>mdi-close</v-icon>
-                  <v-list-item-title>Xóa</v-list-item-title>
+                  <v-list-item-title>Xóa phòng</v-list-item-title>
                 </v-list-item>
-                <v-list-item v-if="room.isAvailable" @click="startTimer">
-                  <v-icon>mdi-cash-edit</v-icon>
-                  <v-list-item-title>Sửa giá phòng</v-list-item-title>
-                </v-list-item>
-                <v-list-item v-if="!room.isAvailable" @click="stopTimer">
-                  <v-icon>mdi-clock-check</v-icon>
-                  <v-list-item-title>Ngừng tính giờ</v-list-item-title>
-                </v-list-item>
-                <v-list-item v-if="!room.isAvailable" @click="showPaymentRoom">
+               
+            
+                <v-list-item v-if="!room.available" @click="showPaymentRoom">
                   <v-icon>mdi-currency-usd</v-icon>
-                  <v-list-item-title>Thanh Toán</v-list-item-title>
+                  <v-list-item-title>Trả phòng & Thanh toán</v-list-item-title>
                 </v-list-item>
-                <v-list-item v-if="!room.isAvailable" @click="showAddService">
+                <v-list-item v-if="room.available" @click="showAddService">
                   <v-icon>mdi-room-service</v-icon>
                   <v-list-item-title>Thêm dịch vụ</v-list-item-title>
                 </v-list-item>
@@ -133,8 +127,10 @@
           <v-text-field
             v-model="formattedPrice"
             label="Giá phòng"
-          ></v-text-field>
-          <v-radio-group v-model="newRoom.type" row>
+          ><template v-slot:append>
+        <span>đ</span>
+      </template></v-text-field>
+          <v-radio-group v-model="newRoom.typeRoom" row>
             <v-radio color="#1db4f0" label="Phòng đơn" :value="1"></v-radio>
             <v-radio color="#1db4f0" label="Phòng đôi" :value="2"></v-radio>
           </v-radio-group>
@@ -227,13 +223,7 @@ export default {
       },
 
       rooms: [
-        {
-          id: 2,
-          numberRoom: "101",
-          type: 1,
-          price: 100000,
-          isAvailable: false,
-        },
+       
       ],
       detailInvoice: {
         inforHotel: {
@@ -344,6 +334,8 @@ export default {
     hideCreateEditRoom() {
       this.isShowCreateRoom = false;
       this.isShowEditRoom = false;
+      this.newRoom = {numberRoom: "", type: 1, price: ""};
+
     },
     hideDeleteRoom() {
       this.isDeleteRoom = false;
@@ -355,16 +347,18 @@ export default {
     },
 
     async submit(type) {
-      const roomType = parseInt(this.newRoom.type, 10);
+      const roomType = parseInt(this.newRoom.typeRoom, 10);
       const price =
         typeof this.newRoom.price === "string"
           ? parseInt(this.newRoom.price.replace(/,/g, ""), 10)
           : this.newRoom.price;
       var data = {
-        numberRoom: this.newRoom.name,
+        numberRoom: this.newRoom.numberRoom,
         typeRoom: roomType,
         price: price,
+        available:true
       };
+      this.loading =true;
       try {
         if (type == 1) {
           console.log("Tạo");
@@ -379,8 +373,10 @@ export default {
         this.hideCreateEditRoom();
       } catch (e) {
         this.$toast.error("Có lỗi xảy ra");
+      }finally{
+        this.loading = false;
       }
-      this.newRoom = {};
+      
     },
   },
 
