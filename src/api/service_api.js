@@ -1,9 +1,10 @@
 import axios from "axios";
 import { BASE_URL } from "./BASE_URL";
 import Cookies from "js-cookie";
+const accountId = Cookies.get("accountId");
+
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dfxdq0iwq/image/upload";
 const UPLOAD_PRESET = "wcayf2ib";
-const accountId = Cookies.get("accountId");
 
 export const createService = async (data) => {
   data.idAccount = accountId;

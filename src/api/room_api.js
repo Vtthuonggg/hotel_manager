@@ -23,6 +23,7 @@ export const getRoomInfo = async (roomId) => {
   console.log(accountId);
   try {
     const response = await axios.get(`${BASE_URL}room/${roomId}`, {
+
       headers: {
         "ngrok-skip-browser-warning": "true",
       },
@@ -56,6 +57,7 @@ export const createRoom = async (data) => {
     throw error;
   }
 };
+
 export const deleteRoom = async (id) => {
   try {
     const response = await axios.delete(`${BASE_URL}room/deleteroom/${id}`);

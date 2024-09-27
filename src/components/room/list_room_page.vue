@@ -80,7 +80,7 @@
                 </v-card>
               </template>
               <v-list v-if="selectedRoom === index">
-                <v-list-item v-if="room.available" @click="startTimer">
+                <v-list-item v-if="room.available" @click="startTimer(room.id)">
                   <v-icon>mdi-clock</v-icon>
                   <v-list-item-title>Bắt đầu tính giờ</v-list-item-title>
                 </v-list-item>
@@ -98,13 +98,11 @@
                   <v-icon>mdi-close</v-icon>
                   <v-list-item-title>Xóa phòng</v-list-item-title>
                 </v-list-item>
-               
-            
                 <v-list-item v-if="!room.available" @click="showPaymentRoom">
                   <v-icon>mdi-currency-usd</v-icon>
                   <v-list-item-title>Trả phòng & Thanh toán</v-list-item-title>
                 </v-list-item>
-                <v-list-item v-if="room.available" @click="showAddService">
+                <v-list-item v-if="!room.available" @click="showAddService">
                   <v-icon>mdi-room-service</v-icon>
                   <v-list-item-title>Thêm dịch vụ</v-list-item-title>
                 </v-list-item>
@@ -199,6 +197,8 @@ import {
 import Invoice from "../invoice_page.vue";
 import PopupAddService from "../service/popup_service_page.vue";
 import { formatCurrency } from "@/utils/format_currency";
+import {createOrder} from "@/api/order_api.js";
+import moment from 'moment-timezone';
 export default {
   components: {
     Invoice,
@@ -304,8 +304,22 @@ export default {
         this.$toast.error("Có lỗi xảy ra");
       }
     },
-    startTimer() {
-      // Logic for starting timer
+   async startTimer(roomId) {
+    const timeInVietnam = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD HH:mm:ss');
+   const data={
+  idRoom:roomId,
+  timeIn: timeInVietnam,
+  isPaid: false,
+   }
+   this.loading = true;
+   try{
+await createOrder(data);
+this.$toast.success("Tạo đơn thành công");
+   }catch(e){
+     this.$toast.error("Có lỗi xảy ra");
+    }finally{
+      this.loading = false;
+    }
     },
     stopTimer() {
       // Logic for stopping timer

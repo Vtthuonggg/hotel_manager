@@ -5,11 +5,14 @@ const accountId = Cookies.get("accountId");
 
 export const createOrder = async (data) => {
   data.idAccount = accountId;
+  console.log(data);
   try {
     const response = await axios.post(`${BASE_URL}booking/add`, data);
     console.log(response.data);
     return response.data;
   } catch (error) {
+    console.error(error);
+
     throw error;
   }
 };
@@ -20,6 +23,9 @@ export const updateOrder = async (data, id) => {
     console.log(response.data);
     return response.data;
   } catch (error) {
+    console.error(error);
+
+
     throw error;
   }
 };
@@ -35,6 +41,8 @@ export const getListOrder = async () => {
     console.log(response.data);
     return response.data;
   } catch (error) {
+    console.error(error);
+
     throw error;
   }
 };
@@ -42,11 +50,16 @@ export const getListOrder = async () => {
 export const getOrderInfo = async (idBooking) => {
   try {
     const response = await axios.get(`${BASE_URL}booking/getbooking`, {
+      headers: {
+        "ngrok-skip-browser-warning": "true",
+      },
       params: { idAccount: accountId, idBooking: idBooking },
     });
     console.log(response.data);
     return response.data;
   } catch (error) {
+    console.error(error);
+
     throw error;
   }
 };
