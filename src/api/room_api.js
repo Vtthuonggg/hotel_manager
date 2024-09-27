@@ -12,7 +12,7 @@ export const getListRoom = async () => {
       },
       params: { id: accountId },
     });
-    console.log(response.data)
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -20,10 +20,8 @@ export const getListRoom = async () => {
   }
 };
 export const getRoomInfo = async (roomId) => {
-  console.log(accountId);
   try {
     const response = await axios.get(`${BASE_URL}room/${roomId}`, {
-
       headers: {
         "ngrok-skip-browser-warning": "true",
       },
@@ -38,7 +36,9 @@ export const getRoomInfo = async (roomId) => {
 };
 export const updateRoom = async (roomId, data) => {
   try {
-    const response = await axios.put(`${BASE_URL}room/updateroom/${roomId}`, data
+    const response = await axios.put(
+      `${BASE_URL}room/updateroom/${roomId}`,
+      data
     );
     return response.data;
   } catch (error) {

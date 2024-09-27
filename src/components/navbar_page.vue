@@ -142,7 +142,7 @@ import "vue-select/dist/vue-select.css";
 import vSelect from "vue-select";
 import Cookies from "js-cookie";
 import { uploadImage } from "@/api/service_api.js";
-import {getAccountInfo} from "@/api/login_api.js";
+import { getAccountInfo, updateAccountInfo } from "@/api/login_api.js";
 export default {
   name: "AppNavbar",
   components: {
@@ -290,24 +290,25 @@ export default {
       console.log("showInputInfo");
       this.isInputInfo = true;
       this.fetchUserInfo();
-
     },
     hideInputInfo() {
       this.isInputInfo = false;
-      this.info={ name: "",
+      this.info = {
+        name: "",
         phone: "",
         address: "",
         avatar: "",
-        avatarFile: null,}
+        avatarFile: null,
+      };
     },
-async fetchUserInfo(){
-  try{
-var res = await getAccountInfo();
-this.info = res;
-}catch(error){
-  this.$toast.error("Có lỗi xảy ra");
-}
-},
+    async fetchUserInfo() {
+      try {
+        var res = await getAccountInfo();
+        this.info = res;
+      } catch (error) {
+        this.$toast.error("Có lỗi xảy ra");
+      }
+    },
 
     async saveInfo() {
       if (this.info.avatar) {
@@ -321,10 +322,16 @@ this.info = res;
           return;
         }
       }
+      const data = {
+        name: this.info.name,
+        phone: this.info.phone,
+        address: this.info.address,
+        avatar: this.info.avatar,
+      };
+      await updateAccountInfo(data);
 
       this.hideInputInfo();
     },
-
   },
 };
 </script>
