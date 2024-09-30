@@ -1,45 +1,52 @@
 <template>
-  <div>
-    <img alt="Vue logo" src="../assets/logo.png" class="logo" />
-    <h3 class="name-group">Quản lý khách sạn</h3>
-    <div class="login-container">
-      <h2>Đăng nhập</h2>
-      <form @submit.prevent="handleLogin">
-        <div class="form-group">
-          <label for="username">Tài khoản:</label>
-          <input type="text" id="username" v-model="username" required />
-        </div>
-        <div class="form-group">
-          <label for="password">Mật khẩu:</label>
-          <v-text-field
-            outlined
-            :type="showPassword ? 'text' : 'password'"
-            id="password"
-            v-model="password"
-            required
-            :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-            @click:append="togglePasswordVisibility"
-            dense
-            class="password-field"
-          ></v-text-field>
-        </div>
-        <button type="submit" class="gradient-button">Đăng nhập</button>
-      </form>
+  <div class="page-container">
+    <div class="content-wrap">
+      <img alt="Vue logo" src="../assets/logo.png" class="logo" />
+      <h3 class="name-group">Quản lý khách sạn</h3>
+      <div class="login-container">
+        <h2>Đăng nhập</h2>
+        <form @submit.prevent="handleLogin">
+          <div class="form-group">
+            <label for="username">Tài khoản:</label>
+            <input type="text" id="username" v-model="username" required />
+          </div>
+          <div class="form-group">
+            <label for="password">Mật khẩu:</label>
+            <v-text-field
+              outlined
+              :type="showPassword ? 'text' : 'password'"
+              id="password"
+              v-model="password"
+              required
+              :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+              @click:append="togglePasswordVisibility"
+              dense
+              class="password-field"
+            ></v-text-field>
+          </div>
+          <button type="submit" class="gradient-button">Đăng nhập</button>
+        </form>
+      </div>
+      <div class="register-link">
+        <router-link to="/register">Đăng ký tài khoản</router-link>
+      </div>
+
+      <v-overlay :value="loading">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay>
     </div>
-    <div class="register-link">
-      <router-link to="/register">Đăng ký tài khoản</router-link>
-    </div>
-    <v-overlay :value="loading">
-      <v-progress-circular indeterminate size="64"></v-progress-circular>
-    </v-overlay>
+    <FooterPage />
   </div>
 </template>
 
 <script>
 import { login } from "../api/login_api.js";
 import Cookies from "js-cookie";
-
+import FooterPage from "./footer_page.vue";
 export default {
+  components: {
+    FooterPage,
+  },
   data() {
     return {
       loading: false,
@@ -76,6 +83,18 @@ export default {
 </script>
 
 <style scoped>
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content-wrap {
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .logo {
   width: 10%;
   height: auto;
