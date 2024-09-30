@@ -79,15 +79,12 @@
                   </v-list-item>
                 </v-card>
               </template>
-              <v-list v-if="selectedRoom === index">
+              <v-list style="font-weight: bold" v-if="selectedRoom === index">
                 <v-list-item v-if="room.available" @click="startTimer(room.id)">
                   <v-icon>mdi-clock</v-icon>
                   <v-list-item-title>Bắt đầu tính giờ</v-list-item-title>
                 </v-list-item>
-                <v-list-item
-                  v-if="room.available"
-                  @click="showEditRooom(room)"
-                >
+                <v-list-item v-if="room.available" @click="showEditRooom(room)">
                   <v-icon>mdi-pencil</v-icon>
                   <v-list-item-title>Sửa phòng</v-list-item-title>
                 </v-list-item>
@@ -98,7 +95,7 @@
                   <v-icon>mdi-close</v-icon>
                   <v-list-item-title>Xóa phòng</v-list-item-title>
                 </v-list-item>
-                <v-list-item v-if="!room.available" @click="showPaymentRoom">
+                <v-list-item v-if="!room.available" @click="updateOrder(room)">
                   <v-icon>mdi-currency-usd</v-icon>
                   <v-list-item-title>Trả phòng & Thanh toán</v-list-item-title>
                 </v-list-item>
@@ -115,19 +112,20 @@
         <div class="popup-content">
           <h3>
             {{
-              isShowEditRoom ? `Sửa phòng: ${newRoom.name}` : "Tạo phòng mới"
+              isShowEditRoom
+                ? `Sửa phòng: ${newRoom.numberRoom}`
+                : "Tạo phòng mới"
             }}
           </h3>
           <v-text-field
             v-model="newRoom.numberRoom"
             label="Tên phòng"
           ></v-text-field>
-          <v-text-field
-            v-model="formattedPrice"
-            label="Giá phòng"
-          ><template v-slot:append>
-        <span>đ</span>
-      </template></v-text-field>
+          <v-text-field v-model="formattedPrice" label="Giá phòng"
+            ><template v-slot:append>
+              <span>đ</span>
+            </template></v-text-field
+          >
           <v-radio-group v-model="newRoom.typeRoom" row>
             <v-radio color="#1db4f0" label="Phòng đơn" :value="1"></v-radio>
             <v-radio color="#1db4f0" label="Phòng đôi" :value="2"></v-radio>
@@ -197,8 +195,8 @@ import {
 import Invoice from "../invoice_page.vue";
 import PopupAddService from "../service/popup_service_page.vue";
 import { formatCurrency } from "@/utils/format_currency";
-import {createOrder} from "@/api/order_api.js";
-import moment from 'moment-timezone';
+import { createOrder, updateOrder } from "@/api/order_api.js";
+import moment from "moment-timezone";
 export default {
   components: {
     Invoice,
@@ -217,14 +215,12 @@ export default {
       isDeleteRoom: false,
 
       newRoom: {
-        name: "",
-        type: 1,
+        numberRoom: "",
+        typeRoom: 1,
         price: "",
       },
 
-      rooms: [
-       
-      ],
+      rooms: [],
       detailInvoice: {
         inforHotel: {
           hotelName: "Viet",
@@ -273,7 +269,29 @@ export default {
     this.fetchListRooom();
   },
   methods: {
+    async updateOrder(room) {
+      const timeOut = moment()
+        .tz("Asia/Ho_Chi_Minh")
+        .format("YYYY-MM-DD HH:mm:ss");
+      var data = {
+        idRoom: room.id.toString(),
+        timeIn: "2024-09-28 12:02:05",
+        timeOut: timeOut,
+        isPaid: true,
+      };
+      this.loading = true;
+      try {
+        await updateOrder(data, this.roomId);
+        this.$toast.success("Thanh toán thành công");
+      } catch (e) {
+        this.$toast.error("Có lỗi xảy ra");
+      } finally {
+        this.loading = true;
+      }
+    },
+
     showEditRooom(room) {
+      console.log(room);
       this.newRoom = { ...room };
       this.selectedRoom = null;
       this.isShowEditRoom = true;
@@ -304,22 +322,24 @@ export default {
         this.$toast.error("Có lỗi xảy ra");
       }
     },
-   async startTimer(roomId) {
-    const timeInVietnam = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD HH:mm:ss');
-   const data={
-  idRoom:roomId,
-  timeIn: timeInVietnam,
-  isPaid: false,
-   }
-   this.loading = true;
-   try{
-await createOrder(data);
-this.$toast.success("Tạo đơn thành công");
-   }catch(e){
-     this.$toast.error("Có lỗi xảy ra");
-    }finally{
-      this.loading = false;
-    }
+    async startTimer(roomId) {
+      const timeIn = moment()
+        .tz("Asia/Ho_Chi_Minh")
+        .format("YYYY-MM-DD HH:mm:ss");
+      const data = {
+        idRoom: roomId,
+        timeIn: timeIn,
+        isPaid: false,
+      };
+      this.loading = true;
+      try {
+        await createOrder(data);
+        this.$toast.success("Tạo đơn thành công");
+      } catch (e) {
+        this.$toast.error("Có lỗi xảy ra");
+      } finally {
+        this.loading = false;
+      }
     },
     stopTimer() {
       // Logic for stopping timer
@@ -348,8 +368,7 @@ this.$toast.success("Tạo đơn thành công");
     hideCreateEditRoom() {
       this.isShowCreateRoom = false;
       this.isShowEditRoom = false;
-      this.newRoom = {numberRoom: "", type: 1, price: ""};
-
+      this.newRoom = { numberRoom: "", type: 1, price: "" };
     },
     hideDeleteRoom() {
       this.isDeleteRoom = false;
@@ -370,9 +389,9 @@ this.$toast.success("Tạo đơn thành công");
         numberRoom: this.newRoom.numberRoom,
         typeRoom: roomType,
         price: price,
-        available:true
+        available: true,
       };
-      this.loading =true;
+      this.loading = true;
       try {
         if (type == 1) {
           console.log("Tạo");
@@ -387,10 +406,9 @@ this.$toast.success("Tạo đơn thành công");
         this.hideCreateEditRoom();
       } catch (e) {
         this.$toast.error("Có lỗi xảy ra");
-      }finally{
+      } finally {
         this.loading = false;
       }
-      
     },
   },
 

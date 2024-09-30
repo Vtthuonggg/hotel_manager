@@ -49,13 +49,19 @@
                   </v-btn>
                 </template>
                 <v-list>
-                  <v-list-item @click="editService(item)">
+                  <v-list-item
+                    style="font-weight: bold"
+                    @click="editService(item)"
+                  >
                     <v-list-item-icon>
                       <v-icon>mdi-pencil</v-icon>
                     </v-list-item-icon>
                     <v-list-item-title>Sửa</v-list-item-title>
                   </v-list-item>
-                  <v-list-item @click="showDeletePop(item.id)">
+                  <v-list-item
+                    style="font-weight: bold"
+                    @click="showDeletePop(item.id)"
+                  >
                     <v-list-item-icon>
                       <v-icon>mdi-delete</v-icon>
                     </v-list-item-icon>
@@ -97,9 +103,10 @@
           type="text"
           @input="updatePrice"
           append-outer="đ"
-        ><template v-slot:append>
-        <span>đ</span>
-      </template></v-text-field>
+          ><template v-slot:append>
+            <span>đ</span>
+          </template></v-text-field
+        >
         <div class="image-upload-container">
           <input
             type="file"
@@ -166,9 +173,7 @@ export default {
         image: null,
         imageFile: null,
       },
-      listSevices: [
-       
-      ],
+      listSevices: [],
     };
   },
   created() {
@@ -192,7 +197,7 @@ export default {
   },
   methods: {
     showDeletePop(id) {
-      this.serviceId =id;
+      this.serviceId = id;
       this.isShowDelete = true;
     },
 
@@ -234,7 +239,7 @@ export default {
     hideCreateEditService() {
       this.isShowCreateService = false;
       this.isShowEditService = false;
-      this.newService = {name: "", price: null, image: null, imageFile: null};
+      this.newService = { name: "", price: null, image: null, imageFile: null };
     },
     async submitService(type) {
       var data = {

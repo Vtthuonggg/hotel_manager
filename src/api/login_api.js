@@ -41,12 +41,12 @@ export const getAccountInfo = async () => {
   }
 };
 export const updateAccountInfo = async (data) => {
+  console.log(data);
   try {
     const response = await axios.put(
       `${BASE_URL}account/update/${accountId}`,
       data
     );
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error(error);

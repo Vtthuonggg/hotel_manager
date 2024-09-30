@@ -27,7 +27,7 @@ export const getListService = async () => {
       },
       params: { idAccount: accountId },
     });
-    console.log(response.data)
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -50,8 +50,6 @@ export const getServiceInfo = async (id) => {
   }
 };
 export const updateService = async (data, id) => {
-  console.log(data);
-  console.log(id);
   try {
     const response = await axios.put(`${BASE_URL}service/update/${id}`, data);
     return response.data;
@@ -82,6 +80,7 @@ export const uploadImage = async (file) => {
         "Content-Type": "multipart/form-data",
       },
     });
+    console.log(response.data.secure_url);
     return response.data.secure_url;
   } catch (error) {
     console.error(

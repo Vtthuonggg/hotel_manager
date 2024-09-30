@@ -109,8 +109,8 @@
             ref="fileInput"
           />
           <div class="avatar" @click="triggerFileInput">
-            <div v-if="info.avatar">
-              <img :src="info.avatar" alt="Avatar" />
+            <div v-if="info.image">
+              <img :src="info.image" alt="Avatar" />
             </div>
 
             <v-icon v-else class="upload-icon">mdi-upload</v-icon>
@@ -134,6 +134,9 @@
         </div>
       </form>
     </div>
+    <v-overlay :value="loading">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
   </nav>
 </template>
 
@@ -150,6 +153,8 @@ export default {
   },
   data() {
     return {
+      avatarFile: null,
+      loading: false,
       qrCodeUrl: "",
       accountNumer: "",
       bankCode: "",
@@ -167,7 +172,6 @@ export default {
         phone: "",
         address: "",
         avatar: "",
-        avatarFile: null,
       },
       banks: [
         { name: "VPBank", code: "VPB" },
@@ -214,9 +218,7 @@ export default {
       ],
     };
   },
-  // created() {
-  //   this.fetchHotelInfo();
-  // },
+
   methods: {
     onBankSelect(selectedBankCode) {
       this.bankCode = selectedBankCode;
@@ -271,10 +273,10 @@ export default {
           this.$toast.error("Vui lòng chọn một file ảnh hợp lệ.");
           return;
         }
-        this.info.avatarFile = file;
+        this.avatarFile = file;
         const reader = new FileReader();
         reader.onload = (e) => {
-          this.info.avatar = e.target.result;
+          this.info.image = e.target.result;
         };
         reader.readAsDataURL(file);
       }
@@ -298,39 +300,54 @@ export default {
         phone: "",
         address: "",
         avatar: "",
-        avatarFile: null,
       };
+      this.avatarFile = null;
     },
     async fetchUserInfo() {
+      this.loading = true;
       try {
         var res = await getAccountInfo();
         this.info = res;
       } catch (error) {
         this.$toast.error("Có lỗi xảy ra");
+      } finally {
+        this.loading = false;
       }
     },
 
     async saveInfo() {
-      if (this.info.avatar) {
-        try {
-          const imageUrl = await uploadImage(this.info.avatarFile);
-          this.info.avatar = imageUrl;
-          this.$toast.success("Lưu thông tin thành công");
-        } catch (error) {
-          console.error("Error uploading image:", error);
-          this.$toast.error("Tải ảnh lên thất bại");
-          return;
-        }
-      }
-      const data = {
+      var data = {
+        id: this.info.id,
         name: this.info.name,
         phone: this.info.phone,
         address: this.info.address,
-        avatar: this.info.avatar,
+        image: null,
       };
-      await updateAccountInfo(data);
 
-      this.hideInputInfo();
+      if (this.info.image) {
+        this.loading = true;
+        try {
+          const imageUrl = await uploadImage(this.avatarFile);
+          this.info.image = imageUrl;
+          data.image = imageUrl;
+          console.log("data", data);
+        } catch (error) {
+          console.error("Error uploading image:", error);
+          this.$toast.error("Có lỗi xảy ra");
+          this.loading = false;
+          return;
+        }
+      }
+      this.loading = true;
+      try {
+        await updateAccountInfo(data);
+        this.hideInputInfo();
+        this.$toast.success("Lưu thông tin thành công");
+      } catch (e) {
+        this.$toast.error("Có lỗi xảy ra");
+      } finally {
+        this.loading = false;
+      }
     },
   },
 };
