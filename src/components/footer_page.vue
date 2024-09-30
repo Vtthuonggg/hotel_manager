@@ -31,7 +31,7 @@ export default {
   position: relative;
   bottom: 0;
   width: 100%;
-  z-index: 1000; /* Đảm bảo footer luôn hiển thị trên các phần tử khác */
+  z-index: 1000;
 }
 .footer-content {
   max-width: 1200px;
