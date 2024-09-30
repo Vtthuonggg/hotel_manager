@@ -59,12 +59,18 @@
     <v-overlay :value="loading">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
+    <FooterPage />
   </div>
 </template>
 
 <script>
 import { register } from "../api/login_api.js";
+import FooterPage from "./footer_page.vue";
+
 export default {
+  components: {
+    FooterPage,
+  },
   data() {
     return {
       loading: false,
