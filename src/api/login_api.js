@@ -5,7 +5,7 @@ const accountId = Cookies.get("accountId");
 export const login = async (username, password) => {
   try {
     const response = await axios.post(`${BASE_URL}account/login`, {
-      email: username,
+      email: `${username}@gmail.com`,
       password: password,
     });
     console.log(response.data);

@@ -11,11 +11,11 @@
           <input type="text" id="email" v-model="email" required />
         </div>
         <div class="form-group">
-          <label for="username">Tên:</label>
+          <label for="username">Tên khách sạn:</label>
           <input type="text" id="username" v-model="name" required />
         </div>
         <div class="form-group">
-          <label for="phone">Số điện thoại:</label>
+          <label for="phone">Hotline:</label>
           <input type="text" id="phone" v-model="phone" required />
         </div>
         <div class="form-group">
@@ -96,7 +96,7 @@ export default {
 
     async handleRegister() {
       const data = {
-        email: this.email,
+        email: `${this.email}@gmail.com`,
         password: this.password,
         name: this.name,
         phone: this.phone,
