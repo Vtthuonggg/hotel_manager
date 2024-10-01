@@ -86,15 +86,15 @@ const router = new Router({
   base: process.env.BASE_URL,
   routes,
 });
-// router.beforeEach((to, from, next) => {
-//   const isLoggedIn = Cookies.get("accountId") != null;
-//   if (!isLoggedIn && to.path !== "/login" && to.path !== "/register") {
-//     Vue.prototype.$toast.error("Vui lòng đăng nhập");
-//     next("/login");
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  const isLoggedIn = Cookies.get("accountId");
+  if (!isLoggedIn && to.path !== "/login" && to.path !== "/register") {
+    Vue.prototype.$toast.error("Vui lòng đăng nhập");
+    next("/login");
+  } else {
+    next();
+  }
+});
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title || "Bate - Quản lý khách sạn";
   next();

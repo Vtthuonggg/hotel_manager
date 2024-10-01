@@ -11,10 +11,16 @@ export default new Vuex.Store({
     setAccountId(state, accountId) {
       state.accountId = accountId;
     },
+    removeAccountId(state) {
+      state.accountId = null;
+    },
   },
   actions: {
     setAccountId({ commit }, accountId) {
       commit("setAccountId", accountId);
+    },
+    removeAccountId({ commit }) {
+      commit("removeAccountId");
     },
   },
 });

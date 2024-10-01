@@ -118,23 +118,25 @@
             }}
           </h3>
           <v-form ref="form" v-model="formValid">
-          <v-text-field
-            v-model="newRoom.numberRoom"
-            label="Tên phòng"
-             :rules="[v => !!v || 'Tên phòng không được để trống']"
-          ></v-text-field>
-          <v-text-field v-model="formattedPrice" label="Giá phòng"
-           :rules="[v => !!v || 'Giá phòng không được để trống']"
-             @keydown="filterInput"
-            ><template v-slot:append>
-              <span>đ</span>
-            </template></v-text-field
-          >
-          <v-radio-group v-model="newRoom.typeRoom" row>
-            <v-radio color="#1db4f0" label="Phòng đơn" :value="1"></v-radio>
-            <v-radio color="#1db4f0" label="Phòng đôi" :value="2"></v-radio>
-          </v-radio-group>
-        </v-form>
+            <v-text-field
+              v-model="newRoom.numberRoom"
+              label="Tên phòng"
+              :rules="[(v) => !!v || 'Tên phòng không được để trống']"
+            ></v-text-field>
+            <v-text-field
+              v-model="formattedPrice"
+              label="Giá phòng"
+              :rules="[(v) => !!v || 'Giá phòng không được để trống']"
+              @keydown="filterInput"
+              ><template v-slot:append>
+                <span>đ</span>
+              </template></v-text-field
+            >
+            <v-radio-group v-model="newRoom.typeRoom" row>
+              <v-radio color="#1db4f0" label="Phòng đơn" :value="1"></v-radio>
+              <v-radio color="#1db4f0" label="Phòng đôi" :value="2"></v-radio>
+            </v-radio-group>
+          </v-form>
           <div class="button-container">
             <v-btn
               class="gradient-button-cancel"
@@ -200,7 +202,7 @@ import {
 import Invoice from "../invoice_page.vue";
 import PopupAddService from "../service/popup_service_page.vue";
 import { formatCurrency } from "@/utils/format_currency";
-import { createOrder, updateOrder } from "@/api/order_api.js";
+import { createOrder, updateOrder, getListOrder } from "@/api/order_api.js";
 import moment from "moment-timezone";
 export default {
   components: {
@@ -219,7 +221,7 @@ export default {
       isShowCreateRoom: false,
       isShowPaymentRoom: false,
       isDeleteRoom: false,
-
+      listOrder: [],
       newRoom: {
         numberRoom: "",
         typeRoom: 1,
@@ -273,27 +275,44 @@ export default {
 
   created() {
     this.fetchListRooom();
+    this.fetchListOrder();
   },
   methods: {
-    
-    async updateOrder(room) {
-      const timeOut = moment()
-        .tz("Asia/Ho_Chi_Minh")
-        .format("YYYY-MM-DD HH:mm:ss");
-      var data = {
-        idRoom: room.id.toString(),
-        timeIn: "2024-09-28 12:02:05",
-        timeOut: timeOut,
-        isPaid: true,
-      };
-      this.loading = true;
+    async fetchListOrder() {
       try {
-        await updateOrder(data, this.roomId);
-        this.$toast.success("Thanh toán thành công");
-      } catch (e) {
+        var res = await getListOrder();
+        console.log(`list order`, res);
+        this.listOrder = res;
+      } catch (error) {
         this.$toast.error("Có lỗi xảy ra");
-      } finally {
+      }
+    },
+    async updateOrder(room) {
+      const order = this.rooms.find((service) => service.room.id === room.id);
+      if (order) {
+        const orderId = order.id;
+        console.log(`Order ID: ${orderId}`);
+
+        const timeOut = moment()
+          .tz("Asia/Ho_Chi_Minh")
+          .format("YYYY-MM-DD HH:mm:ss");
+        var data = {
+          idRoom: room.id.toString(),
+          timeIn: "2024-09-28 12:02:05",
+          timeOut: timeOut,
+          isPaid: true,
+        };
         this.loading = true;
+        try {
+          await updateOrder(data, orderId);
+          this.$toast.success("Thanh toán thành công");
+        } catch (e) {
+          this.$toast.error("Có lỗi xảy ra");
+        } finally {
+          this.loading = true;
+        }
+      } else {
+        this.$toast.error("Không tìm thấy đơn hàng");
       }
     },
 
@@ -388,7 +407,12 @@ export default {
     filterInput(event) {
       // Chỉ cho phép các phím số và các phím điều khiển
       const allowedKeys = [
-        'Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab', 'Enter'
+        "Backspace",
+        "ArrowLeft",
+        "ArrowRight",
+        "Delete",
+        "Tab",
+        "Enter",
       ];
       if (!/[0-9]/.test(event.key) && !allowedKeys.includes(event.key)) {
         event.preventDefault();
@@ -458,7 +482,6 @@ export default {
 </script>
 
 <style scoped>
-
 .gradient-button-cancel {
   flex: 1;
   border: none;

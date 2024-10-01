@@ -1,11 +1,11 @@
 import axios from "axios";
 import { BASE_URL } from "./BASE_URL";
-import store from "../components/store/store.js";
+import Cookies from "js-cookie";
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dfxdq0iwq/image/upload";
 const UPLOAD_PRESET = "wcayf2ib";
 
 export const createService = async (data) => {
-  const accountId = store.state.accountId;
+  const accountId = Cookies.get("accountId");
   try {
     const response = await axios.post(`${BASE_URL}service/add`, data, {
       params: { idAccount: accountId },
@@ -18,7 +18,7 @@ export const createService = async (data) => {
 };
 
 export const getListService = async () => {
-  const accountId = store.state.accountId;
+  const accountId = Cookies.get("accountId");
   // console.log("accountId", accountId);
   try {
     const response = await axios.get(`${BASE_URL}service/getlist`, {
