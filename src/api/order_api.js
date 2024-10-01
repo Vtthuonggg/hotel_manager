@@ -24,7 +24,7 @@ export const updateOrder = async (data, id) => {
   console.log(data);
   try {
     const response = await axios.put(`${BASE_URL}booking/update/${id}`, data);
-    console.log(response.data);
+    console.log(`Thanh toán thành công rồi nè: ${response.data}`);
     return response.data;
   } catch (error) {
     console.error(error);

@@ -1,8 +1,9 @@
 import axios from "axios";
 import { BASE_URL } from "./BASE_URL";
-import store from "../components/store/store.js";
+import Cookies from "js-cookie";
+
 export const getBillInfo = async () => {
-  const accountId = store.state.accountId;
+  const accountId = Cookies.get("accountId");
   try {
     const response = await axios.post(`${BASE_URL}bill`, {
       params: { idAccount: accountId },

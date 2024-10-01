@@ -288,7 +288,7 @@ export default {
       }
     },
     async updateOrder(room) {
-      const order = this.rooms.find((service) => service.room.id === room.id);
+      const order = this.listOrder.find((order) => order.room.id === room.id);
       if (order) {
         const orderId = order.id;
         console.log(`Order ID: ${orderId}`);
@@ -309,7 +309,7 @@ export default {
         } catch (e) {
           this.$toast.error("Có lỗi xảy ra");
         } finally {
-          this.loading = true;
+          this.loading = false;
         }
       } else {
         this.$toast.error("Không tìm thấy đơn hàng");

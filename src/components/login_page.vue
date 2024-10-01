@@ -65,7 +65,7 @@ export default {
         Cookies.set("accountId", res.accountId, {
           expires: 7,
           secure: true,
-          sameSite: "Strict",
+          sameSite: "Lax",
         });
         this.$toast.success("Đăng nhập thành công");
         this.$router.push("/dashboard");
