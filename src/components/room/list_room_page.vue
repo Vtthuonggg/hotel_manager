@@ -117,11 +117,15 @@
                 : "Tạo phòng mới"
             }}
           </h3>
+          <v-form ref="form" v-model="formValid">
           <v-text-field
             v-model="newRoom.numberRoom"
             label="Tên phòng"
+             :rules="[v => !!v || 'Tên phòng không được để trống']"
           ></v-text-field>
           <v-text-field v-model="formattedPrice" label="Giá phòng"
+           :rules="[v => !!v || 'Giá phòng không được để trống']"
+             @keydown="filterInput"
             ><template v-slot:append>
               <span>đ</span>
             </template></v-text-field
@@ -130,6 +134,7 @@
             <v-radio color="#1db4f0" label="Phòng đơn" :value="1"></v-radio>
             <v-radio color="#1db4f0" label="Phòng đôi" :value="2"></v-radio>
           </v-radio-group>
+        </v-form>
           <div class="button-container">
             <v-btn
               class="gradient-button-cancel"
@@ -140,7 +145,7 @@
             <v-btn
               class="gradient-button-confirm"
               style="color: white"
-              @click="submit(isShowEditRoom ? 2 : 1)"
+              @click="validateAndSubmit"
               >Xác nhận</v-btn
             >
           </div>
@@ -204,6 +209,7 @@ export default {
   },
   data() {
     return {
+      formValid: false,
       loading: false,
       showPopupAddService: false,
       roomId: null,
@@ -269,6 +275,7 @@ export default {
     this.fetchListRooom();
   },
   methods: {
+    
     async updateOrder(room) {
       const timeOut = moment()
         .tz("Asia/Ho_Chi_Minh")
@@ -368,7 +375,7 @@ export default {
     hideCreateEditRoom() {
       this.isShowCreateRoom = false;
       this.isShowEditRoom = false;
-      this.newRoom = { numberRoom: "", type: 1, price: "" };
+      this.newRoom = { numberRoom: "", typeRoom: 1, price: "" };
     },
     hideDeleteRoom() {
       this.isDeleteRoom = false;
@@ -378,7 +385,15 @@ export default {
       this.roomId = id;
       console.log(id);
     },
-
+    filterInput(event) {
+      // Chỉ cho phép các phím số và các phím điều khiển
+      const allowedKeys = [
+        'Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab', 'Enter'
+      ];
+      if (!/[0-9]/.test(event.key) && !allowedKeys.includes(event.key)) {
+        event.preventDefault();
+      }
+    },
     async submit(type) {
       const roomType = parseInt(this.newRoom.typeRoom, 10);
       const price =
@@ -410,6 +425,11 @@ export default {
         this.loading = false;
       }
     },
+    validateAndSubmit() {
+      if (this.$refs.form.validate()) {
+        this.submit(this.isShowEditRoom ? 2 : 1);
+      }
+    },
   },
 
   computed: {
@@ -438,6 +458,7 @@ export default {
 </script>
 
 <style scoped>
+
 .gradient-button-cancel {
   flex: 1;
   border: none;

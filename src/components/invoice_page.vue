@@ -147,7 +147,6 @@ export default {
     const numberBank = Cookies.get("accountNumber");
     const selectedBank = Cookies.get("selectedBank");
     this.qrCodeUrl = `https://img.vietqr.io/image/${selectedBank}-${numberBank}-qr_only.png?amount=${this.detailInvoice.totalAmount}`;
-    console.log(this.qrCodeUrl);
   },
   methods: {
     confirmPayment() {

@@ -131,7 +131,6 @@ export default {
           (service) => service.id !== item.id
         );
       }
-      console.log(this.selectedService);
     },
     isSelected(item) {
       return this.selectedService.some((service) => service.id === item.id);

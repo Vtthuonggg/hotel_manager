@@ -10,6 +10,7 @@ import Report from "../components/report/report_page.vue";
 import CreateOrrder from "../components/order/create_order_page.vue";
 import Service from "../components/service/list_service_page.vue";
 import Invoice from "../components/invoice_page.vue";
+import ListOrder from "../components/order/list_order_page.vue";
 Vue.use(Router);
 
 const routes = [
@@ -69,6 +70,12 @@ const routes = [
         name: "Service",
         component: Service,
         meta: { title: "Bate - Dịch vụ" },
+      },
+      {
+        path: "list-order",
+        name: "ListOrder",
+        component: ListOrder,
+        meta: { title: "Bate - Danh sách đơn" },
       },
     ],
   },

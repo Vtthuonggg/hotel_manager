@@ -16,16 +16,6 @@
       </li>
       <li class="navbar-item">
         <router-link
-          to="/dashboard/report"
-          active-class="active-link"
-          exact-active-class="exact-active-link"
-        >
-          <v-icon style="color: black">mdi-chart-bar</v-icon
-          ><span class="bold-text"></span>Báo cáo</router-link
-        >
-      </li>
-      <li class="navbar-item">
-        <router-link
           to="/dashboard/service"
           active-class="active-link"
           exact-active-class="exact-active-link"
@@ -34,6 +24,27 @@
           ><span class="bold-text"></span>Dịch vụ</router-link
         >
       </li>
+      <li class="navbar-item">
+        <router-link
+          to="/dashboard/list-order"
+          active-class="active-link"
+          exact-active-class="exact-active-link"
+        >
+          <v-icon style="color: black">mdi-list-box-outline</v-icon
+          ><span class="bold-text"></span>Danh sách đơn</router-link
+        >
+      </li>
+      <li class="navbar-item">
+        <router-link
+          to="/dashboard/report"
+          active-class="active-link"
+          exact-active-class="exact-active-link"
+        >
+          <v-icon style="color: black">mdi-chart-bar</v-icon
+          ><span class="bold-text"></span>Báo cáo</router-link
+        >
+      </li>
+     
       <li
         class="navbar-item1 dropdown"
         @mouseover="showDropdown"
@@ -289,7 +300,6 @@ export default {
     },
 
     showInputInfo() {
-      console.log("showInputInfo");
       this.isInputInfo = true;
       this.fetchUserInfo();
     },
@@ -330,7 +340,6 @@ export default {
           const imageUrl = await uploadImage(this.avatarFile);
           this.info.image = imageUrl;
           data.image = imageUrl;
-          console.log("data", data);
         } catch (error) {
           console.error("Error uploading image:", error);
           this.$toast.error("Có lỗi xảy ra");

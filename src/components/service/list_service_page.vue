@@ -100,9 +100,8 @@
         <v-text-field
           v-model="formattedPrice"
           label="Giá tiền"
-          type="text"
-          @input="updatePrice"
           append-outer="đ"
+          @keydown="filterInput"
           ><template v-slot:append>
             <span>đ</span>
           </template></v-text-field
@@ -196,6 +195,15 @@ export default {
     },
   },
   methods: {
+    filterInput(event) {
+      // Chỉ cho phép các phím số và các phím điều khiển
+      const allowedKeys = [
+        'Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab', 'Enter'
+      ];
+      if (!/[0-9]/.test(event.key) && !allowedKeys.includes(event.key)) {
+        event.preventDefault();
+      }
+    },
     showDeletePop(id) {
       this.serviceId = id;
       this.isShowDelete = true;
@@ -227,12 +235,7 @@ export default {
       }
     },
     formatCurrency,
-    updatePrice(event) {
-      if (event && event.target && event.target.value !== undefined) {
-        const value = event.target.value.replace(/\D/g, "");
-        this.newService.price = parseInt(value, 10) || 0;
-      }
-    },
+  
     showCreateService() {
       this.isShowCreateService = true;
     },
