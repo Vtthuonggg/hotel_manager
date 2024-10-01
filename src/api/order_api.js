@@ -1,9 +1,10 @@
 import axios from "axios";
-import Cookies from "js-cookie";
+
 import { BASE_URL } from "./BASE_URL";
-const accountId = Cookies.get("accountId");
+import store from "../components/store/store.js";
 
 export const createOrder = async (data) => {
+  const accountId = store.state.accountId;
   data.idAccount = accountId;
   console.log(data);
   try {
@@ -18,6 +19,7 @@ export const createOrder = async (data) => {
 };
 
 export const updateOrder = async (data, id) => {
+  const accountId = store.state.accountId;
   data.idAccount = accountId;
   console.log(data);
   try {
@@ -31,6 +33,7 @@ export const updateOrder = async (data, id) => {
 };
 
 export const getListOrder = async () => {
+  const accountId = store.state.accountId;
   try {
     const response = await axios.get(`${BASE_URL}booking/getlist`, {
       headers: {
@@ -48,6 +51,8 @@ export const getListOrder = async () => {
 };
 
 export const getOrderInfo = async (idBooking) => {
+  const accountId = store.state.accountId;
+
   try {
     const response = await axios.get(`${BASE_URL}booking/getbooking`, {
       headers: {

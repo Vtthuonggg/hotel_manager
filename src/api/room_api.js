@@ -1,10 +1,9 @@
 import axios from "axios";
-import Cookies from "js-cookie";
 import { BASE_URL } from "./BASE_URL";
-const accountId = Cookies.get("accountId");
-
+import store from "../components/store/store.js";
 export const getListRoom = async () => {
-  console.log(accountId);
+  const accountId = store.state.accountId;
+  console.log("accountIdSSSSSSSSSSSSSSSSSSSS", accountId);
   try {
     const response = await axios.get(`${BASE_URL}room/getlistt`, {
       headers: {
@@ -20,6 +19,7 @@ export const getListRoom = async () => {
   }
 };
 export const getRoomInfo = async (roomId) => {
+  const accountId = store.state.accountId;
   try {
     const response = await axios.get(`${BASE_URL}room/${roomId}`, {
       headers: {
@@ -47,6 +47,7 @@ export const updateRoom = async (roomId, data) => {
   }
 };
 export const createRoom = async (data) => {
+  const accountId = store.state.accountId;
   data.idAccount = accountId;
   try {
     const response = await axios.post(`${BASE_URL}room/addroom`, data);

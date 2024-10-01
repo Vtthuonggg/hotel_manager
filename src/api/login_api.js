@@ -1,7 +1,6 @@
 import axios from "axios";
 import { BASE_URL } from "./BASE_URL";
-import Cookies from "js-cookie";
-const accountId = Cookies.get("accountId");
+import store from "../components/store/store.js";
 export const login = async (username, password) => {
   try {
     const response = await axios.post(`${BASE_URL}account/login`, {
@@ -27,6 +26,7 @@ export const register = async (data) => {
 };
 
 export const getAccountInfo = async () => {
+  const accountId = store.state.accountId;
   try {
     const response = await axios.get(`${BASE_URL}account/${accountId}`, {
       headers: {
@@ -41,6 +41,7 @@ export const getAccountInfo = async () => {
   }
 };
 export const updateAccountInfo = async (data) => {
+  const accountId = store.state.accountId;
   console.log(data);
   try {
     const response = await axios.put(

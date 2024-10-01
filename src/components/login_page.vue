@@ -43,6 +43,8 @@
 import { login } from "../api/login_api.js";
 import Cookies from "js-cookie";
 import FooterPage from "./footer_page.vue";
+import { mapActions } from "vuex";
+
 export default {
   components: {
     FooterPage,
@@ -57,17 +59,15 @@ export default {
   },
 
   methods: {
+    ...mapActions(["setAccountId"]),
     async handleLogin() {
       this.loading = true;
       try {
         var res = await login(this.username, this.password);
+        this.setAccountId(res.accountId);
         this.$toast.success("Đăng nhập thành công");
+        console.log(`aaaaaaaaaaaaaa${Cookies.get("accountId")}`);
         this.$router.push("/dashboard");
-        Cookies.set("accountId", res.accountId, {
-          expires: 7,
-          secure: true,
-          sameSite: "Strict",
-        });
       } catch (error) {
         this.$toast.error("Tài khoản mật khẩu không chính xác");
       } finally {
