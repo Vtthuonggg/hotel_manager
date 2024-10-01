@@ -44,7 +44,7 @@
           ><span class="bold-text"></span>Báo cáo</router-link
         >
       </li>
-     
+
       <li
         class="navbar-item1 dropdown"
         @mouseover="showDropdown"
@@ -182,7 +182,7 @@ export default {
         name: "",
         phone: "",
         address: "",
-        avatar: "",
+        image: "",
       },
       banks: [
         { name: "VPBank", code: "VPB" },
@@ -327,14 +327,16 @@ export default {
 
     async saveInfo() {
       var data = {
+        email: this.info.name,
+        password: this.info.phone,
         id: this.info.id,
         name: this.info.name,
         phone: this.info.phone,
         address: this.info.address,
-        image: null,
+        image: this.info.image,
       };
 
-      if (this.info.image) {
+      if (this.avatarFile) {
         this.loading = true;
         try {
           const imageUrl = await uploadImage(this.avatarFile);

@@ -98,9 +98,7 @@ export default {
     return {
       loading: false,
       selectedService: [],
-      listService: [
-      
-      ],
+      listService: [],
     };
   },
   methods: {
