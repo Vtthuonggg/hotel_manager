@@ -172,15 +172,16 @@
           </div>
         </div>
       </div>
-      <div v-if="isShowPaymentRoom">
+      <div v-if="isShowInvoice">
         <Invoice
           :detailInvoice="detailInvoice"
-          :isShowPaymentRoom="isShowPaymentRoom"
+          :isShowPaymentRoom="isShowInvoice"
           @closePopup="hidePaymentRoom"
         ></Invoice>
       </div>
       <div v-if="showPopupAddService">
         <PopupAddService
+          :idBooking="orderServiceId"
           :isShowAddSv="showPopupAddService"
           @close-popup="hideAddService"
         ></PopupAddService>
@@ -204,6 +205,7 @@ import PopupAddService from "../service/popup_service_page.vue";
 import { formatCurrency } from "@/utils/format_currency";
 import { createOrder, updateOrder, getListOrder } from "@/api/order_api.js";
 import moment from "moment-timezone";
+import { getBillInfo } from "@/api/invoice_api.js";
 export default {
   components: {
     Invoice,
@@ -211,6 +213,7 @@ export default {
   },
   data() {
     return {
+      orderServiceId: null,
       formValid: false,
       loading: false,
       showPopupAddService: false,
@@ -219,7 +222,7 @@ export default {
       selectedRoom: null,
       menu: false,
       isShowCreateRoom: false,
-      isShowPaymentRoom: false,
+      isShowInvoice: false,
       isDeleteRoom: false,
       listOrder: [],
       newRoom: {
@@ -228,8 +231,8 @@ export default {
         price: "",
       },
 
-      rooms: [  ],
-      detailInvoice:{}
+      rooms: [],
+      detailInvoice: {},
     };
   },
 
@@ -241,8 +244,8 @@ export default {
     async fetchListOrder() {
       try {
         var res = await getListOrder();
-        this.listOrder = res.filter(order => !order.isPaid);
-        console.log('OOOOOO',this.listOrder);
+        this.listOrder = res.filter((order) => !order.isPaid);
+        console.log("OOOOOO", this.listOrder);
       } catch (error) {
         this.$toast.error("Có lỗi xảy ra");
       }
@@ -265,6 +268,7 @@ export default {
         try {
           await updateOrder(data, orderId);
           this.$toast.success("Thanh toán thành công");
+          this.showInvoiceRoom(orderId);
           this.fetchListOrder();
           this.fetchListRooom();
         } catch (e) {
@@ -321,8 +325,8 @@ export default {
       try {
         await createOrder(data);
         this.$toast.success("Tạo đơn thành công");
-       this.fetchListOrder();
-       this.fetchListRooom();
+        this.fetchListOrder();
+        this.fetchListRooom();
       } catch (e) {
         this.$toast.error("Có lỗi xảy ra");
       } finally {
@@ -335,23 +339,32 @@ export default {
     checkout() {
       // Logic for checkout
     },
-    showAddService() {
-      this.showPopupAddService = true;
-      this.menu = false;
+    showAddService(room) {
+      const order = this.listOrder.find((order) => order.room.id === room.id);
+      if (order) {
+        this.orderServiceId = order.id;
+        this.showPopupAddService = true;
+        this.menu = false;
+      } else {
+        this.$toast.error("Phòng chưa được đặt");
+      }
     },
     hideAddService() {
+      this.orderServiceId = null;
       this.showPopupAddService = false;
     },
 
     showCreateRoom() {
       this.isShowCreateRoom = true;
     },
-    showPaymentRoom() {
-      this.isShowPaymentRoom = true;
+    async showInvoiceRoom(idBooking) {
+      var res = await getBillInfo(idBooking);
+      this.detailInvoice = res;
+      this.isShowInvoice = true;
       this.menu = false;
     },
     hidePaymentRoom() {
-      this.isShowPaymentRoom = false;
+      this.isShowInvoice = false;
     },
     hideCreateEditRoom() {
       this.isShowCreateRoom = false;

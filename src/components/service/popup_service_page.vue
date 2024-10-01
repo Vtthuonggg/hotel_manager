@@ -1,7 +1,7 @@
 <template>
   <div v-if="isShowAddSv" class="popup">
     <div class="pop-container">
-     <div class="header">
+      <div class="header">
         <span class="close" @click="closePopup">&times;</span>
         <h1>Chọn dịch vụ</h1>
         <v-divider></v-divider>
@@ -77,9 +77,19 @@
           </v-row>
         </v-container>
       </div>
-        <div class="footer">
-        <v-btn class="gradient-button-cancel" @click="closePopup"  style="color: #007bff">Hủy</v-btn>
-        <v-btn class="gradient-button-confirm" color="primary" @click="submitService">Xác nhận</v-btn>
+      <div class="footer">
+        <v-btn
+          class="gradient-button-cancel"
+          @click="closePopup"
+          style="color: #007bff"
+          >Hủy</v-btn
+        >
+        <v-btn
+          class="gradient-button-confirm"
+          color="primary"
+          @click="submitService"
+          >Xác nhận</v-btn
+        >
       </div>
       <v-overlay :value="loading">
         <v-progress-circular indeterminate size="64"></v-progress-circular>
@@ -91,10 +101,11 @@
 <script>
 import { getListService } from "@/api/service_api.js";
 import { formatCurrency } from "@/utils/format_currency";
-
+import { addServiceBill } from "@/api/invoice_api.js";
 export default {
   props: {
     isShowAddSv: Boolean,
+    idBooking: String,
   },
   created() {
     this.fetchServices();
@@ -108,8 +119,8 @@ export default {
     };
   },
   methods: {
-    async submitService(){
-
+    async submitService() {
+      await addServiceBill();
     },
     updateSelectedService(item) {
       const selected = this.selectedService.find(
@@ -196,7 +207,7 @@ export default {
 .footer {
   position: sticky;
   bottom: 0;
-  background-color: white !important; 
+  background-color: white !important;
   z-index: 20;
   padding-top: 10px;
   display: flex;
@@ -204,7 +215,7 @@ export default {
   gap: 10px;
 }
 .content {
-  max-height: calc(90vh - 100px); 
+  max-height: calc(90vh - 100px);
   overflow-y: auto;
   z-index: 5;
 }

@@ -10,6 +10,7 @@ export const getBillInfo = async (idBooking) => {
     });
     return response.data;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -22,15 +23,18 @@ export const updateBill = async (id) => {
     });
     return response.data;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
 
-export const addServiceBill = async () => {
+export const addServiceBill = async (data) => {
+  //idBooking, idService, quantity`
   try {
     const response = await axios.post(`${BASE_URL}bill/addservice`);
     return response.data;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
