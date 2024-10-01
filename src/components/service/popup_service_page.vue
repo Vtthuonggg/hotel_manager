@@ -1,10 +1,12 @@
 <template>
   <div v-if="isShowAddSv" class="popup">
     <div class="pop-container">
-      <div>
+     <div class="header">
         <span class="close" @click="closePopup">&times;</span>
-        <h1 style="margin-bottom: 20px">Chọn dịch vụ</h1>
+        <h1>Chọn dịch vụ</h1>
         <v-divider></v-divider>
+      </div>
+      <div class="content">
         <v-container v-if="listService.length > 0">
           <v-row>
             <v-col
@@ -74,10 +76,14 @@
             </v-col>
           </v-row>
         </v-container>
-        <v-overlay :value="loading">
-          <v-progress-circular indeterminate size="64"></v-progress-circular>
-        </v-overlay>
       </div>
+        <div class="footer">
+        <v-btn class="gradient-button-cancel" @click="closePopup"  style="color: #007bff">Hủy</v-btn>
+        <v-btn class="gradient-button-confirm" color="primary" @click="submitService">Xác nhận</v-btn>
+      </div>
+      <v-overlay :value="loading">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay>
     </div>
   </div>
 </template>
@@ -102,6 +108,9 @@ export default {
     };
   },
   methods: {
+    async submitService(){
+
+    },
     updateSelectedService(item) {
       const selected = this.selectedService.find(
         (service) => service.id === item.id
@@ -164,6 +173,41 @@ export default {
 };
 </script>
 <style scoped>
+.popup {
+  width: 100%;
+  height: 100%;
+}
+.pop-container {
+  border: #000 1px solid;
+  width: 60%;
+  background-color: white;
+  padding: 30px;
+  max-height: 90vh;
+  overflow: hidden;
+  position: relative;
+}
+.header {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 20;
+  padding-bottom: 10px;
+}
+.footer {
+  position: sticky;
+  bottom: 0;
+  background-color: white !important; 
+  z-index: 20;
+  padding-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.content {
+  max-height: calc(90vh - 100px); 
+  overflow-y: auto;
+  z-index: 5;
+}
 .service-checkbox {
   position: absolute;
   top: 10px;
@@ -183,45 +227,28 @@ export default {
   align-items: center;
   justify-content: space-between;
 }
-
 .image-container {
   width: 120px;
   height: 120px;
   overflow: hidden;
   margin: 10px;
 }
-
 .service-image {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
-
 .service-info {
   flex: 1;
   text-align: left;
   user-select: none;
 }
-
 .service-price {
   user-select: none;
   text-align: right;
 }
-.popup {
-  width: 100%;
-  height: 100%;
-}
-.pop-container {
-  border: #000 1px solid;
-  width: 60%;
-  background-color: white;
-  padding: 30px;
-  max-height: 90vh;
-  overflow: auto;
-}
 .quantity-container {
   display: flex;
-
   margin-top: 10px;
   width: 120px;
 }
@@ -229,8 +256,33 @@ export default {
   text-align: center;
   padding: 0;
 }
-.v-btn {
-  min-width: 30px;
-  padding: 0;
+.gradient-button-cancel {
+  flex: 1;
+  border: none;
+
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 5px;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: background 0.3s ease;
+}
+.gradient-button-confirm {
+  flex: 1;
+  background: linear-gradient(45deg, #007bff, #00d4ff);
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 5px;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: background 0.3s ease;
 }
 </style>

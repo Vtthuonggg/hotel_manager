@@ -6,6 +6,7 @@ const UPLOAD_PRESET = "wcayf2ib";
 
 export const createService = async (data) => {
   const accountId = Cookies.get("accountId");
+  data.idAccount = accountId;
   try {
     const response = await axios.post(`${BASE_URL}service/add`, data, {
       params: { idAccount: accountId },

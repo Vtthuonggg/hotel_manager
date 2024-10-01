@@ -228,48 +228,8 @@ export default {
         price: "",
       },
 
-      rooms: [],
-      detailInvoice: {
-        inforHotel: {
-          hotelName: "Viet",
-          image:
-            "https://res.cloudinary.com/dfxdq0iwq/image/upload/v1726576569/tfievesjykbp8zu8h1yh.jpg",
-          hotelAddress: "Ha Noi",
-          hotline: "0123445567",
-        },
-        bookingDto: {
-          id: 102,
-          room: {
-            id: 1,
-            numberRoom: 198,
-            typeRoom: "Deluxe",
-            price: 500000,
-            available: false,
-          },
-
-          timeIn: "2024-12-12T05:12:12.000+00:00",
-          timeOut: "2024-12-14T05:00:00.000+00:00",
-          totalPrice: 700000,
-          isPaid: true,
-        },
-        serviceDtoList: [
-          {
-            id: 1,
-            nameService: "coca",
-            price: 15000,
-            quantity: 2,
-            amount: 30000,
-          },
-          {
-            id: 2,
-            nameService: "aqua",
-            price: 10000,
-            quantity: 4,
-            amount: 40000,
-          },
-        ],
-        totalAmount: 770000,
-      },
+      rooms: [  ],
+      detailInvoice:{}
     };
   },
 
@@ -281,8 +241,8 @@ export default {
     async fetchListOrder() {
       try {
         var res = await getListOrder();
-        console.log(`list order`, res);
-        this.listOrder = res;
+        this.listOrder = res.filter(order => !order.isPaid);
+        console.log('OOOOOO',this.listOrder);
       } catch (error) {
         this.$toast.error("Có lỗi xảy ra");
       }
@@ -291,7 +251,6 @@ export default {
       const order = this.listOrder.find((order) => order.room.id === room.id);
       if (order) {
         const orderId = order.id;
-        console.log(`Order ID: ${orderId}`);
 
         const timeOut = moment()
           .tz("Asia/Ho_Chi_Minh")
@@ -306,6 +265,8 @@ export default {
         try {
           await updateOrder(data, orderId);
           this.$toast.success("Thanh toán thành công");
+          this.fetchListOrder();
+          this.fetchListRooom();
         } catch (e) {
           this.$toast.error("Có lỗi xảy ra");
         } finally {
@@ -317,7 +278,6 @@ export default {
     },
 
     showEditRooom(room) {
-      console.log(room);
       this.newRoom = { ...room };
       this.selectedRoom = null;
       this.isShowEditRoom = true;
@@ -361,6 +321,8 @@ export default {
       try {
         await createOrder(data);
         this.$toast.success("Tạo đơn thành công");
+       this.fetchListOrder();
+       this.fetchListRooom();
       } catch (e) {
         this.$toast.error("Có lỗi xảy ra");
       } finally {
@@ -402,7 +364,6 @@ export default {
     showDeleteRoom(id) {
       this.isDeleteRoom = true;
       this.roomId = id;
-      console.log(id);
     },
     filterInput(event) {
       // Chỉ cho phép các phím số và các phím điều khiển
@@ -433,11 +394,9 @@ export default {
       this.loading = true;
       try {
         if (type == 1) {
-          console.log("Tạo");
           await createRoom(data);
           this.$toast.success("Thêm phòng thành công");
         } else {
-          console.log("Sửa");
           await updateRoom(this.newRoom.id, data);
           this.$toast.success("Sửa phòng thành công");
         }
