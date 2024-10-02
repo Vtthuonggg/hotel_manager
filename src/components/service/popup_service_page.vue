@@ -18,8 +18,6 @@
               lg="6"
             >
               <v-card
-                class="service-card"
-                :class="{ selected: isSelected(item) }"
                 @click="toggleSelect(item)"
               >
                 <v-list-item>
@@ -31,25 +29,6 @@
                     ></v-img>
                   </div>
                   <v-col>
-                    <div class="quantity-container">
-                      <v-btn icon @click.stop="decreaseQuantity(item)">
-                        <v-icon>mdi-minus</v-icon>
-                      </v-btn>
-                      <v-text-field
-                        outlined
-                        dense
-                        v-model="item.quantity"
-                        min="1"
-                        class="quantity-input"
-                        @keypress="isNumber"
-                        @input="filterInput"
-                        @click.stop
-                      ></v-text-field>
-                      <v-btn icon @click.stop="increaseQuantity(item)">
-                        <v-icon>mdi-plus</v-icon>
-                      </v-btn>
-                    </div>
-
                     <div class="info-service">
                       <div class="service-info">
                         <span>{{ item.name }}</span>
@@ -65,12 +44,7 @@
                     <v-divider></v-divider>
                   </v-col>
 
-                  <v-checkbox
-                    v-model="item.selected"
-                    class="service-checkbox"
-                    color="#2da8ff"
-                    :disabled="true"
-                  ></v-checkbox>
+                 
                 </v-list-item>
               </v-card>
             </v-col>
@@ -95,6 +69,36 @@
         <v-progress-circular indeterminate size="64"></v-progress-circular>
       </v-overlay>
     </div>
+    <div v-if="selectedService" class="detail-popup">
+      <div class="detail-container">
+        <div class="detail-header">
+          <span class="close" @click="closeDetailPopup">&times;</span>
+          <h2>{{ selectedService.name }}</h2>
+        </div>
+        <div class="detail-content">
+          <v-img :src="selectedService.image" class="detail-image" aspect-ratio="1"></v-img>
+          <v-text-field
+            v-model="selectedService.quantity"
+            type="number"
+            min="1"
+            class="quantity-input"
+            @input="validateQuantity"
+          ></v-text-field>
+          <div class="quantity-buttons">
+            <v-btn icon @click="decreaseQuantity">
+              <v-icon>mdi-minus</v-icon>
+            </v-btn>
+            <v-btn icon @click="increaseQuantity">
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </div>
+        </div>
+        <div class="detail-footer">
+          <v-btn @click="closeDetailPopup">Hủy</v-btn>
+          <v-btn color="primary" @click="confirmDetail">Xác nhận</v-btn>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -113,45 +117,27 @@ export default {
 
   data() {
     return {
+      selectedService:null,
       loading: false,
-      selectedService: [],
       listService: [],
     };
   },
   methods: {
     async submitService() {
-      await addServiceBill();
-    },
-    updateSelectedService(item) {
-      const selected = this.selectedService.find(
-        (service) => service.id === item.id
-      );
-      if (selected) {
-        selected.quantity = item.quantity;
+
+      var data ={
+        idBooking: this.idBooking,
+       
       }
+      await addServiceBill(data);
     },
-    increaseQuantity(item) {
-      item.quantity++;
-      this.updateSelectedService(item);
-    },
-    decreaseQuantity(item) {
-      if (item.quantity > 1) {
-        item.quantity--;
-        this.updateSelectedService(item);
-      }
-    },
+   
+   
     toggleSelect(item) {
-      item.selected = !item.selected;
-      if (item.selected) {
-        this.selectedService.push({ id: item.id, quantity: item.quantity });
-      } else {
-        this.selectedService = this.selectedService.filter(
-          (service) => service.id !== item.id
-        );
-      }
+     this.selectedService = {...item};
     },
-    isSelected(item) {
-      return this.selectedService.some((service) => service.id === item.id);
+ closeDetailPopup() {
+      this.selectedService = null;
     },
     formatCurrency,
     closePopup() {
@@ -184,6 +170,56 @@ export default {
 };
 </script>
 <style scoped>
+.detail-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 30;
+}
+.detail-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.detail-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+.detail-image {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+}
+.quantity-input {
+  width: 100px;
+  text-align: center;
+  margin-top: 10px;
+}
+.quantity-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100px;
+  margin-top: 10px;
+}
+.detail-footer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 20px;
+}
 .popup {
   width: 100%;
   height: 100%;
@@ -219,20 +255,14 @@ export default {
   overflow-y: auto;
   z-index: 5;
 }
-.service-checkbox {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
+
 .info-service {
   display: flex;
   justify-content: space-between;
   font-weight: bold;
   width: 100%;
 }
-.service-card.selected {
-  border: 2px solid #2da8ff;
-}
+
 .service-card {
   display: flex;
   align-items: center;
@@ -258,15 +288,7 @@ export default {
   user-select: none;
   text-align: right;
 }
-.quantity-container {
-  display: flex;
-  margin-top: 10px;
-  width: 120px;
-}
-.quantity-input {
-  text-align: center;
-  padding: 0;
-}
+
 .gradient-button-cancel {
   flex: 1;
   border: none;

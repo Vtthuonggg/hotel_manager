@@ -29,9 +29,12 @@ export const updateBill = async (id) => {
 };
 
 export const addServiceBill = async (data) => {
+  const accountId = Cookies.get("accountId");
+
+  data.idAccount = accountId;
   //idBooking, idService, quantity`
   try {
-    const response = await axios.post(`${BASE_URL}bill/addservice`);
+    const response = await axios.post(`${BASE_URL}bill/addservice`, data);
     return response.data;
   } catch (error) {
     console.log(error);

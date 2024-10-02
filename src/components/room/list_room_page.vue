@@ -99,7 +99,7 @@
                   <v-icon>mdi-currency-usd</v-icon>
                   <v-list-item-title>Trả phòng & Thanh toán</v-list-item-title>
                 </v-list-item>
-                <v-list-item v-if="!room.available" @click="showAddService">
+                <v-list-item v-if="!room.available" @click="showAddService(room)">
                   <v-icon>mdi-room-service</v-icon>
                   <v-list-item-title>Thêm dịch vụ</v-list-item-title>
                 </v-list-item>
@@ -340,6 +340,8 @@ export default {
       // Logic for checkout
     },
     showAddService(room) {
+      console.log("ROOM", room);
+      console.log("LIST ORDER", this.listOrder);
       const order = this.listOrder.find((order) => order.room.id === room.id);
       if (order) {
         this.orderServiceId = order.id;
