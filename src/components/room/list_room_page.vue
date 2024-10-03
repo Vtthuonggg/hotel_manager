@@ -253,22 +253,25 @@ export default {
     async updateOrder(room) {
       const order = this.listOrder.find((order) => order.room.id === room.id);
       if (order) {
+        console.log("ORDER", order); 
         const orderId = order.id;
 
         const timeOut = moment()
           .tz("Asia/Ho_Chi_Minh")
           .format("YYYY-MM-DD HH:mm:ss");
+          const timeIn = moment(order.timeIn).format("YYYY-MM-DD HH:mm:ss");
         var data = {
           idRoom: room.id.toString(),
-          timeIn: "2024-09-28 12:02:05",
+          timeIn:timeIn,
           timeOut: timeOut,
           isPaid: true,
         };
+        console.log("DATA THanh toán", data);
         this.loading = true;
         try {
           await updateOrder(data, orderId);
           this.$toast.success("Thanh toán thành công");
-          this.showInvoiceRoom(orderId);
+          // this.showInvoiceRoom(orderId);
           this.fetchListOrder();
           this.fetchListRooom();
         } catch (e) {
@@ -321,6 +324,7 @@ export default {
         timeIn: timeIn,
         isPaid: false,
       };
+      console.log("DATA Tạo đươn", data);
       this.loading = true;
       try {
         await createOrder(data);

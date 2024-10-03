@@ -22,7 +22,7 @@
                     <span>ID: {{ item.id }}</span>
                   </div>
                   <div class="order-name">
-                    <span>Tên phòng: {{ item.room.numberRoom }}</span>
+                    <span>Phòng: {{ item.room.numberRoom }}</span>
                   </div>
                     <div class="order-Timein">
                         <span>Check-in: {{formatDate(item.timeIn)}}</span>
@@ -47,6 +47,9 @@
         </v-col>
       </v-row>
     </v-container>
+    <v-overlay :value="loading">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay>
     </div>
 </template>
 <script>
@@ -56,6 +59,7 @@ import moment from 'moment';
 export default {
   data() {
     return {
+      loading: false,
       listOrder: []
     };
   },
@@ -68,11 +72,14 @@ export default {
       return moment(date).format('DD/MM/YYYY HH:mm');
     },
     async fetchOrderList() {
+      this.loading = true;
       try {
         var res = await getListOrder();
         this.listOrder = res;
       } catch (error) {
         this.$toast.error("Có lỗi xảy ra");
+      }finally{
+        this.loading = false;
       }
     }
   }
