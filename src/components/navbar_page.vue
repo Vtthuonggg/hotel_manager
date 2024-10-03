@@ -251,6 +251,7 @@ export default {
         secure: true,
         sameSite: "Strict",
       });
+      this.$toast.success("Tạo mã thành công");
     },
     showInputQr() {
       const qrCodeUrl = Cookies.get("qrCodeUrl");

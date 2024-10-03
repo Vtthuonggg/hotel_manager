@@ -17,9 +17,7 @@
               md="6"
               lg="6"
             >
-              <v-card
-                @click="toggleSelect(item)"
-              >
+              <v-card @click="toggleSelect(item)">
                 <v-list-item>
                   <div class="image-container">
                     <v-img
@@ -34,68 +32,58 @@
                         <span>{{ item.name }}</span>
                       </div>
                       <div class="service-price">
-                        <span
-                          >{{
-                            formatCurrency(item.price * item.quantity)
-                          }}đ</span
-                        >
+                        <span>{{ formatCurrency(item.price) }}đ</span>
                       </div>
                     </div>
                     <v-divider></v-divider>
                   </v-col>
-
-                 
                 </v-list-item>
               </v-card>
             </v-col>
           </v-row>
         </v-container>
       </div>
-      <div class="footer">
-        <v-btn
-          class="gradient-button-cancel"
-          @click="closePopup"
-          style="color: #007bff"
-          >Hủy</v-btn
-        >
-        <v-btn
-          class="gradient-button-confirm"
-          color="primary"
-          @click="submitService"
-          >Xác nhận</v-btn
-        >
-      </div>
+
       <v-overlay :value="loading">
         <v-progress-circular indeterminate size="64"></v-progress-circular>
       </v-overlay>
     </div>
     <div v-if="selectedService" class="detail-popup">
       <div class="detail-container">
-        <div class="detail-header">
-          <span class="close" @click="closeDetailPopup">&times;</span>
-          <h2>{{ selectedService.name }}</h2>
-        </div>
         <div class="detail-content">
-          <v-img :src="selectedService.image" class="detail-image" aspect-ratio="1"></v-img>
-          <v-text-field
-            v-model="selectedService.quantity"
-            type="number"
-            min="1"
-            class="quantity-input"
-            @input="validateQuantity"
-          ></v-text-field>
-          <div class="quantity-buttons">
+          <h2>{{ selectedService.name }}</h2>
+          <v-img
+            :src="selectedService.image"
+            class="detail-image"
+            aspect-ratio="1"
+          ></v-img>
+          <div class="quantity-container">
             <v-btn icon @click="decreaseQuantity">
               <v-icon>mdi-minus</v-icon>
             </v-btn>
-            <v-btn icon @click="increaseQuantity">
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
+            <v-text-field
+              v-model="selectedService.quantity"
+              min="1"
+              class="quantity-input"
+              @keydown="isNumber"
+            ></v-text-field>
+            <div class="quantity-buttons">
+              <v-btn icon @click="increaseQuantity">
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
+            </div>
           </div>
         </div>
         <div class="detail-footer">
-          <v-btn @click="closeDetailPopup">Hủy</v-btn>
-          <v-btn color="primary" @click="confirmDetail">Xác nhận</v-btn>
+          <v-btn class="gradient-button-cancel" @click="closeDetailPopup"
+            >Hủy</v-btn
+          >
+          <v-btn
+            class="gradient-button-confirm"
+            color="primary"
+            @click="confirmDetail"
+            >Xác nhận</v-btn
+          >
         </div>
       </div>
     </div>
@@ -109,7 +97,7 @@ import { addServiceBill } from "@/api/invoice_api.js";
 export default {
   props: {
     isShowAddSv: Boolean,
-    idBooking: String,
+    idBooking: Number,
   },
   created() {
     this.fetchServices();
@@ -117,26 +105,42 @@ export default {
 
   data() {
     return {
-      selectedService:null,
+      selectedService: null,
       loading: false,
       listService: [],
     };
   },
   methods: {
-    async submitService() {
-
-      var data ={
-        idBooking: this.idBooking,
-       
+    increaseQuantity() {
+      this.selectedService.quantity++;
+    },
+    decreaseQuantity() {
+      if (this.selectedService.quantity > 1) {
+        this.selectedService.quantity--;
       }
-      await addServiceBill(data);
     },
-   
-   
+    async confirmDetail() {
+      var data = {
+        idBooking: this.idBooking,
+        idService: this.selectedService.id,
+        quantity: this.selectedService.quantity,
+      };
+      console.log("Thêm dịch dụ", data);
+      this.loading = true;
+      try {
+        await addServiceBill(data);
+        this.$toast.success("Thêm dịch vụ thành công");
+      } catch (error) {
+        this.$toast.error("Có lỗi xảy ra");
+      } finally {
+        this.loading = false;
+      }
+    },
+
     toggleSelect(item) {
-     this.selectedService = {...item};
+      this.selectedService = { ...item };
     },
- closeDetailPopup() {
+    closeDetailPopup() {
       this.selectedService = null;
     },
     formatCurrency,
@@ -159,12 +163,15 @@ export default {
     },
     isNumber(event) {
       const charCode = event.charCode ? event.charCode : event.keyCode;
-      if (charCode < 48 || charCode > 57) {
+      if (
+        (charCode < 48 || charCode > 57) &&
+        charCode !== 8 &&
+        charCode !== 46 &&
+        (charCode < 37 || charCode > 40) &&
+        charCode !== 9
+      ) {
         event.preventDefault();
       }
-    },
-    filterInput(event) {
-      event.target.value = event.target.value.replace(/[^0-9]/g, "");
     },
   },
 };
@@ -174,6 +181,7 @@ export default {
   position: fixed;
   top: 50%;
   left: 50%;
+  width: 30%;
   transform: translate(-50%, -50%);
   background-color: white;
   padding: 20px;
@@ -187,11 +195,7 @@ export default {
   flex-direction: column;
   align-items: center;
 }
-.detail-header {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
+
 .detail-content {
   display: flex;
   flex-direction: column;
@@ -203,10 +207,13 @@ export default {
   height: 200px;
   object-fit: contain;
 }
+.quantity-container {
+  display: flex;
+  align-items: center;
+}
 .quantity-input {
-  width: 100px;
-  text-align: center;
-  margin-top: 10px;
+  max-width: 50px;
+  margin: 0 10px;
 }
 .quantity-buttons {
   display: flex;
@@ -233,13 +240,7 @@ export default {
   overflow: hidden;
   position: relative;
 }
-.header {
-  position: sticky;
-  top: 0;
-  background-color: white;
-  z-index: 20;
-  padding-bottom: 10px;
-}
+
 .footer {
   position: sticky;
   bottom: 0;

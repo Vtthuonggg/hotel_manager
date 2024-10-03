@@ -80,9 +80,7 @@
         {{ detailInvoice.inforHotel.hotline }}
       </div>
       <div class="confirm-button-container">
-        <button @click="confirmPayment" class="confirm-button">
-          Xác nhận thanh toán
-        </button>
+        <button @click="confirmPayment" class="confirm-button">Đóng</button>
       </div>
     </div>
   </div>
@@ -110,7 +108,6 @@ export default {
   methods: {
     confirmPayment() {
       this.closePopup();
-      this.$toast.success("Thanh toán thành công");
     },
     formatCurrency,
 
