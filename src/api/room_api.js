@@ -4,7 +4,6 @@ import Cookies from "js-cookie";
 
 export const getListRoom = async () => {
   const accountId = Cookies.get("accountId");
-  console.log("accountIdSSSSSSSSSSSSSSSSSSSS", accountId);
   try {
     const response = await axios.get(`${BASE_URL}room/getlistt`, {
       headers: {
@@ -12,7 +11,6 @@ export const getListRoom = async () => {
       },
       params: { id: accountId },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error(error);

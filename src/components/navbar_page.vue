@@ -34,16 +34,6 @@
           ><span class="bold-text"></span>Danh sách đơn</router-link
         >
       </li>
-      <li class="navbar-item">
-        <router-link
-          to="/dashboard/report"
-          active-class="active-link"
-          exact-active-class="exact-active-link"
-        >
-          <v-icon style="color: black">mdi-chart-bar</v-icon
-          ><span class="bold-text"></span>Báo cáo</router-link
-        >
-      </li>
 
       <li
         class="navbar-item1 dropdown"
@@ -325,8 +315,6 @@ export default {
 
     async saveInfo() {
       var data = {
-        email: this.info.name,
-        password: this.info.phone,
         id: this.info.id,
         name: this.info.name,
         phone: this.info.phone,

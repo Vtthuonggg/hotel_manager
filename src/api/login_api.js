@@ -7,7 +7,6 @@ export const login = async (username, password) => {
       email: `${username}@gmail.com`,
       password: password,
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Login error:", error);
@@ -33,7 +32,6 @@ export const getAccountInfo = async () => {
         "ngrok-skip-browser-warning": "true",
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error(error);

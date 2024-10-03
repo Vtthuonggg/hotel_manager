@@ -6,10 +6,8 @@ import Cookies from "js-cookie";
 export const createOrder = async (data) => {
   const accountId = Cookies.get("accountId");
   data.idAccount = accountId;
-  console.log(data);
   try {
     const response = await axios.post(`${BASE_URL}booking/add`, data);
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -21,10 +19,8 @@ export const createOrder = async (data) => {
 export const updateOrder = async (data, id) => {
   const accountId = Cookies.get("accountId");
   data.idAccount = accountId;
-  console.log(data);
   try {
     const response = await axios.put(`${BASE_URL}booking/update/${id}`, data);
-    console.log(`Thanh toán thành công rồi nè: ${response.data}`);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -41,7 +37,6 @@ export const getListOrder = async () => {
       },
       params: { idAccount: accountId },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -60,7 +55,6 @@ export const getOrderInfo = async (idBooking) => {
       },
       params: { idAccount: accountId, idBooking: idBooking },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error(error);

@@ -125,11 +125,11 @@ export default {
         idService: this.selectedService.id,
         quantity: this.selectedService.quantity,
       };
-      console.log("Thêm dịch dụ", data);
       this.loading = true;
       try {
         await addServiceBill(data);
         this.$toast.success("Thêm dịch vụ thành công");
+        this.closeDetailPopup();
       } catch (error) {
         this.$toast.error("Có lỗi xảy ra");
       } finally {

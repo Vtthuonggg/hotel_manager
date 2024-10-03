@@ -20,7 +20,6 @@ export const createService = async (data) => {
 
 export const getListService = async () => {
   const accountId = Cookies.get("accountId");
-  // console.log("accountId", accountId);
   try {
     const response = await axios.get(`${BASE_URL}service/getlist`, {
       headers: {
@@ -28,7 +27,6 @@ export const getListService = async () => {
       },
       params: { idAccount: accountId },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error(error);
