@@ -256,7 +256,6 @@ export default {
     async updateOrder(room) {
       const order = this.listOrder.find((order) => order.room.id === room.id);
       if (order) {
-        console.log("ORDER", order);
         const orderId = order.id;
 
         const timeOut = moment()
@@ -269,12 +268,11 @@ export default {
           timeOut: timeOut,
           isPaid: true,
         };
-        console.log("DATA THanh toán", data);
         this.loading = true;
         try {
           await updateOrder(data, orderId);
           this.$toast.success("Thanh toán thành công");
-          // this.showInvoiceRoom(orderId);
+          this.showInvoiceRoom(orderId);
           this.fetchListOrder();
           this.fetchListRooom();
         } catch (e) {
@@ -340,12 +338,7 @@ export default {
         this.loading = false;
       }
     },
-    stopTimer() {
-      // Logic for stopping timer
-    },
-    checkout() {
-      // Logic for checkout
-    },
+
     showAddService(room) {
       console.log("ROOM", room);
       console.log("LIST ORDER", this.listOrder);

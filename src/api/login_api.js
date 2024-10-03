@@ -42,7 +42,6 @@ export const getAccountInfo = async () => {
 };
 export const updateAccountInfo = async (data) => {
   const accountId = Cookies.get("accountId");
-  console.log(data);
   try {
     const response = await axios.put(
       `${BASE_URL}account/update/${accountId}`,

@@ -5,9 +5,13 @@ import Cookies from "js-cookie";
 export const getBillInfo = async (idBooking) => {
   const accountId = Cookies.get("accountId");
   try {
-    const response = await axios.post(`${BASE_URL}bill`, {
+    const response = await axios.get(`${BASE_URL}bill`, {
       params: { idAccount: accountId, idBooking: idBooking },
+      headers: {
+        "ngrok-skip-browser-warning": "true",
+      },
     });
+    console.log("HBoas đơn", response.data);
     return response.data;
   } catch (error) {
     console.log(error);

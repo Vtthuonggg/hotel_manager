@@ -85,7 +85,6 @@
         </button>
       </div>
     </div>
-    
   </div>
 </template>
 
@@ -95,51 +94,11 @@ import { formatCurrency } from "@/utils/format_currency";
 export default {
   props: {
     isShowPaymentRoom: Boolean,
+    detailInvoice: Object,
   },
   data() {
     return {
       qrCodeUrl: "",
-      detailInvoice: {
-        inforHotel: {
-          hotelName: "Viet",
-          image:
-            "https://res.cloudinary.com/dfxdq0iwq/image/upload/v1726576569/tfievesjykbp8zu8h1yh.jpg",
-          hotelAddress: "Ha Noi",
-          hotline: "0123445567",
-        },
-        bookingDto: {
-          id: 102,
-          room: {
-            id: 1,
-            numberRoom: 198,
-            typeRoom: "Deluxe",
-            price: 500000,
-            available: false,
-          },
-
-          timeIn: "2024-12-12T05:12:12.000+00:00",
-          timeOut: "2024-12-14T05:00:00.000+00:00",
-          totalPrice: 700000,
-          isPaid: true,
-        },
-        serviceDtoList: [
-          {
-            id: 1,
-            nameService: "coca",
-            price: 15000,
-            quantity: 2,
-            amount: 30000,
-          },
-          {
-            id: 2,
-            nameService: "aqua",
-            price: 10000,
-            quantity: 4,
-            amount: 40000,
-          },
-        ],
-        totalAmount: 770000,
-      },
     };
   },
 

@@ -55,7 +55,7 @@
           <span class="bold-text">Cài đặt</span>
         </a>
         <ul class="dropdown-menu" v-if="dropdownVisible">
-          <li @click="showInputInfo">
+          <li @click="fetchUserInfo">
             <a href="#"><i class="fa-solid fa-hotel"></i>Cài đặt thông tin</a>
           </li>
 
@@ -299,10 +299,6 @@ export default {
       this.dropdownVisible = false;
     },
 
-    showInputInfo() {
-      this.isInputInfo = true;
-      this.fetchUserInfo();
-    },
     hideInputInfo() {
       this.isInputInfo = false;
       this.info = {
@@ -314,9 +310,10 @@ export default {
       this.avatarFile = null;
     },
     async fetchUserInfo() {
+      this.isInputInfo = true;
       this.loading = true;
       try {
-        var res = await getAccountInfo();
+        const res = await getAccountInfo();
         this.info = res;
       } catch (error) {
         this.$toast.error("Có lỗi xảy ra");
