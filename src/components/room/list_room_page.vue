@@ -99,7 +99,10 @@
                   <v-icon>mdi-currency-usd</v-icon>
                   <v-list-item-title>Trả phòng & Thanh toán</v-list-item-title>
                 </v-list-item>
-                <v-list-item v-if="!room.available" @click="showAddService(room)">
+                <v-list-item
+                  v-if="!room.available"
+                  @click="showAddService(room)"
+                >
                   <v-icon>mdi-room-service</v-icon>
                   <v-list-item-title>Thêm dịch vụ</v-list-item-title>
                 </v-list-item>
@@ -253,16 +256,16 @@ export default {
     async updateOrder(room) {
       const order = this.listOrder.find((order) => order.room.id === room.id);
       if (order) {
-        console.log("ORDER", order); 
+        console.log("ORDER", order);
         const orderId = order.id;
 
         const timeOut = moment()
           .tz("Asia/Ho_Chi_Minh")
           .format("YYYY-MM-DD HH:mm:ss");
-          const timeIn = moment(order.timeIn).format("YYYY-MM-DD HH:mm:ss");
+        const timeIn = moment(order.timeIn).format("YYYY-MM-DD HH:mm:ss");
         var data = {
           idRoom: room.id.toString(),
-          timeIn:timeIn,
+          timeIn: timeIn,
           timeOut: timeOut,
           isPaid: true,
         };
