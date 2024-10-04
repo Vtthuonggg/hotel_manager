@@ -67,7 +67,7 @@
                   v-on="on"
                   @click="selectRoom(index)"
                 >
-                  <v-list-item>
+                  <v-list-item class="centered-list-item">
                     <v-icon v-if="room.typeRoom === 1" large
                       >mdi-bed-single-outline</v-icon
                     >
@@ -76,15 +76,20 @@
                       <span>{{ room.numberRoom }}</span>
                     </div>
                   </v-list-item>
-                  <v-divider style="margin-bottom: 10px;"></v-divider>
-                  <p v-if="room.available==true">{{ formatCurrency(room.price) }}đ/Ngày</p>
+                  <v-divider style="margin-bottom: 10px"></v-divider>
+                  <p v-if="room.available == true">
+                    {{ formatCurrency(room.price) }}đ/Ngày
+                  </p>
                   <p v-else>
-                {{ getTimeUsed(room.id) }}
-              </p>
+                    {{ getTimeUsed(room.id) }}
+                  </p>
                 </v-card>
               </template>
               <v-list style="font-weight: bold" v-if="selectedRoom === index">
-                <v-list-item v-if="room.available" @click="createOrderRoom(room.id)">
+                <v-list-item
+                  v-if="room.available"
+                  @click="createOrderRoom(room.id)"
+                >
                   <v-icon>mdi-clock</v-icon>
                   <v-list-item-title>Bắt đầu tính giờ</v-list-item-title>
                 </v-list-item>
@@ -136,7 +141,7 @@
               :rules="[(v) => !!v || 'Giá phòng không được để trống']"
               @keydown="filterInput"
               ><template v-slot:append>
-                <span style="color: grey;">đ/ngày</span>
+                <span style="color: grey">đ/ngày</span>
               </template></v-text-field
             >
             <v-radio-group v-model="newRoom.typeRoom" row>
@@ -443,14 +448,14 @@ export default {
         const hours = Math.floor(duration.asHours()) % 24;
         const minutes = Math.floor(duration.asMinutes()) % 60;
 
-        let result = '';
+        let result = "";
         if (days > 0) {
           result += `${days} ngày `;
         }
         if (hours > 0) {
           result += `${hours} giờ `;
         }
-        if (minutes > 0 || result === '') {
+        if (minutes > 0 || result === "") {
           result += `${minutes} phút`;
         }
 
@@ -630,6 +635,11 @@ export default {
 .container {
   width: 100%;
   flex-direction: column;
+  align-items: center;
+}
+.centered-list-item {
+  display: flex;
+  justify-content: center;
   align-items: center;
 }
 </style>
