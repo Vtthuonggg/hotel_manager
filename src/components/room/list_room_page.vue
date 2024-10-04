@@ -132,7 +132,7 @@
               :rules="[(v) => !!v || 'Giá phòng không được để trống']"
               @keydown="filterInput"
               ><template v-slot:append>
-                <span>đ</span>
+                <span style="color: grey;">đ/ngày</span>
               </template></v-text-field
             >
             <v-radio-group v-model="newRoom.typeRoom" row>
@@ -325,7 +325,6 @@ export default {
         timeIn: timeIn,
         isPaid: false,
       };
-      console.log("DATA Tạo đươn", data);
       this.loading = true;
       try {
         await createOrder(data);
