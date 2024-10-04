@@ -4,19 +4,19 @@
       <v-row class="row-title-item">
         <h2>Danh sách đơn hàng</h2>
       </v-row>
-      <v-divider></v-divider>
+      <v-divider ></v-divider>
       <v-row justify="center" class="row-item">
         <v-col cols="12" md="6" lg="4">
           <v-card class="status-card">
             <v-list-item>
               <v-icon style="color: #23b84f" large
-                >mdi-check-circle-outline</v-icon
+                >mdi-view-list</v-icon
               >
               <v-col>
                 <div class="empty-text">
                   <span>Tổng số đơn</span>
                 </div>
-                <v-divider></v-divider>
+                <v-divider style="margin-bottom: 10px;"></v-divider>
                 <span class="count">{{ report.totalBooking }}</span>
               </v-col>
             </v-list-item>
@@ -25,14 +25,14 @@
         <v-col cols="12" md="6" lg="4">
           <v-card class="status-card">
             <v-list-item>
-              <v-icon style="color: red" large>mdi-home-heart</v-icon>
+              <v-icon style="color: red" large>mdi-wallet-plus</v-icon>
               <v-col>
                 <div class="empty-text">
                   <span>Tổng doanh thu</span>
                 </div>
-                <v-divider></v-divider>
+                <v-divider style="margin-bottom: 10px;"></v-divider>
 
-                <span class="count">{{ formatCurrency(report.revenue) }}</span>
+                <span class="count">{{ formatCurrency(report.revenue) }}đ</span>
               </v-col>
             </v-list-item>
           </v-card>
@@ -129,7 +129,7 @@ export default {
   },
   data() {
     return {
-      report: null,
+      report: {},
       isShowInvoice: false,
       selectedOrder: null,
       loading: false,
@@ -138,6 +138,7 @@ export default {
   },
   created() {
     this.fetchOrderList();
+    this.fetchReport();
   },
   methods: {
     async fetchReport() {

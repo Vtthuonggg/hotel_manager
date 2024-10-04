@@ -9,7 +9,7 @@ export const getReport = async () => {
       headers: {
         "ngrok-skip-browser-warning": "true",
       },
-      params: { id: accountId },
+      params: { idAccount: accountId },
     });
     return response.data;
   } catch (error) {

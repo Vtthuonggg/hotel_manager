@@ -75,12 +75,16 @@
                     <div class="room-info">
                       <span>{{ room.numberRoom }}</span>
                     </div>
-                    <v-spacer></v-spacer>
                   </v-list-item>
+                  <v-divider style="margin-bottom: 10px;"></v-divider>
+                  <p v-if="room.available==true">{{ formatCurrency(room.price) }}đ/Ngày</p>
+                  <p v-else>
+                {{ getTimeUsed(room.id) }}
+              </p>
                 </v-card>
               </template>
               <v-list style="font-weight: bold" v-if="selectedRoom === index">
-                <v-list-item v-if="room.available" @click="startTimer(room.id)">
+                <v-list-item v-if="room.available" @click="createOrderRoom(room.id)">
                   <v-icon>mdi-clock</v-icon>
                   <v-list-item-title>Bắt đầu tính giờ</v-list-item-title>
                 </v-list-item>
@@ -236,19 +240,23 @@ export default {
 
       rooms: [],
       detailInvoice: {},
+      timerId: null,
     };
   },
 
   created() {
     this.fetchListRooom();
     this.fetchListOrder();
+    this.startTimer();
+  },
+  beforeDestroy() {
+    this.stopTimer();
   },
   methods: {
     async fetchListOrder() {
       try {
         var res = await getListOrder();
         this.listOrder = res.filter((order) => !order.isPaid);
-        console.log("OOOOOO", this.listOrder);
       } catch (error) {
         this.$toast.error("Có lỗi xảy ra");
       }
@@ -316,7 +324,7 @@ export default {
         this.$toast.error("Có lỗi xảy ra");
       }
     },
-    async startTimer(roomId) {
+    async createOrderRoom(roomId) {
       const timeIn = moment()
         .tz("Asia/Ho_Chi_Minh")
         .format("YYYY-MM-DD HH:mm:ss");
@@ -339,8 +347,6 @@ export default {
     },
 
     showAddService(room) {
-      console.log("ROOM", room);
-      console.log("LIST ORDER", this.listOrder);
       const order = this.listOrder.find((order) => order.room.id === room.id);
       if (order) {
         this.orderServiceId = order.id;
@@ -425,6 +431,42 @@ export default {
     validateAndSubmit() {
       if (this.$refs.form.validate()) {
         this.submit(this.isShowEditRoom ? 2 : 1);
+      }
+    },
+    getTimeUsed(roomId) {
+      const order = this.listOrder.find((order) => order.room.id === roomId);
+      if (order) {
+        const timeIn = moment(order.timeIn);
+        const now = moment();
+        const duration = moment.duration(now.diff(timeIn));
+        const days = Math.floor(duration.asDays());
+        const hours = Math.floor(duration.asHours()) % 24;
+        const minutes = Math.floor(duration.asMinutes()) % 60;
+
+        let result = '';
+        if (days > 0) {
+          result += `${days} ngày `;
+        }
+        if (hours > 0) {
+          result += `${hours} giờ `;
+        }
+        if (minutes > 0 || result === '') {
+          result += `${minutes} phút`;
+        }
+
+        return result.trim();
+      }
+      return "";
+    },
+    startTimer() {
+      this.timerId = setInterval(() => {
+        this.$forceUpdate(); // Cập nhật lại component để gọi lại getTimeUsed
+      }, 60000); // 60000ms = 1 phút
+    },
+    stopTimer() {
+      if (this.timerId) {
+        clearInterval(this.timerId);
+        this.timerId = null;
       }
     },
   },
