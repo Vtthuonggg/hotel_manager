@@ -133,12 +133,12 @@
             <v-text-field
               v-model="newRoom.numberRoom"
               label="Tên phòng"
-              :rules="[(v) => !!v || 'Tên phòng không được để trống']"
+              :rules="[(v) => !!v.trim() || 'Tên phòng không được để trống']"
             ></v-text-field>
             <v-text-field
               v-model="formattedPrice"
               label="Giá phòng"
-              :rules="[(v) => !!v || 'Giá phòng không được để trống']"
+              :rules="[(v) => !!v.trim() || 'Giá phòng không được để trống']"
               @keydown="filterInput"
               ><template v-slot:append>
                 <span style="color: grey">đ/ngày</span>

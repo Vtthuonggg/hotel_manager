@@ -96,12 +96,17 @@
     <div v-if="isShowCreateService || isShowEditService" class="popup">
       <div class="popup-content">
         <h3>{{ isShowCreateService ? "Tạo dịch vụ" : "Sửa dịch vụ" }}</h3>
-        <v-text-field v-model="newService.name" label="Tên"></v-text-field>
+        <v-text-field
+          :rules="[(v) => !!v.trim() || 'Tên không được để trống']"
+          v-model="newService.name"
+          label="Tên"
+        ></v-text-field>
         <v-text-field
           v-model="formattedPrice"
           label="Giá tiền"
           append-outer="đ"
           @keydown="filterInput"
+          :rules="[(v) => !!v.trim() || 'Giá tiền không được để trống']"
           ><template v-slot:append>
             <span>đ</span>
           </template></v-text-field
@@ -198,7 +203,12 @@ export default {
     filterInput(event) {
       // Chỉ cho phép các phím số và các phím điều khiển
       const allowedKeys = [
-        'Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab', 'Enter'
+        "Backspace",
+        "ArrowLeft",
+        "ArrowRight",
+        "Delete",
+        "Tab",
+        "Enter",
       ];
       if (!/[0-9]/.test(event.key) && !allowedKeys.includes(event.key)) {
         event.preventDefault();
@@ -235,7 +245,7 @@ export default {
       }
     },
     formatCurrency,
-  
+
     showCreateService() {
       this.isShowCreateService = true;
     },
