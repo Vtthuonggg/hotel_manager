@@ -225,6 +225,14 @@ export default {
       this.bankCode = selectedBankCode;
     },
     saveQrCode() {
+      if (!this.accountNumer) {
+        this.$toast.error("Vui lòng nhập số tài khoản");
+        return;
+      }
+      if (!this.bankCode) {
+        this.$toast.error("Vui lòng chọn ngân hàng");
+        return;
+      }
       this.qrCodeUrl = `https://img.vietqr.io/image/${this.bankCode}-${this.accountNumer}-qr_only.png`;
       Cookies.set("qrCodeUrl", this.qrCodeUrl, {
         expires: 30,

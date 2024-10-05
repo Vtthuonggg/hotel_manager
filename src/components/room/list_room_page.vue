@@ -167,7 +167,7 @@
       </div>
       <div v-if="isDeleteRoom" class="popup">
         <div class="popup-content">
-          <h3>Xóa phòng</h3>
+          <h3>Xác nhận xóa phòng</h3>
           <div class="button-container">
             <v-btn
               class="gradient-button-cancel"
