@@ -5,21 +5,13 @@
       <p>
         Email: <a href="mailto:info@hotelmanager.com">batehotel@gmail.com</a>
       </p>
-      <p>&copy; 2023 Hotel Manager. All rights reserved.</p>
-    </div>
-    <div class="footer-social">
       <p>
-        <span class="mdi mdi-facebook"></span>
+        Facebook:
         <a href="https://www.facebook.com/thanhthuongvu52" target="_blank">
           facebook.com/batehotel
         </a>
       </p>
-      <p>
-        <span class="mdi mdi-instagram"></span>
-        <a href="https://www.instagram.com/phucng.hiii/" target="_blank">
-          instagram.com/batehotel
-        </a>
-      </p>
+      <p>&copy; 2023 Hotel Manager. All rights reserved.</p>
     </div>
   </footer>
 </template>
@@ -35,14 +27,14 @@ export default {
   background-color: #2c3e50;
   color: white;
   padding: 20px 0;
-  text-align: left;
+  text-align: center;
   position: relative;
   bottom: 0;
   width: 100%;
   z-index: 1000;
 }
 .footer-content {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 .footer-content p {
@@ -53,20 +45,6 @@ export default {
   text-decoration: none;
 }
 .footer-content a:hover {
-  text-decoration: underline;
-}
-.footer-social {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  padding-right: 80px;
-}
-.footer-social a {
-  color: #1db4f0;
-  text-decoration: none;
-}
-.footer-social a:hover {
   text-decoration: underline;
 }
 </style>
