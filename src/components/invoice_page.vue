@@ -39,7 +39,7 @@
         <div>
           <span>
             <b>Tổng giá: </b>
-            <br />{{ formatCurrency(detailInvoice.bookingDto.totalPrice) }} VND
+            <br />{{ formatCurrency(detailInvoice.bookingDto.totalPrice) }} VNĐ
           </span>
         </div>
       </div>
@@ -60,9 +60,9 @@
               :key="index"
             >
               <td>{{ servie.nameService }}</td>
-              <td>{{ formatCurrency(servie.price) }} VND</td>
+              <td>{{ formatCurrency(servie.price) }} VNĐ</td>
               <td>{{ servie.quantity }}</td>
-              <td>{{ formatCurrency(servie.amount) }} VND</td>
+              <td>{{ formatCurrency(servie.amount) }} VNĐ</td>
             </tr>
           </tbody>
         </table>
@@ -70,7 +70,7 @@
       <hr class="dashed-line" />
       <div class="invoice-room">
         <h3>
-          TỔNG GIÁ PHÒNG: {{ formatCurrency(detailInvoice.totalAmount) }} VND
+          TỔNG GIÁ PHÒNG: {{ formatCurrency(detailInvoice.totalAmount) }} VNĐ
         </h3>
       </div>
       <hr class="dashed-line" />

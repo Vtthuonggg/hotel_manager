@@ -354,6 +354,7 @@ export default {
     showAddService(room) {
       const order = this.listOrder.find((order) => order.room.id === room.id);
       if (order) {
+        console.log(order);
         this.orderServiceId = order.id;
         this.showPopupAddService = true;
         this.menu = false;

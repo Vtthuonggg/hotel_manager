@@ -1,6 +1,6 @@
 export function formatCurrency(value) {
   if (value === undefined || value === null) {
-    return '';
+    return "";
   }
   return value
     .toLocaleString("vi-VN", {

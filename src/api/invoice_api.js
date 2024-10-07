@@ -57,3 +57,14 @@ export const addServiceBill = async (data) => {
     throw error;
   }
 };
+export const updateServiceBill = async (data) => {
+  const accountId = Cookies.get("accountId");
+  data.idAccount = accountId;
+  try {
+    const response = await axios.put(`${BASE_URL}bill/addservice`, data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

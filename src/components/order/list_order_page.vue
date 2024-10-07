@@ -4,19 +4,17 @@
       <v-row class="row-title-item">
         <h2>Danh sách đơn hàng</h2>
       </v-row>
-      <v-divider ></v-divider>
+      <v-divider></v-divider>
       <v-row justify="center" class="row-item">
         <v-col cols="12" md="6" lg="4">
           <v-card class="status-card">
             <v-list-item>
-              <v-icon style="color: #23b84f" large
-                >mdi-view-list</v-icon
-              >
+              <v-icon style="color: #23b84f" large>mdi-view-list</v-icon>
               <v-col>
                 <div class="empty-text">
                   <span>Tổng số đơn</span>
                 </div>
-                <v-divider style="margin-bottom: 10px;"></v-divider>
+                <v-divider style="margin-bottom: 10px"></v-divider>
                 <span class="count">{{ report.totalBooking }}</span>
               </v-col>
             </v-list-item>
@@ -30,9 +28,11 @@
                 <div class="empty-text">
                   <span>Tổng doanh thu</span>
                 </div>
-                <v-divider style="margin-bottom: 10px;"></v-divider>
+                <v-divider style="margin-bottom: 10px"></v-divider>
 
-                <span class="count">{{ formatCurrency(report.revenue) }}đ</span>
+                <span class="count"
+                  >{{ formatCurrency(report.revenue) }}VNĐ</span
+                >
               </v-col>
             </v-list-item>
           </v-card>
