@@ -67,11 +67,9 @@
               class="quantity-input"
               @keydown="isNumber"
             ></v-text-field>
-            <div class="quantity-buttons">
-              <v-btn icon @click="increaseQuantity">
-                <v-icon>mdi-plus</v-icon>
-              </v-btn>
-            </div>
+            <v-btn icon @click="increaseQuantity">
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
           </div>
         </div>
         <div class="detail-footer">
@@ -111,7 +109,6 @@ export default {
     };
   },
   methods: {
-
     increaseQuantity() {
       this.selectedService.quantity++;
     },
@@ -128,8 +125,8 @@ export default {
       };
       this.loading = true;
       try {
-          await addServiceBill(data);
-          this.$toast.success("Thêm dịch vụ thành công");
+        await addServiceBill(data);
+        this.$toast.success("Thêm dịch vụ thành công");
         this.closeDetailPopup();
       } catch (error) {
         this.$toast.error("Có lỗi xảy ra");
@@ -211,17 +208,14 @@ export default {
 .quantity-container {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 .quantity-input {
   max-width: 50px;
   margin: 0 10px;
 }
-.quantity-buttons {
-  display: flex;
-  justify-content: space-between;
-  width: 100px;
-  margin-top: 10px;
-}
+
 .detail-footer {
   display: flex;
   justify-content: space-between;
