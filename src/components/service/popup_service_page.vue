@@ -91,7 +91,6 @@
 </template>
 
 <script>
-import { getOrderInfo } from "@/api/order_api.js";
 import { getListService } from "@/api/service_api.js";
 import { formatCurrency } from "@/utils/format_currency";
 import { addServiceBill, updateServiceBill } from "@/api/invoice_api.js";
@@ -102,29 +101,17 @@ export default {
   },
   created() {
     this.fetchServices();
-    this.fetchInitService();
   },
 
   data() {
     return {
-      initService: [],
       selectedService: null,
       loading: false,
       listService: [],
     };
   },
   methods: {
-    async fetchInitService() {
-      this.loading = true;
-      try {
-        var res = await getOrderInfo(this.idBooking);
-        this.initService = res.serviceDtoList;
-      } catch (error) {
-        this.$toast.error("Có lỗi xảy ra");
-      } finally {
-        this.loading = false;
-      }
-    },
+
     increaseQuantity() {
       this.selectedService.quantity++;
     },
@@ -141,13 +128,8 @@ export default {
       };
       this.loading = true;
       try {
-        if (this.initService.includes(data.idService)) {
-          await updateServiceBill(data);
-          this.$toast.success("Cập nhật dịch vụ thành công");
-        } else {
           await addServiceBill(data);
           this.$toast.success("Thêm dịch vụ thành công");
-        }
         this.closeDetailPopup();
       } catch (error) {
         this.$toast.error("Có lỗi xảy ra");
