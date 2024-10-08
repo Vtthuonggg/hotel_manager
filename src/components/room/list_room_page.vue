@@ -101,8 +101,8 @@
                   v-if="room.available"
                   @click="showDeleteRoom(room.id)"
                 >
-                  <v-icon>mdi-close</v-icon>
-                  <v-list-item-title>Xóa phòng</v-list-item-title>
+                  <v-icon style="color: red;">mdi-close</v-icon>
+                  <v-list-item-title style="color: red;">Xóa phòng</v-list-item-title>
                 </v-list-item>
                 <v-list-item v-if="!room.available" @click="updateOrder(room)">
                   <v-icon>mdi-currency-usd</v-icon>
@@ -114,6 +114,13 @@
                 >
                   <v-icon>mdi-room-service</v-icon>
                   <v-list-item-title>Thêm dịch vụ</v-list-item-title>
+                </v-list-item>
+                <v-list-item
+                  v-if="!room.available"
+                  @click="deleteOrderRoom(room)"
+                >
+                  <v-icon style="color: red;">mdi-delete</v-icon>
+                  <v-list-item-title style="color: red;">Hủy đơn</v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>
@@ -215,7 +222,7 @@ import {
 import Invoice from "../invoice_page.vue";
 import PopupAddService from "../service/popup_service_page.vue";
 import { formatCurrency } from "@/utils/format_currency";
-import { createOrder, updateOrder, getListOrder } from "@/api/order_api.js";
+import { createOrder, updateOrder, getListOrder,deleteOrder } from "@/api/order_api.js";
 import moment from "moment-timezone";
 import { getBillInfo } from "@/api/invoice_api.js";
 export default {
@@ -258,6 +265,25 @@ export default {
     this.stopTimer();
   },
   methods: {
+    async deleteOrderRoom(room){
+      const order = this.listOrder.find((order) => order.room.id === room.id);
+      if (order) {
+        const orderId = order.id;
+        this.loading = true;
+        try {
+          await deleteOrder(orderId);
+          this.$toast.success("Hủy đơn thành công");
+          this.fetchListOrder();
+          this.fetchListRooom();
+        } catch (e) {
+          this.$toast.error("Có lỗi xảy ra");
+        } finally {
+          this.loading = false;
+        }
+      } else {
+        this.$toast.error("Không tìm thấy đơn hàng");
+      }
+    },
     async fetchListOrder() {
       try {
         var res = await getListOrder();
@@ -309,6 +335,7 @@ export default {
       try {
         var res = await getListRoom();
         this.rooms = res;
+        console.log(this.rooms);
       } catch (error) {
         this.$toast.error("Có lỗi xảy ra");
       } finally {

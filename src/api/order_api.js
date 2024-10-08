@@ -27,6 +27,16 @@ export const updateOrder = async (data, id) => {
     throw error;
   }
 };
+export const deleteOrder = async (id) => {
+
+  try {
+    const response = await axios.delete(`${BASE_URL}booking/delete/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 
 export const getListOrder = async () => {
   const accountId = Cookies.get("accountId");

@@ -93,7 +93,7 @@
 <script>
 import { getListService } from "@/api/service_api.js";
 import { formatCurrency } from "@/utils/format_currency";
-import { addServiceBill, updateServiceBill } from "@/api/invoice_api.js";
+import { addServiceBill } from "@/api/invoice_api.js";
 export default {
   props: {
     isShowAddSv: Boolean,
