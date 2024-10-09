@@ -335,7 +335,6 @@ export default {
       try {
         var res = await getListRoom();
         this.rooms = res;
-        console.log(this.rooms);
       } catch (error) {
         this.$toast.error("Có lỗi xảy ra");
       } finally {
@@ -381,7 +380,6 @@ export default {
     showAddService(room) {
       const order = this.listOrder.find((order) => order.room.id === room.id);
       if (order) {
-        console.log(order);
         this.orderServiceId = order.id;
         this.showPopupAddService = true;
         this.menu = false;
